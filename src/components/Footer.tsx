@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div>
             <p className="text-sm text-purple-600">
-              &copy; {new Date().getFullYear()} DataGrid. All rights reserved.
+              &copy; {new Date().getFullYear()} CustodialData. All rights reserved.
             </p>
           </div>
           <div className="flex gap-6">

@@ -22,7 +22,7 @@ const SearchBar = ({ className = "" }: SearchBarProps) => {
       return;
     }
     
-    // In a real app, you'd make an API call here
+    // In a real app, you'd make an API call to custodial data services here
     navigate(`/results?q=${encodeURIComponent(query)}`);
   };
 
@@ -32,7 +32,7 @@ const SearchBar = ({ className = "" }: SearchBarProps) => {
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search for any data..."
+          placeholder="Search for custodial data, portfolio holdings, performance metrics..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="pl-10"

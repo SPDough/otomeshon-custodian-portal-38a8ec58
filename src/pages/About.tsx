@@ -7,11 +7,11 @@ const About = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex flex-1 flex-col">
-        <section className="bg-blue-600 px-4 py-16 text-white">
+        <section className="bg-purple-600 px-4 py-16 text-white">
           <div className="container mx-auto text-center">
-            <h1 className="mb-4 text-4xl font-extrabold sm:text-5xl">About DataGrid</h1>
+            <h1 className="mb-4 text-4xl font-extrabold sm:text-5xl">About CustodialData</h1>
             <p className="mx-auto mb-6 max-w-2xl text-xl">
-              Combining the simplicity of search with the power of spreadsheets.
+              Connecting asset managers and pension funds with global custodian data.
             </p>
           </div>
         </section>
@@ -19,62 +19,62 @@ const About = () => {
         <section className="bg-white px-4 py-16">
           <div className="container mx-auto">
             <div className="mx-auto max-w-3xl">
-              <h2 className="mb-6 text-3xl font-bold">Our Story</h2>
+              <h2 className="mb-6 text-3xl font-bold">Our Mission</h2>
               <p className="mb-6 text-gray-700">
-                DataGrid was founded with a simple mission: to make data search and exploration as 
-                intuitive as possible. We recognized that while search engines are excellent at finding 
-                information, they often lack the organization capabilities that spreadsheets offer.
+                CustodialData was founded to bridge the data gap between asset managers, pension funds, 
+                and global custodians. We recognized that accessing and analyzing custodial data often 
+                involves complex processes, multiple platforms, and inconsistent formats.
               </p>
               <p className="mb-6 text-gray-700">
-                Our team of data enthusiasts and user experience experts came together to build a 
-                solution that offers the best of both worlds. With DataGrid, you get the simplicity of 
-                a search engine with the organizational power of a spreadsheet.
+                Our platform provides a unified interface to search, analyze, and report on custodial 
+                data from multiple sources, empowering investment professionals with the insights they 
+                need to make informed decisions.
               </p>
               
               <div className="my-12 aspect-video overflow-hidden rounded-lg bg-gray-100">
                 <img 
                   src="/placeholder.svg" 
-                  alt="DataGrid Team" 
+                  alt="CustodialData Team" 
                   className="h-full w-full object-cover"
                 />
               </div>
               
-              <h2 className="mb-6 text-3xl font-bold">Our Values</h2>
+              <h2 className="mb-6 text-3xl font-bold">Our Services</h2>
               <div className="mb-10 space-y-6">
                 <div>
-                  <h3 className="mb-2 text-xl font-semibold text-blue-600">Simplicity</h3>
+                  <h3 className="mb-2 text-xl font-semibold text-purple-600">Data Aggregation</h3>
                   <p className="text-gray-700">
-                    We believe that powerful tools don't need to be complicated. Our interface is
-                    designed to be intuitive and distraction-free.
+                    We consolidate data from multiple global custodians into a single, searchable platform,
+                    eliminating the need to navigate different portals and systems.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="mb-2 text-xl font-semibold text-blue-600">Organization</h3>
+                  <h3 className="mb-2 text-xl font-semibold text-purple-600">Portfolio Analytics</h3>
                   <p className="text-gray-700">
-                    Information is only useful when it's well-organized. We make it easy to sort,
-                    filter, and make sense of your data.
+                    Our powerful analytical tools help pension fund managers and asset managers gain insights
+                    into holdings, performance, and risk across their entire portfolio.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="mb-2 text-xl font-semibold text-blue-600">Accessibility</h3>
+                  <h3 className="mb-2 text-xl font-semibold text-purple-600">Compliance Reporting</h3>
                   <p className="text-gray-700">
-                    We're committed to making data exploration accessible to everyone, regardless of
-                    their technical background.
+                    Generate comprehensive reports for regulatory compliance, board meetings, and stakeholder
+                    communications with just a few clicks.
                   </p>
                 </div>
               </div>
               
               <h2 className="mb-6 text-3xl font-bold">Contact Us</h2>
               <p className="mb-6 text-gray-700">
-                Have questions or feedback? We'd love to hear from you!
+                Looking to streamline your custodial data processes? Get in touch with our team.
               </p>
-              <div className="mb-10 rounded-lg border border-gray-200 bg-gray-50 p-6">
-                <p className="mb-2 font-medium">DataGrid Inc.</p>
-                <p className="mb-2 text-gray-700">123 Data Avenue</p>
-                <p className="mb-2 text-gray-700">Spreadsheet City, SH 10101</p>
-                <p className="mb-2 text-gray-700">Email: info@datagrid.example</p>
+              <div className="mb-10 rounded-lg border border-purple-200 bg-purple-50 p-6">
+                <p className="mb-2 font-medium">CustodialData Inc.</p>
+                <p className="mb-2 text-gray-700">123 Financial Avenue</p>
+                <p className="mb-2 text-gray-700">Investment City, IC 10101</p>
+                <p className="mb-2 text-gray-700">Email: info@custodialdata.example</p>
                 <p className="text-gray-700">Phone: (555) 123-4567</p>
               </div>
             </div>

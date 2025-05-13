@@ -11,31 +11,30 @@ const Index = () => {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex flex-1 flex-col">
-        <section className="flex flex-1 flex-col items-center justify-center bg-gradient-to-b from-white to-blue-50 px-4 py-20 text-center">
+        <section className="flex flex-1 flex-col items-center justify-center bg-gradient-to-b from-white to-purple-50 px-4 py-20 text-center">
           <h1 className="mb-6 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-            <span className="text-blue-600">Search</span> Meets{" "}
-            <span className="text-blue-600">Spreadsheet</span>
+            <span className="text-purple-600">Custodial</span> Data{" "}
+            <span className="text-purple-600">Solutions</span>
           </h1>
           <p className="mb-10 max-w-2xl text-xl text-gray-600">
-            Discover the perfect blend of Google's search simplicity with Excel's
-            organized data presentation.
+            Access comprehensive custodial data for asset managers and pension funds with powerful search and analysis tools.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
             <Button size="lg" onClick={() => navigate("/search")}>
-              Start Searching
+              Search Custodial Data
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate("/about")}>
               Learn More
             </Button>
           </div>
           
-          <div className="mt-16 w-full max-w-5xl rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
+          <div className="mt-16 w-full max-w-5xl rounded-lg border border-purple-200 bg-white p-4 shadow-lg">
             <img 
               src="/placeholder.svg" 
-              alt="DataGrid Demo" 
+              alt="Custodial Data Platform" 
               className="mx-auto h-64 w-full object-cover opacity-75"
             />
-            <p className="mt-4 text-sm text-gray-500">Experience powerful search with intuitive data organization</p>
+            <p className="mt-4 text-sm text-gray-500">Access global custodian data with advanced search and analysis capabilities</p>
           </div>
         </section>
         
@@ -43,32 +42,32 @@ const Index = () => {
           <div className="container mx-auto">
             <div className="grid gap-10 md:grid-cols-3">
               <div className="flex flex-col items-center text-center">
-                <div className="mb-4 rounded-full bg-blue-100 p-4">
-                  <Search className="h-8 w-8 text-blue-600" />
+                <div className="mb-4 rounded-full bg-purple-100 p-4">
+                  <Search className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="mb-2 text-xl font-bold">Simple Search</h3>
+                <h3 className="mb-2 text-xl font-bold">Custodial Search</h3>
                 <p className="text-gray-600">
-                  Enter your query in a clean, distraction-free interface.
+                  Find specific custody data across multiple global custodians.
                 </p>
               </div>
               
               <div className="flex flex-col items-center text-center">
-                <div className="mb-4 rounded-full bg-blue-100 p-4">
-                  <Table className="h-8 w-8 text-blue-600" />
+                <div className="mb-4 rounded-full bg-purple-100 p-4">
+                  <Table className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="mb-2 text-xl font-bold">Organized Results</h3>
+                <h3 className="mb-2 text-xl font-bold">Portfolio Analysis</h3>
                 <p className="text-gray-600">
-                  View your data in a familiar spreadsheet-like format.
+                  View holdings and performance data in a familiar spreadsheet format.
                 </p>
               </div>
               
               <div className="flex flex-col items-center text-center">
-                <div className="mb-4 rounded-full bg-blue-100 p-4">
-                  <SortAsc className="h-8 w-8 text-blue-600" />
+                <div className="mb-4 rounded-full bg-purple-100 p-4">
+                  <ChartBar className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="mb-2 text-xl font-bold">Sort & Filter</h3>
+                <h3 className="mb-2 text-xl font-bold">Reporting Tools</h3>
                 <p className="text-gray-600">
-                  Manipulate your results to find exactly what you need.
+                  Generate custom reports for pension funds and asset managers.
                 </p>
               </div>
             </div>
@@ -81,6 +80,6 @@ const Index = () => {
 };
 
 // Import icons in the component to avoid possible errors
-import { Search, SortAsc, Table } from "lucide-react";
+import { Search, ChartBar, Table } from "lucide-react";
 
 export default Index;
