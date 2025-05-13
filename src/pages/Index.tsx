@@ -73,6 +73,40 @@ const Index = () => {
             </div>
           </div>
         </section>
+        
+        <section className="bg-purple-50 px-4 py-16">
+          <div className="container mx-auto">
+            <div className="mx-auto max-w-3xl text-center">
+              <h2 className="mb-6 text-3xl font-bold">About Otomeshon</h2>
+              <p className="mb-6 text-gray-700">
+                Otomeshon is a leading provider of custodial data solutions for asset managers and pension funds.
+                Our innovative platform connects financial professionals with the global custodian data they need,
+                all in one streamlined interface.
+              </p>
+              <div className="flex items-center justify-center gap-6">
+                <div className="flex items-center">
+                  <Building className="mr-2 text-purple-600" />
+                  <span>Founded 2023</span>
+                </div>
+                <div className="flex items-center">
+                  <Users className="mr-2 text-purple-600" />
+                  <span>Serving 100+ Clients</span>
+                </div>
+                <div className="flex items-center">
+                  <BriefcaseBusiness className="mr-2 text-purple-600" />
+                  <span>Global Coverage</span>
+                </div>
+              </div>
+              <Button 
+                variant="outline" 
+                className="mt-8" 
+                onClick={() => navigate("/about")}
+              >
+                Learn More About Us
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
@@ -80,6 +114,6 @@ const Index = () => {
 };
 
 // Import icons in the component to avoid possible errors
-import { Search, ChartBar, Table } from "lucide-react";
+import { Search, ChartBar, Table, Building, Users, BriefcaseBusiness } from "lucide-react";
 
 export default Index;

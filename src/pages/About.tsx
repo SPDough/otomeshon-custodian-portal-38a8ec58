@@ -9,7 +9,7 @@ const About = () => {
       <main className="flex flex-1 flex-col">
         <section className="bg-purple-600 px-4 py-16 text-white">
           <div className="container mx-auto text-center">
-            <h1 className="mb-4 text-4xl font-extrabold sm:text-5xl">About CustodialData</h1>
+            <h1 className="mb-4 text-4xl font-extrabold sm:text-5xl">About Otomeshon</h1>
             <p className="mx-auto mb-6 max-w-2xl text-xl">
               Connecting asset managers and pension funds with global custodian data.
             </p>
@@ -21,7 +21,7 @@ const About = () => {
             <div className="mx-auto max-w-3xl">
               <h2 className="mb-6 text-3xl font-bold">Our Mission</h2>
               <p className="mb-6 text-gray-700">
-                CustodialData was founded to bridge the data gap between asset managers, pension funds, 
+                Otomeshon was founded to bridge the data gap between asset managers, pension funds, 
                 and global custodians. We recognized that accessing and analyzing custodial data often 
                 involves complex processes, multiple platforms, and inconsistent formats.
               </p>
@@ -34,7 +34,7 @@ const About = () => {
               <div className="my-12 aspect-video overflow-hidden rounded-lg bg-gray-100">
                 <img 
                   src="/placeholder.svg" 
-                  alt="CustodialData Team" 
+                  alt="Otomeshon Team" 
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -71,10 +71,10 @@ const About = () => {
                 Looking to streamline your custodial data processes? Get in touch with our team.
               </p>
               <div className="mb-10 rounded-lg border border-purple-200 bg-purple-50 p-6">
-                <p className="mb-2 font-medium">CustodialData Inc.</p>
+                <p className="mb-2 font-medium">Otomeshon Inc.</p>
                 <p className="mb-2 text-gray-700">123 Financial Avenue</p>
                 <p className="mb-2 text-gray-700">Investment City, IC 10101</p>
-                <p className="mb-2 text-gray-700">Email: info@custodialdata.example</p>
+                <p className="mb-2 text-gray-700">Email: info@otomeshon.example</p>
                 <p className="text-gray-700">Phone: (555) 123-4567</p>
               </div>
             </div>
