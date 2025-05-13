@@ -13,9 +13,9 @@ const Results = () => {
   ];
   
   const columns = [
-    { accessor: "name", header: "Name" },
-    { accessor: "type", header: "Type" },
-    { accessor: "value", header: "Value" },
+    { id: "name", accessor: "name", header: "Name" },
+    { id: "type", accessor: "type", header: "Type" },
+    { id: "value", accessor: "value", header: "Value" },
   ];
 
   return (
