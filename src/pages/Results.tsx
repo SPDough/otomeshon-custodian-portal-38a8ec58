@@ -5,6 +5,19 @@ import ResultsTable from "@/components/ResultsTable";
 import Sidebar from "@/components/Sidebar";
 
 const Results = () => {
+  // Sample data for the results table
+  const data = [
+    { id: 1, name: "Portfolio A", type: "Equity", value: "$1,200,000" },
+    { id: 2, name: "Portfolio B", type: "Fixed Income", value: "$800,000" },
+    { id: 3, name: "Portfolio C", type: "Mixed", value: "$2,500,000" },
+  ];
+  
+  const columns = [
+    { accessor: "name", header: "Name" },
+    { accessor: "type", header: "Type" },
+    { accessor: "value", header: "Value" },
+  ];
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
@@ -16,7 +29,7 @@ const Results = () => {
             <p className="mb-6 text-gray-600">
               Found 24 results related to your search query
             </p>
-            <ResultsTable />
+            <ResultsTable data={data} columns={columns} />
           </div>
         </main>
       </div>
