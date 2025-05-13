@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
-    <nav className="border-b border-gray-200 bg-white p-4 shadow-sm">
+    <nav className="border-b border-purple-200 bg-purple-50 p-4 shadow-sm">
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 sm:flex-row">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-blue-600">DataGrid</span>
+          <span className="text-2xl font-bold text-purple-600">DataGrid</span>
         </Link>
         <div className="flex gap-6">
-          <Link to="/search" className="text-gray-700 hover:text-blue-600">
+          <Link to="/search" className="text-purple-700 hover:text-purple-900">
             Search
           </Link>
-          <Link to="/about" className="text-gray-700 hover:text-blue-600">
+          <Link to="/about" className="text-purple-700 hover:text-purple-900">
             About
           </Link>
         </div>
