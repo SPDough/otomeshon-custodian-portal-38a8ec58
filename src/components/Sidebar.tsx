@@ -1,5 +1,5 @@
 
-import { History, User } from "lucide-react";
+import { History, User, FileText, Briefcase, Shield, TrendingUp, Check } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 
@@ -20,12 +20,15 @@ const mockHistoryItems: HistoryItem[] = [
 interface AgentItem {
   id: string;
   name: string;
+  icon: React.ElementType;
 }
 
-const mockAgentItems: AgentItem[] = [
-  { id: "1", name: "Portfolio Analyst" },
-  { id: "2", name: "Risk Assessment" },
-  { id: "3", name: "ESG Compliance" },
+const agentItems: AgentItem[] = [
+  { id: "1", name: "Confirms", icon: Check },
+  { id: "2", name: "Settlements", icon: FileText },
+  { id: "3", name: "Corporate Actions", icon: Briefcase },
+  { id: "4", name: "Risk", icon: Shield },
+  { id: "5", name: "Performance", icon: TrendingUp },
 ];
 
 const Sidebar = () => {
@@ -36,12 +39,13 @@ const Sidebar = () => {
           <User size={16} /> Agents
         </h2>
         <div className="space-y-1">
-          {mockAgentItems.map((agent) => (
+          {agentItems.map((agent) => (
             <Button 
               key={agent.id} 
               variant="ghost" 
               className="w-full justify-start text-purple-700 hover:bg-purple-100 hover:text-purple-900"
             >
+              <agent.icon className="mr-2 h-4 w-4" />
               {agent.name}
             </Button>
           ))}
