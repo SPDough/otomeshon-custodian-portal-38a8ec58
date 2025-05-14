@@ -18,7 +18,6 @@ import {
   Shield as ShieldIcon,
   TrendingUp as TrendingUpIcon,
   History as HistoryIcon,
-  Person as UserIcon,
   FolderOpen as PortfolioIcon
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
@@ -80,7 +79,7 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
       }}
     >
       <Box sx={{ overflow: 'auto' }}>
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2, pt: 8 }}> {/* Added padding-top to account for AppBar */}
           <Typography 
             variant="subtitle2" 
             component="div" 
@@ -92,7 +91,7 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
               fontWeight: 'bold' 
             }}
           >
-            <UserIcon fontSize="small" /> Agents
+            Financial Agents
           </Typography>
           <List dense>
             {agentItems.map((agent) => (
@@ -129,7 +128,7 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
               mb: 1
             }}
           >
-            <HistoryIcon fontSize="small" /> History
+            <HistoryIcon fontSize="small" /> Recent Searches
           </Typography>
           <List dense>
             {mockHistoryItems.map((item) => (

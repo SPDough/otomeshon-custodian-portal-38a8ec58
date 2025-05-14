@@ -54,6 +54,7 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
   return (
     <AppBar position="fixed" elevation={1} sx={{ zIndex: theme.zIndex.drawer + 1 }}>
       <Toolbar>
+        {/* Sidebar toggle button */}
         <IconButton
           color="inherit"
           aria-label="toggle drawer"
@@ -64,13 +65,14 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
           <MenuIcon />
         </IconButton>
         
+        {/* Logo/Brand */}
         <Typography 
           variant="h6" 
           component={RouterLink} 
           to="/" 
           sx={{ 
             flexGrow: 1, 
-            color: "primary.main",
+            color: "#fff",
             fontWeight: 700,
             textDecoration: "none"
           }}
@@ -78,6 +80,7 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
           Otomeshon
         </Typography>
 
+        {/* Mobile Menu */}
         {isMobile ? (
           <>
             <IconButton
@@ -98,6 +101,9 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
             >
               <MenuItem component={RouterLink} to="/search" onClick={handleMenuClose}>
                 Search
+              </MenuItem>
+              <MenuItem component={RouterLink} to="/portfolios" onClick={handleMenuClose}>
+                Portfolios
               </MenuItem>
               <MenuItem component={RouterLink} to="/about" onClick={handleMenuClose}>
                 About
@@ -129,6 +135,7 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
           </>
         ) : (
           <>
+            {/* Desktop Navigation */}
             <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
               <Button 
                 color="inherit" 
@@ -136,6 +143,13 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
                 to="/search"
               >
                 Search
+              </Button>
+              <Button 
+                color="inherit" 
+                component={RouterLink} 
+                to="/portfolios"
+              >
+                Portfolios
               </Button>
               <Button 
                 color="inherit" 
@@ -149,29 +163,31 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
                 <>
                   <Button 
                     variant="outlined"
-                    color="primary"
+                    color="inherit"
                     size="small"
                     startIcon={<UserIcon />}
-                    sx={{ bgcolor: 'primary.light', color: 'primary.dark' }}
+                    sx={{ bgcolor: 'primary.dark', color: 'white' }}
                   >
                     {username}
                   </Button>
                   <Button 
                     variant="outlined"
-                    color="primary"
+                    color="inherit"
                     size="small"
                     startIcon={<LogoutIcon />}
                     onClick={handleLogout}
+                    sx={{ borderColor: 'white', color: 'white' }}
                   >
                     Logout
                   </Button>
                 </>
               ) : (
                 <Button 
-                  variant="contained" 
-                  color="primary"
+                  variant="outlined" 
+                  color="inherit"
                   startIcon={<LoginIcon />}
                   onClick={handleLogin}
+                  sx={{ borderColor: 'white', color: 'white' }}
                 >
                   Login
                 </Button>
