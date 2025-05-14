@@ -1,5 +1,5 @@
 
-import { Container, Typography, Grid, Card, CardContent, CardActions, Button, Box } from "@mui/material";
+import { Container, Typography, Grid, Card, CardContent, CardActions, Button } from "@mui/material";
 
 const Portfolios = () => {
   return (
@@ -9,7 +9,7 @@ const Portfolios = () => {
       </Typography>
       
       <Grid container spacing={4}>
-        <Grid item xs={12} md={4}>
+        <Grid xs={12} md={4}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: 'primary.light' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'primary.dark', fontWeight: 'bold' }}>
@@ -28,7 +28,7 @@ const Portfolios = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={4}>
+        <Grid xs={12} md={4}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: 'primary.light' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'primary.dark', fontWeight: 'bold' }}>
@@ -47,7 +47,7 @@ const Portfolios = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={4}>
+        <Grid xs={12} md={4}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: 'primary.light' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'primary.dark', fontWeight: 'bold' }}>
