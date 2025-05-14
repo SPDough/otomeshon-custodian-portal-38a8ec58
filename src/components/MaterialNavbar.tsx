@@ -7,9 +7,7 @@ import {
   Typography,
   Button,
   IconButton,
-  Avatar,
   Box,
-  Chip,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -54,29 +52,17 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
   };
 
   return (
-    <AppBar position="fixed" elevation={1}>
+    <AppBar position="fixed" elevation={1} sx={{ zIndex: theme.zIndex.drawer + 1 }}>
       <Toolbar>
-        {isMobile ? (
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={toggleSidebar}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-        ) : (
-          <IconButton
-            color="inherit"
-            aria-label="toggle drawer"
-            edge="start"
-            onClick={toggleSidebar}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
+        <IconButton
+          color="inherit"
+          aria-label="toggle drawer"
+          edge="start"
+          onClick={toggleSidebar}
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
         
         <Typography 
           variant="h6" 
@@ -161,12 +147,15 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
               
               {isLoggedIn ? (
                 <>
-                  <Chip
-                    icon={<UserIcon />}
-                    label={username}
+                  <Button 
                     variant="outlined"
+                    color="primary"
+                    size="small"
+                    startIcon={<UserIcon />}
                     sx={{ bgcolor: 'primary.light', color: 'primary.dark' }}
-                  />
+                  >
+                    {username}
+                  </Button>
                   <Button 
                     variant="outlined"
                     color="primary"

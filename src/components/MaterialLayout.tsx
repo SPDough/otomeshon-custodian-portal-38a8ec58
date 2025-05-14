@@ -1,7 +1,6 @@
 
 import { useState } from "react";
-import { Box, CssBaseline, IconButton, useMediaQuery, useTheme, Toolbar } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { Box, CssBaseline, useMediaQuery, useTheme, Toolbar } from "@mui/material";
 import MaterialNavbar from "./MaterialNavbar";
 import MaterialSidebar from "./MaterialSidebar";
 
@@ -40,6 +39,8 @@ const MaterialLayout = ({ children }: MaterialLayoutProps) => {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <Toolbar /> {/* Adds space under the AppBar */}

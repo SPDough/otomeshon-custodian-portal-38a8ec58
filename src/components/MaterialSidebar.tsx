@@ -18,8 +18,10 @@ import {
   Shield as ShieldIcon,
   TrendingUp as TrendingUpIcon,
   History as HistoryIcon,
-  Person as UserIcon
+  Person as UserIcon,
+  FolderOpen as PortfolioIcon
 } from "@mui/icons-material";
+import { Link as RouterLink } from "react-router-dom";
 
 interface SidebarProps {
   open: boolean;
@@ -31,6 +33,7 @@ interface AgentItem {
   id: string;
   name: string;
   icon: React.ReactElement;
+  path?: string;
 }
 
 interface HistoryItem {
@@ -45,6 +48,7 @@ const agentItems: AgentItem[] = [
   { id: "3", name: "Corporate Actions", icon: <BriefcaseIcon /> },
   { id: "4", name: "Risk", icon: <ShieldIcon /> },
   { id: "5", name: "Performance", icon: <TrendingUpIcon /> },
+  { id: "6", name: "Portfolios", icon: <PortfolioIcon />, path: "/portfolios" },
 ];
 
 const mockHistoryItems: HistoryItem[] = [
@@ -93,7 +97,10 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
           <List dense>
             {agentItems.map((agent) => (
               <ListItem key={agent.id} disablePadding>
-                <ListItemButton>
+                <ListItemButton 
+                  component={agent.path ? RouterLink : "button"}
+                  to={agent.path}
+                >
                   <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
                     {agent.icon}
                   </ListItemIcon>
