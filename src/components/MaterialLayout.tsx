@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Box, CssBaseline, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Box, CssBaseline, IconButton, useMediaQuery, useTheme, Toolbar } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import MaterialNavbar from "./MaterialNavbar";
 import MaterialSidebar from "./MaterialSidebar";
@@ -22,7 +22,7 @@ const MaterialLayout = ({ children }: MaterialLayoutProps) => {
     <Box sx={{ display: 'flex', height: '100vh' }}>
       <CssBaseline />
       
-      <MaterialNavbar />
+      <MaterialNavbar toggleSidebar={toggleSidebar} isMobile={isMobile} />
       
       <MaterialSidebar 
         open={sidebarOpen} 
@@ -42,18 +42,7 @@ const MaterialLayout = ({ children }: MaterialLayoutProps) => {
           }),
         }}
       >
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          mb: 2,
-          mt: 8 // Add margin top to account for AppBar height
-        }}>
-          {!isMobile && (
-            <IconButton onClick={toggleSidebar} sx={{ mr: 2 }}>
-              <MenuIcon />
-            </IconButton>
-          )}
-        </Box>
+        <Toolbar /> {/* Adds space under the AppBar */}
         {children}
       </Box>
     </Box>

@@ -10,7 +10,6 @@ import {
   Avatar,
   Box,
   Chip,
-  useMediaQuery,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -23,12 +22,16 @@ import {
   Logout as LogoutIcon
 } from "@mui/icons-material";
 
-const MaterialNavbar = () => {
+interface MaterialNavbarProps {
+  toggleSidebar?: () => void;
+  isMobile?: boolean;
+}
+
+const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLogin = () => {
     // Simulate login for demonstration
@@ -51,8 +54,30 @@ const MaterialNavbar = () => {
   };
 
   return (
-    <AppBar position="static" elevation={1}>
+    <AppBar position="fixed" elevation={1}>
       <Toolbar>
+        {isMobile ? (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={toggleSidebar}
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+        ) : (
+          <IconButton
+            color="inherit"
+            aria-label="toggle drawer"
+            edge="start"
+            onClick={toggleSidebar}
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+        
         <Typography 
           variant="h6" 
           component={RouterLink} 
