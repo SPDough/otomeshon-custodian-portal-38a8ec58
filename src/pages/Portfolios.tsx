@@ -9,7 +9,7 @@ const Portfolios = () => {
       </Typography>
       
       <Grid container spacing={4}>
-        <Grid component="div" xs={12} md={4}>
+        <Grid sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: 'primary.light' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'primary.dark', fontWeight: 'bold' }}>
@@ -28,7 +28,7 @@ const Portfolios = () => {
           </Card>
         </Grid>
         
-        <Grid component="div" xs={12} md={4}>
+        <Grid sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: 'primary.light' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'primary.dark', fontWeight: 'bold' }}>
@@ -47,7 +47,7 @@ const Portfolios = () => {
           </Card>
         </Grid>
         
-        <Grid component="div" xs={12} md={4}>
+        <Grid sx={{ gridColumn: { xs: 'span 12', md: 'span 4' } }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderColor: 'primary.light' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'primary.dark', fontWeight: 'bold' }}>
