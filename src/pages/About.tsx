@@ -4,238 +4,225 @@ import {
   Box,
   Card,
   CardContent,
-  CardHeader,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  Avatar,
   Chip,
-  Divider,
   Button,
   Paper,
 } from '@mui/material';
 import {
-  Analytics,
-  AccountTree,
-  Storage,
-  Search,
+  TrendingUp,
   Security,
-  Speed,
-  Support,
-  AutoAwesome,
-  GitHub,
-  Description,
+  Analytics,
+  Business,
+  LinkedIn,
+  Email,
 } from '@mui/icons-material';
 
 const About = () => {
-  const features = [
+  const teamMembers = [
     {
-      icon: <Storage />,
-      title: 'Data Sandbox',
-      description: 'Interactive data manipulation with HandsonTable for real-time analysis',
+      name: 'Sarah Chen',
+      role: 'Chief Executive Officer',
+      bio: 'Former Goldman Sachs VP with 15+ years in financial technology and quantitative analysis.',
+      image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=400&fit=crop&crop=face',
+      linkedin: '#',
+      email: 'sarah.chen@company.com'
     },
     {
-      icon: <AccountTree />,
-      title: 'Workflow Engine',
-      description: 'Drools 9 rules engine and Langchain AI workflows for automated processes',
+      name: 'Michael Rodriguez',
+      role: 'Chief Technology Officer',
+      bio: 'Ex-Bloomberg technology lead specializing in real-time financial data systems and AI.',
+      image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=400&fit=crop&crop=face',
+      linkedin: '#',
+      email: 'michael.rodriguez@company.com'
     },
     {
-      icon: <Analytics />,
-      title: 'Knowledge Graph',
-      description: 'FIBO ontology integration for semantic data relationships and insights',
+      name: 'Dr. Emma Thompson',
+      role: 'Head of Data Science',
+      bio: 'PhD in Quantitative Finance from MIT, former JPMorgan quant researcher with expertise in machine learning.',
+      image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=400&fit=crop&crop=face',
+      linkedin: '#',
+      email: 'emma.thompson@company.com'
     },
     {
-      icon: <Search />,
-      title: 'Global Search',
-      description: 'Unified search across data, workflows, and ontology elements',
-    },
-    {
-      icon: <AutoAwesome />,
-      title: 'Portfolio Management',
-      description: 'Create, analyze, and optimize investment portfolios with advanced metrics',
-    },
-    {
-      icon: <Speed />,
-      title: 'Real-time Analytics',
-      description: 'Live dashboard with performance metrics and risk assessments',
-    },
+      name: 'James Park',
+      role: 'Head of Product',
+      bio: 'Former Blackrock product manager with deep expertise in portfolio management and risk analytics.',
+      image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=400&fit=crop&crop=face',
+      linkedin: '#',
+      email: 'james.park@company.com'
+    }
   ];
 
-  const technologies = [
-    { name: 'React 18', category: 'Frontend' },
-    { name: 'TypeScript', category: 'Language' },
-    { name: 'Material-UI', category: 'UI Framework' },
-    { name: 'HandsonTable', category: 'Data Grid' },
-    { name: 'Drools 9', category: 'Rules Engine' },
-    { name: 'Langchain', category: 'AI/ML' },
-    { name: 'FIBO Ontology', category: 'Knowledge Base' },
-    { name: 'React Query', category: 'Data Fetching' },
-  ];
-
-  const systemInfo = [
-    { label: 'Version', value: '1.0.0' },
-    { label: 'Build', value: 'Production' },
-    { label: 'Last Updated', value: 'January 2024' },
-    { label: 'License', value: 'MIT' },
+  const values = [
+    {
+      icon: <Analytics color="primary" />,
+      title: 'Data-Driven Decisions',
+      description: 'We believe in the power of data to transform financial decision-making and drive better outcomes.'
+    },
+    {
+      icon: <Security color="primary" />,
+      title: 'Security First',
+      description: 'Enterprise-grade security and compliance are built into every aspect of our platform.'
+    },
+    {
+      icon: <TrendingUp color="primary" />,
+      title: 'Innovation',
+      description: 'We continuously push the boundaries of what\'s possible in financial technology.'
+    },
+    {
+      icon: <Business color="primary" />,
+      title: 'Client Success',
+      description: 'Our clients\' success is our success. We\'re committed to delivering exceptional value.'
+    }
   ];
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ textAlign: 'center', mb: 6 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
-          Financial Intelligence Platform
+      {/* Company Overview */}
+      <Box sx={{ textAlign: 'center', mb: 8 }}>
+        <Typography variant="h2" component="h1" gutterBottom>
+          About Our Company
         </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
-          Advanced data analysis, workflow automation, and knowledge management for financial services
+        <Typography variant="h5" color="text.secondary" sx={{ mb: 4, maxWidth: 800, mx: 'auto' }}>
+          We're revolutionizing financial intelligence through advanced analytics, 
+          automated workflows, and comprehensive data management solutions.
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-          <Button variant="contained" startIcon={<Description />}>
-            Documentation
-          </Button>
-          <Button variant="outlined" startIcon={<GitHub />}>
-            View Source
-          </Button>
-          <Button variant="outlined" startIcon={<Support />}>
-            Support
-          </Button>
+      </Box>
+
+      {/* Mission Statement */}
+      <Paper sx={{ p: 4, mb: 6, bgcolor: 'primary.main', color: 'white' }}>
+        <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
+          Our Mission
+        </Typography>
+        <Typography variant="h6" sx={{ color: 'grey.100' }}>
+          To empower financial professionals with intelligent tools that transform complex data 
+          into actionable insights, enabling smarter decisions and better outcomes for investors worldwide.
+        </Typography>
+      </Paper>
+
+      {/* Company Values */}
+      <Box sx={{ mb: 8 }}>
+        <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
+          Our Values
+        </Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 4 }}>
+          {values.map((value, index) => (
+            <Card key={index} sx={{ height: '100%', textAlign: 'center' }}>
+              <CardContent>
+                <Box sx={{ mb: 2 }}>
+                  {value.icon}
+                </Box>
+                <Typography variant="h6" gutterBottom>
+                  {value.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {value.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        {/* Features Section */}
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            Key Features
-          </Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
-            {features.map((feature, index) => (
-              <Card key={index} sx={{ height: '100%' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    {feature.icon}
-                    <Typography variant="h6" sx={{ ml: 1 }}>
-                      {feature.title}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    {feature.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
+      {/* Team Section */}
+      <Box sx={{ mb: 8 }}>
+        <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
+          Meet Our Team
+        </Typography>
+        <Typography variant="h6" color="text.secondary" sx={{ textAlign: 'center', mb: 6 }}>
+          Our leadership team brings decades of experience from top financial institutions and technology companies.
+        </Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 4 }}>
+          {teamMembers.map((member, index) => (
+            <Card key={index} sx={{ height: '100%', textAlign: 'center' }}>
+              <CardContent>
+                <Avatar
+                  src={member.image}
+                  alt={member.name}
+                  sx={{ 
+                    width: 120, 
+                    height: 120, 
+                    mx: 'auto', 
+                    mb: 2,
+                    border: '4px solid',
+                    borderColor: 'primary.main'
+                  }}
+                />
+                <Typography variant="h6" gutterBottom>
+                  {member.name}
+                </Typography>
+                <Chip 
+                  label={member.role} 
+                  color="primary" 
+                  variant="outlined" 
+                  sx={{ mb: 2 }}
+                />
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                  {member.bio}
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                  <Button
+                    size="small"
+                    startIcon={<LinkedIn />}
+                    href={member.linkedin}
+                    sx={{ minWidth: 'auto' }}
+                  >
+                  </Button>
+                  <Button
+                    size="small"
+                    startIcon={<Email />}
+                    href={`mailto:${member.email}`}
+                    sx={{ minWidth: 'auto' }}
+                  >
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Company Stats */}
+      <Paper sx={{ p: 4, textAlign: 'center', bgcolor: 'grey.50' }}>
+        <Typography variant="h4" gutterBottom>
+          By the Numbers
+        </Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr 1fr' }, gap: 4, mt: 4 }}>
+          <Box>
+            <Typography variant="h3" color="primary.main" gutterBottom>
+              50+
+            </Typography>
+            <Typography variant="h6" color="text.secondary">
+              Enterprise Clients
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h3" color="primary.main" gutterBottom>
+              $10B+
+            </Typography>
+            <Typography variant="h6" color="text.secondary">
+              Assets Under Management
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h3" color="primary.main" gutterBottom>
+              99.9%
+            </Typography>
+            <Typography variant="h6" color="text.secondary">
+              Platform Uptime
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h3" color="primary.main" gutterBottom>
+              24/7
+            </Typography>
+            <Typography variant="h6" color="text.secondary">
+              Expert Support
+            </Typography>
           </Box>
         </Box>
-
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 4 }}>
-          {/* Technology Stack */}
-          <Card>
-            <CardHeader title="Technology Stack" />
-            <CardContent>
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-                {technologies.map((tech, index) => (
-                  <Box key={index}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1 }}>
-                      <Typography variant="body1">{tech.name}</Typography>
-                      <Chip label={tech.category} size="small" variant="outlined" />
-                    </Box>
-                    {index < technologies.length - 1 && <Divider />}
-                  </Box>
-                ))}
-              </Box>
-            </CardContent>
-          </Card>
-
-          {/* System Information */}
-          <Card>
-            <CardHeader title="System Information" />
-            <CardContent>
-              <List dense>
-                {systemInfo.map((info, index) => (
-                  <ListItem key={index} sx={{ px: 0 }}>
-                    <ListItemText
-                      primary={info.label}
-                      secondary={info.value}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
-        </Box>
-
-        {/* Architecture Overview */}
-        <Card>
-          <CardHeader title="Architecture Overview" />
-          <CardContent>
-            <Typography variant="body1" paragraph>
-              This platform is built as a modern single-page application with a microservices-oriented 
-              architecture. The frontend leverages React 18 with TypeScript for type safety and 
-              Material-UI for consistent design patterns.
-            </Typography>
-            
-            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-              Core Components:
-            </Typography>
-            
-            <List>
-              <ListItem>
-                <ListItemIcon>
-                  <Storage color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Data Layer"
-                  secondary="HandsonTable provides an Excel-like interface for data manipulation with real-time collaboration features"
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <AccountTree color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Workflow Engine"
-                  secondary="Drools 9 rules engine for business logic and Langchain for AI-powered workflow automation"
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Analytics color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Knowledge Base"
-                  secondary="FIBO (Financial Industry Business Ontology) integration for semantic data relationships"
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <Security color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Security & Compliance"
-                  secondary="Enterprise-grade security with role-based access control and audit trails"
-                />
-              </ListItem>
-            </List>
-          </CardContent>
-        </Card>
-
-        {/* Usage Guidelines */}
-        <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
-          <Typography variant="h6" gutterBottom>
-            Getting Started
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Navigate through the different sections using the sidebar to explore the platform's capabilities:
-          </Typography>
-          <Typography variant="body2" component="div">
-            <strong>Data:</strong> Import and manipulate datasets using the interactive table interface<br/>
-            <strong>Workflows:</strong> Configure and execute automated processes using Drools rules and AI workflows<br/>
-            <strong>Knowledge Graph:</strong> Explore data relationships through the FIBO ontology browser<br/>
-            <strong>Search:</strong> Find information across all platform components<br/>
-            <strong>Portfolios:</strong> Create and analyze investment portfolios with advanced metrics<br/>
-            <strong>Results:</strong> View workflow outputs and analytical insights
-          </Typography>
-        </Paper>
-      </Box>
+      </Paper>
     </Container>
   );
 };
