@@ -4,7 +4,6 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   CardHeader,
@@ -146,64 +145,56 @@ const Portfolios = () => {
       </Box>
 
       {/* Summary Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} md={4}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <AccountBalance color="primary" />
-                <Typography variant="h6" sx={{ ml: 1 }}>
-                  Total Value
-                </Typography>
-              </Box>
-              <Typography variant="h4" color="primary">
-                {formatCurrency(totalValue)}
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3, mb: 4 }}>
+        <Card>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <AccountBalance color="primary" />
+              <Typography variant="h6" sx={{ ml: 1 }}>
+                Total Value
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Across {portfolios.length} portfolios
+            </Box>
+            <Typography variant="h4" color="primary">
+              {formatCurrency(totalValue)}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Across {portfolios.length} portfolios
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <TrendingUp color="primary" />
+              <Typography variant="h6" sx={{ ml: 1 }}>
+                Average Return
               </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <TrendingUp color="primary" />
-                <Typography variant="h6" sx={{ ml: 1 }}>
-                  Average Return
-                </Typography>
-              </Box>
-              <Typography variant="h4" color="success.main">
-                +{avgReturn.toFixed(1)}%
+            </Box>
+            <Typography variant="h4" color="success.main">
+              +{avgReturn.toFixed(1)}%
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Weighted average
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Analytics color="primary" />
+              <Typography variant="h6" sx={{ ml: 1 }}>
+                Best Performer
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Weighted average
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Analytics color="primary" />
-                <Typography variant="h6" sx={{ ml: 1 }}>
-                  Best Performer
-                </Typography>
-              </Box>
-              <Typography variant="h4" color="success.main">
-                Aggressive Tech
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                +15.7% return
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </Box>
+            <Typography variant="h4" color="success.main">
+              Aggressive Tech
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              +15.7% return
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* Portfolios Table */}
       <Card>

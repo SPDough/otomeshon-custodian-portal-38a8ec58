@@ -6,7 +6,6 @@ import {
   Box,
   TextField,
   Button,
-  Grid,
   Card,
   CardContent,
   Chip,
@@ -122,21 +121,19 @@ const Search = () => {
 
       <TabPanel value={tabValue} index={0}>
         <Typography variant="h6" gutterBottom>Data Results</Typography>
-        <Grid container spacing={2}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
           {dataResults.map((result, index) => (
-            <Grid item xs={12} md={6} key={index}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6">{result.name}</Typography>
-                  <Chip label={result.type} size="small" sx={{ mb: 1 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {result.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+            <Card key={index}>
+              <CardContent>
+                <Typography variant="h6">{result.name}</Typography>
+                <Chip label={result.type} size="small" sx={{ mb: 1 }} />
+                <Typography variant="body2" color="text.secondary">
+                  {result.description}
+                </Typography>
+              </CardContent>
+            </Card>
           ))}
-        </Grid>
+        </Box>
       </TabPanel>
 
       <TabPanel value={tabValue} index={1}>

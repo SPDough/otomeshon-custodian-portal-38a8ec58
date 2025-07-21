@@ -4,7 +4,6 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   CardHeader,
@@ -95,150 +94,18 @@ const Results = () => {
       </Box>
 
       {viewMode === 'overview' && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <TrendingUp color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    Portfolio Value
-                  </Typography>
-                </Box>
-                <Typography variant="h4" color="primary">
-                  $1,247,500
-                </Typography>
-                <Typography variant="body2" color="success.main">
-                  +12.45% YTD
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Assessment color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    Risk Score
-                  </Typography>
-                </Box>
-                <Typography variant="h4" color="warning.main">
-                  Medium
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Risk Level: 6/10
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Analytics color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    Active Workflows
-                  </Typography>
-                </Box>
-                <Typography variant="h4" color="info.main">
-                  3
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  2 Running, 1 Queued
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <TrendingUp color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    Compliance
-                  </Typography>
-                </Box>
-                <Typography variant="h4" color="success.main">
-                  98.5%
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  All checks passed
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={8}>
-            <Card>
-              <CardHeader title="Key Performance Metrics" />
-              <CardContent>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Metric</TableCell>
-                        <TableCell align="right">Value</TableCell>
-                        <TableCell align="right">Change</TableCell>
-                        <TableCell align="right">Trend</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {analysisData.map((row) => (
-                        <TableRow key={row.metric}>
-                          <TableCell>{row.metric}</TableCell>
-                          <TableCell align="right">{row.value}</TableCell>
-                          <TableCell align="right">
-                            <Chip
-                              label={row.change}
-                              color={row.trend === 'up' ? 'success' : 'error'}
-                              size="small"
-                            />
-                          </TableCell>
-                          <TableCell align="right">
-                            <TrendingUp
-                              color={row.trend === 'up' ? 'success' : 'error'}
-                              sx={{ transform: row.trend === 'down' ? 'rotate(180deg)' : 'none' }}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardHeader title="Top Holdings" />
-              <CardContent>
-                {portfolioData.map((holding) => (
-                  <Box key={holding.asset} sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography variant="subtitle2">{holding.asset}</Typography>
-                      <Typography variant="body2" color={holding.return.startsWith('+') ? 'success.main' : 'error.main'}>
-                        {holding.return}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography variant="body2" color="text.secondary">
-                        {holding.allocation}
-                      </Typography>
-                      <Typography variant="body2">
-                        {holding.value}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        <>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr 1fr' }, gap: 3, mb: 3 }}>
+            <Card><CardContent><Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}><TrendingUp color="primary" /><Typography variant="h6" sx={{ ml: 1 }}>Portfolio Value</Typography></Box><Typography variant="h4" color="primary">$1,247,500</Typography><Typography variant="body2" color="success.main">+12.45% YTD</Typography></CardContent></Card>
+            <Card><CardContent><Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}><Assessment color="primary" /><Typography variant="h6" sx={{ ml: 1 }}>Risk Score</Typography></Box><Typography variant="h4" color="warning.main">Medium</Typography><Typography variant="body2" color="text.secondary">Risk Level: 6/10</Typography></CardContent></Card>
+            <Card><CardContent><Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}><Analytics color="primary" /><Typography variant="h6" sx={{ ml: 1 }}>Active Workflows</Typography></Box><Typography variant="h4" color="info.main">3</Typography><Typography variant="body2" color="text.secondary">2 Running, 1 Queued</Typography></CardContent></Card>
+            <Card><CardContent><Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}><TrendingUp color="primary" /><Typography variant="h6" sx={{ ml: 1 }}>Compliance</Typography></Box><Typography variant="h4" color="success.main">98.5%</Typography><Typography variant="body2" color="text.secondary">All checks passed</Typography></CardContent></Card>
+          </Box>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 3 }}>
+            <Card><CardHeader title="Key Performance Metrics" /><CardContent><TableContainer><Table><TableHead><TableRow><TableCell>Metric</TableCell><TableCell align="right">Value</TableCell><TableCell align="right">Change</TableCell><TableCell align="right">Trend</TableCell></TableRow></TableHead><TableBody>{analysisData.map((row) => (<TableRow key={row.metric}><TableCell>{row.metric}</TableCell><TableCell align="right">{row.value}</TableCell><TableCell align="right"><Chip label={row.change} color={row.trend === 'up' ? 'success' : 'error'} size="small" /></TableCell><TableCell align="right"><TrendingUp color={row.trend === 'up' ? 'success' : 'error'} sx={{ transform: row.trend === 'down' ? 'rotate(180deg)' : 'none' }} /></TableCell></TableRow>))}</TableBody></Table></TableContainer></CardContent></Card>
+            <Card><CardHeader title="Top Holdings" /><CardContent>{portfolioData.map((holding) => (<Box key={holding.asset} sx={{ mb: 2 }}><Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}><Typography variant="subtitle2">{holding.asset}</Typography><Typography variant="body2" color={holding.return.startsWith('+') ? 'success.main' : 'error.main'}>{holding.return}</Typography></Box><Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}><Typography variant="body2" color="text.secondary">{holding.allocation}</Typography><Typography variant="body2">{holding.value}</Typography></Box></Box>))}</CardContent></Card>
+          </Box>
+        </>
       )}
 
       {viewMode === 'workflows' && (

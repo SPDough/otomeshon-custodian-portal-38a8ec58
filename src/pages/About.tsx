@@ -1,9 +1,7 @@
-
 import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   CardHeader,
@@ -103,55 +101,51 @@ const About = () => {
         </Box>
       </Box>
 
-      <Grid container spacing={4}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {/* Features Section */}
-        <Grid item xs={12}>
+        <Box>
           <Typography variant="h4" gutterBottom>
             Key Features
           </Typography>
-          <Grid container spacing={3}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
             {features.map((feature, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Card sx={{ height: '100%' }}>
-                  <CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      {feature.icon}
-                      <Typography variant="h6" sx={{ ml: 1 }}>
-                        {feature.title}
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      {feature.description}
+              <Card key={index} sx={{ height: '100%' }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    {feature.icon}
+                    <Typography variant="h6" sx={{ ml: 1 }}>
+                      {feature.title}
                     </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
             ))}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
-        {/* Technology Stack */}
-        <Grid item xs={12} md={8}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 4 }}>
+          {/* Technology Stack */}
           <Card>
             <CardHeader title="Technology Stack" />
             <CardContent>
-              <Grid container spacing={2}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
                 {technologies.map((tech, index) => (
-                  <Grid item xs={12} sm={6} key={index}>
+                  <Box key={index}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1 }}>
                       <Typography variant="body1">{tech.name}</Typography>
                       <Chip label={tech.category} size="small" variant="outlined" />
                     </Box>
                     {index < technologies.length - 1 && <Divider />}
-                  </Grid>
+                  </Box>
                 ))}
-              </Grid>
+              </Box>
             </CardContent>
           </Card>
-        </Grid>
 
-        {/* System Information */}
-        <Grid item xs={12} md={4}>
+          {/* System Information */}
           <Card>
             <CardHeader title="System Information" />
             <CardContent>
@@ -167,85 +161,81 @@ const About = () => {
               </List>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
         {/* Architecture Overview */}
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader title="Architecture Overview" />
-            <CardContent>
-              <Typography variant="body1" paragraph>
-                This platform is built as a modern single-page application with a microservices-oriented 
-                architecture. The frontend leverages React 18 with TypeScript for type safety and 
-                Material-UI for consistent design patterns.
-              </Typography>
-              
-              <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                Core Components:
-              </Typography>
-              
-              <List>
-                <ListItem>
-                  <ListItemIcon>
-                    <Storage color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Data Layer"
-                    secondary="HandsonTable provides an Excel-like interface for data manipulation with real-time collaboration features"
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <AccountTree color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Workflow Engine"
-                    secondary="Drools 9 rules engine for business logic and Langchain for AI-powered workflow automation"
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Analytics color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Knowledge Base"
-                    secondary="FIBO (Financial Industry Business Ontology) integration for semantic data relationships"
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <Security color="primary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Security & Compliance"
-                    secondary="Enterprise-grade security with role-based access control and audit trails"
-                  />
-                </ListItem>
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
+        <Card>
+          <CardHeader title="Architecture Overview" />
+          <CardContent>
+            <Typography variant="body1" paragraph>
+              This platform is built as a modern single-page application with a microservices-oriented 
+              architecture. The frontend leverages React 18 with TypeScript for type safety and 
+              Material-UI for consistent design patterns.
+            </Typography>
+            
+            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+              Core Components:
+            </Typography>
+            
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <Storage color="primary" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Data Layer"
+                  secondary="HandsonTable provides an Excel-like interface for data manipulation with real-time collaboration features"
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <AccountTree color="primary" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Workflow Engine"
+                  secondary="Drools 9 rules engine for business logic and Langchain for AI-powered workflow automation"
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <Analytics color="primary" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Knowledge Base"
+                  secondary="FIBO (Financial Industry Business Ontology) integration for semantic data relationships"
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <Security color="primary" />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Security & Compliance"
+                  secondary="Enterprise-grade security with role-based access control and audit trails"
+                />
+              </ListItem>
+            </List>
+          </CardContent>
+        </Card>
 
         {/* Usage Guidelines */}
-        <Grid item xs={12}>
-          <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
-            <Typography variant="h6" gutterBottom>
-              Getting Started
-            </Typography>
-            <Typography variant="body1" paragraph>
-              Navigate through the different sections using the sidebar to explore the platform's capabilities:
-            </Typography>
-            <Typography variant="body2" component="div">
-              <strong>Data:</strong> Import and manipulate datasets using the interactive table interface<br/>
-              <strong>Workflows:</strong> Configure and execute automated processes using Drools rules and AI workflows<br/>
-              <strong>Knowledge Graph:</strong> Explore data relationships through the FIBO ontology browser<br/>
-              <strong>Search:</strong> Find information across all platform components<br/>
-              <strong>Portfolios:</strong> Create and analyze investment portfolios with advanced metrics<br/>
-              <strong>Results:</strong> View workflow outputs and analytical insights
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+        <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
+          <Typography variant="h6" gutterBottom>
+            Getting Started
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Navigate through the different sections using the sidebar to explore the platform's capabilities:
+          </Typography>
+          <Typography variant="body2" component="div">
+            <strong>Data:</strong> Import and manipulate datasets using the interactive table interface<br/>
+            <strong>Workflows:</strong> Configure and execute automated processes using Drools rules and AI workflows<br/>
+            <strong>Knowledge Graph:</strong> Explore data relationships through the FIBO ontology browser<br/>
+            <strong>Search:</strong> Find information across all platform components<br/>
+            <strong>Portfolios:</strong> Create and analyze investment portfolios with advanced metrics<br/>
+            <strong>Results:</strong> View workflow outputs and analytical insights
+          </Typography>
+        </Paper>
+      </Box>
     </Container>
   );
 };

@@ -1,10 +1,8 @@
-
 import { useNavigate } from "react-router-dom";
 import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   CardHeader,
@@ -61,131 +59,116 @@ const Index = () => {
       </Box>
 
       {/* Stats Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 3, mb: 4 }}>
         {dashboardStats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Box sx={{ color: `${stat.color}.main` }}>
-                    {stat.icon}
-                  </Box>
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    {stat.title}
-                  </Typography>
-                </Box>
-                <Typography variant="h4" color={`${stat.color}.main`}>
-                  {stat.value}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {stat.change}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Grid container spacing={4}>
-        {/* Quick Actions */}
-        <Grid item xs={12} md={8}>
-          <Card>
-            <CardHeader title="Quick Actions" />
+          <Card key={index}>
             <CardContent>
-              <Grid container spacing={2}>
-                {quickActions.map((action, index) => (
-                  <Grid item xs={12} sm={6} key={index}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        cursor: 'pointer',
-                        '&:hover': { bgcolor: 'action.hover' },
-                        transition: 'background-color 0.2s',
-                      }}
-                      onClick={() => navigate(action.path)}
-                    >
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        {action.icon}
-                        <Typography variant="h6" sx={{ ml: 1 }}>
-                          {action.title}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">
-                        {action.description}
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Box sx={{ color: `${stat.color}.main` }}>
+                  {stat.icon}
+                </Box>
+                <Typography variant="h6" sx={{ ml: 1 }}>
+                  {stat.title}
+                </Typography>
+              </Box>
+              <Typography variant="h4" color={`${stat.color}.main`}>
+                {stat.value}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {stat.change}
+              </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        ))}
+      </Box>
 
-        {/* Recent Activity */}
-        <Grid item xs={12} md={4}>
-          <Card>
-            <CardHeader title="Recent Activity" />
-            <CardContent>
-              <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-                {recentActivity.map((activity, index) => (
-                  <Box key={index} sx={{ mb: 2, pb: 2, borderBottom: index < recentActivity.length - 1 ? 1 : 0, borderColor: 'divider' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                      <Typography variant="subtitle2">{activity.name}</Typography>
-                      <Chip
-                        label={activity.type}
-                        size="small"
-                        variant="outlined"
-                        color={activity.status as any}
-                      />
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      {activity.time}
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 4, mb: 4 }}>
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader title="Quick Actions" />
+          <CardContent>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+              {quickActions.map((action, index) => (
+                <Paper
+                  key={index}
+                  sx={{
+                    p: 2,
+                    cursor: 'pointer',
+                    '&:hover': { bgcolor: 'action.hover' },
+                    transition: 'background-color 0.2s',
+                  }}
+                  onClick={() => navigate(action.path)}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    {action.icon}
+                    <Typography variant="h6" sx={{ ml: 1 }}>
+                      {action.title}
                     </Typography>
                   </Box>
-                ))}
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
+                  <Typography variant="body2" color="text.secondary">
+                    {action.description}
+                  </Typography>
+                </Paper>
+              ))}
+            </Box>
+          </CardContent>
+        </Card>
 
-        {/* System Performance */}
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader title="System Performance" />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                  <Box sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography variant="body2">Workflow Engine</Typography>
-                      <Typography variant="body2">92%</Typography>
-                    </Box>
-                    <LinearProgress variant="determinate" value={92} color="success" />
+        {/* Recent Activity */}
+        <Card>
+          <CardHeader title="Recent Activity" />
+          <CardContent>
+            <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+              {recentActivity.map((activity, index) => (
+                <Box key={index} sx={{ mb: 2, pb: 2, borderBottom: index < recentActivity.length - 1 ? 1 : 0, borderColor: 'divider' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                    <Typography variant="subtitle2">{activity.name}</Typography>
+                    <Chip
+                      label={activity.type}
+                      size="small"
+                      variant="outlined"
+                      color={activity.status as any}
+                    />
                   </Box>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Box sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography variant="body2">Data Processing</Typography>
-                      <Typography variant="body2">87%</Typography>
-                    </Box>
-                    <LinearProgress variant="determinate" value={87} color="primary" />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Box sx={{ mb: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                      <Typography variant="body2">Knowledge Graph</Typography>
-                      <Typography variant="body2">95%</Typography>
-                    </Box>
-                    <LinearProgress variant="determinate" value={95} color="success" />
-                  </Box>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+                  <Typography variant="body2" color="text.secondary">
+                    {activity.time}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
+
+      {/* System Performance */}
+      <Card>
+        <CardHeader title="System Performance" />
+        <CardContent>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="body2">Workflow Engine</Typography>
+                <Typography variant="body2">92%</Typography>
+              </Box>
+              <LinearProgress variant="determinate" value={92} color="success" />
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="body2">Data Processing</Typography>
+                <Typography variant="body2">87%</Typography>
+              </Box>
+              <LinearProgress variant="determinate" value={87} color="primary" />
+            </Box>
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="body2">Knowledge Graph</Typography>
+                <Typography variant="body2">95%</Typography>
+              </Box>
+              <LinearProgress variant="determinate" value={95} color="success" />
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
     </Container>
   );
 };
