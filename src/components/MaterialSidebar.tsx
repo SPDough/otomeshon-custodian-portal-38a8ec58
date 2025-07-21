@@ -1,4 +1,3 @@
-
 import { 
   Drawer, 
   List, 
@@ -70,6 +69,10 @@ const dataItems: AgentItem[] = [
   { id: "2", name: "Import/Export", icon: <ImportIcon /> },
   { id: "3", name: "Analytics", icon: <AnalyticsIcon /> },
   { id: "4", name: "Data Tables", icon: <TableIcon /> },
+];
+
+const knowledgeGraphItems: AgentItem[] = [
+  { id: "1", name: "Knowledge Graph", icon: <WorkflowIcon />, path: "/knowledge-graph" },
 ];
 
 const mockHistoryItems: HistoryItem[] = [
@@ -189,6 +192,42 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
           </Typography>
           <List dense>
             {dataItems.map((item) => (
+              <ListItem key={item.id} disablePadding>
+                <ListItemButton 
+                  component={item.path ? RouterLink : "button"}
+                  to={item.path}
+                >
+                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.name} 
+                    sx={{ color: 'secondary.dark' }} 
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+        
+        <Divider />
+        
+        <Box sx={{ p: 2 }}>
+          <Typography 
+            variant="subtitle2" 
+            component="div" 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              color: 'secondary.dark',
+              fontWeight: 'bold' 
+            }}
+          >
+            Knowledge Graph
+          </Typography>
+          <List dense>
+            {knowledgeGraphItems.map((item) => (
               <ListItem key={item.id} disablePadding>
                 <ListItemButton 
                   component={item.path ? RouterLink : "button"}
