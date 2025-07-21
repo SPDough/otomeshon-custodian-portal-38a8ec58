@@ -18,7 +18,15 @@ import {
   Shield as ShieldIcon,
   TrendingUp as TrendingUpIcon,
   History as HistoryIcon,
-  FolderOpen as PortfolioIcon
+  FolderOpen as PortfolioIcon,
+  AccountTree as WorkflowIcon,
+  PlayArrow as AutomationIcon,
+  Schedule as ScheduleIcon,
+  Assessment as ReportIcon,
+  Storage as DatabaseIcon,
+  CloudUpload as ImportIcon,
+  Analytics as AnalyticsIcon,
+  TableChart as TableIcon
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -48,6 +56,20 @@ const agentItems: AgentItem[] = [
   { id: "4", name: "Risk", icon: <ShieldIcon /> },
   { id: "5", name: "Performance", icon: <TrendingUpIcon /> },
   { id: "6", name: "Portfolios", icon: <PortfolioIcon />, path: "/portfolios" },
+];
+
+const workflowItems: AgentItem[] = [
+  { id: "1", name: "Automation Rules", icon: <AutomationIcon /> },
+  { id: "2", name: "Process Flows", icon: <WorkflowIcon /> },
+  { id: "3", name: "Scheduled Tasks", icon: <ScheduleIcon /> },
+  { id: "4", name: "Report Generation", icon: <ReportIcon /> },
+];
+
+const dataItems: AgentItem[] = [
+  { id: "1", name: "Data Sources", icon: <DatabaseIcon /> },
+  { id: "2", name: "Import/Export", icon: <ImportIcon /> },
+  { id: "3", name: "Analytics", icon: <AnalyticsIcon /> },
+  { id: "4", name: "Data Tables", icon: <TableIcon /> },
 ];
 
 const mockHistoryItems: HistoryItem[] = [
@@ -105,6 +127,78 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
                   </ListItemIcon>
                   <ListItemText 
                     primary={agent.name} 
+                    sx={{ color: 'secondary.dark' }} 
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+        
+        <Divider />
+        
+        <Box sx={{ p: 2 }}>
+          <Typography 
+            variant="subtitle2" 
+            component="div" 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              color: 'secondary.dark',
+              fontWeight: 'bold' 
+            }}
+          >
+            Workflows
+          </Typography>
+          <List dense>
+            {workflowItems.map((item) => (
+              <ListItem key={item.id} disablePadding>
+                <ListItemButton 
+                  component={item.path ? RouterLink : "button"}
+                  to={item.path}
+                >
+                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.name} 
+                    sx={{ color: 'secondary.dark' }} 
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+        
+        <Divider />
+        
+        <Box sx={{ p: 2 }}>
+          <Typography 
+            variant="subtitle2" 
+            component="div" 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              color: 'secondary.dark',
+              fontWeight: 'bold' 
+            }}
+          >
+            Data
+          </Typography>
+          <List dense>
+            {dataItems.map((item) => (
+              <ListItem key={item.id} disablePadding>
+                <ListItemButton 
+                  component={item.path ? RouterLink : "button"}
+                  to={item.path}
+                >
+                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.name} 
                     sx={{ color: 'secondary.dark' }} 
                   />
                 </ListItemButton>
