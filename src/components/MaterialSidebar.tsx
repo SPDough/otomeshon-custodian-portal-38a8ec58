@@ -71,6 +71,10 @@ const dataItems: AgentItem[] = [
   { id: "4", name: "Data Tables", icon: <TableIcon /> },
 ];
 
+const dashboardItems: AgentItem[] = [
+  { id: "1", name: "Dashboard", icon: <AnalyticsIcon />, path: "/dashboard" },
+];
+
 const knowledgeGraphItems: AgentItem[] = [
   { id: "1", name: "Knowledge Graph", icon: <WorkflowIcon />, path: "/knowledge-graph" },
 ];
@@ -130,6 +134,42 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
                   </ListItemIcon>
                   <ListItemText 
                     primary={agent.name} 
+                    sx={{ color: 'secondary.dark' }} 
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+        
+        <Divider />
+        
+        <Box sx={{ p: 2 }}>
+          <Typography 
+            variant="subtitle2" 
+            component="div" 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1,
+              color: 'secondary.dark',
+              fontWeight: 'bold' 
+            }}
+          >
+            Dashboard
+          </Typography>
+          <List dense>
+            {dashboardItems.map((item) => (
+              <ListItem key={item.id} disablePadding>
+                <ListItemButton 
+                  component={item.path ? RouterLink : "button"}
+                  to={item.path}
+                >
+                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.name} 
                     sx={{ color: 'secondary.dark' }} 
                   />
                 </ListItemButton>

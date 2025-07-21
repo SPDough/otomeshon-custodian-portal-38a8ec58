@@ -3,172 +3,92 @@ import {
   Container,
   Typography,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
-  Button,
-  Paper,
-  LinearProgress,
-  Chip,
 } from "@mui/material";
 import {
-  TrendingUp,
+  Dashboard as DashboardIcon,
+  Search,
   Analytics,
   AccountTree,
   Storage,
-  Search,
-  Assessment,
-  Timeline,
-  Speed,
 } from "@mui/icons-material";
 
 const Index = () => {
   const navigate = useNavigate();
 
-  const dashboardStats = [
-    { title: "Portfolio Value", value: "$1,247,500", change: "+12.45%", icon: <TrendingUp />, color: "success" },
-    { title: "Active Workflows", value: "8", change: "3 Running", icon: <AccountTree />, color: "info" },
-    { title: "Data Sources", value: "24", change: "2 New Today", icon: <Storage />, color: "primary" },
-    { title: "Risk Score", value: "Medium", change: "6/10", icon: <Assessment />, color: "warning" },
-  ];
-
-  const recentActivity = [
-    { type: "Workflow", name: "Risk Assessment Complete", time: "2 min ago", status: "success" },
-    { type: "Data", name: "Market Data Updated", time: "15 min ago", status: "info" },
-    { type: "Portfolio", name: "Rebalancing Triggered", time: "1 hour ago", status: "warning" },
-    { type: "System", name: "FIBO Ontology Sync", time: "3 hours ago", status: "success" },
-  ];
-
-  const quickActions = [
-    { title: "Explore Data", description: "Interactive data sandbox", icon: <Storage />, path: "/data" },
-    { title: "Run Workflows", description: "Configure automation", icon: <AccountTree />, path: "/workflows" },
-    { title: "Search Platform", description: "Find anything quickly", icon: <Search />, path: "/search" },
-    { title: "View Analytics", description: "Performance insights", icon: <Analytics />, path: "/results" },
-  ];
-
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Financial Intelligence Dashboard
+      {/* Hero Section */}
+      <Box sx={{ textAlign: 'center', mb: 6 }}>
+        <Typography variant="h2" component="h1" gutterBottom>
+          Financial Intelligence Platform
         </Typography>
-        <Typography variant="h6" color="text.secondary">
-          Welcome back! Here's what's happening with your financial data and workflows.
+        <Typography variant="h5" color="text.secondary" sx={{ mb: 4 }}>
+          Advanced analytics, automated workflows, and comprehensive data management for financial intelligence
         </Typography>
+        <Button
+          variant="contained"
+          size="large"
+          startIcon={<DashboardIcon />}
+          onClick={() => navigate('/dashboard')}
+          sx={{ mr: 2 }}
+        >
+          View Dashboard
+        </Button>
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<Search />}
+          onClick={() => navigate('/search')}
+        >
+          Start Searching
+        </Button>
       </Box>
 
-      {/* Stats Cards */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 3, mb: 4 }}>
-        {dashboardStats.map((stat, index) => (
-          <Card key={index}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Box sx={{ color: `${stat.color}.main` }}>
-                  {stat.icon}
-                </Box>
-                <Typography variant="h6" sx={{ ml: 1 }}>
-                  {stat.title}
-                </Typography>
-              </Box>
-              <Typography variant="h4" color={`${stat.color}.main`}>
-                {stat.value}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {stat.change}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
-
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 4, mb: 4 }}>
-        {/* Quick Actions */}
-        <Card>
-          <CardHeader title="Quick Actions" />
+      {/* Feature Cards */}
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 4 }}>
+        <Card sx={{ cursor: 'pointer', '&:hover': { boxShadow: 6 } }} onClick={() => navigate('/dashboard')}>
+          <CardHeader 
+            avatar={<DashboardIcon color="primary" />}
+            title="Dashboard"
+            subheader="Real-time insights and metrics"
+          />
           <CardContent>
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-              {quickActions.map((action, index) => (
-                <Paper
-                  key={index}
-                  sx={{
-                    p: 2,
-                    cursor: 'pointer',
-                    '&:hover': { bgcolor: 'action.hover' },
-                    transition: 'background-color 0.2s',
-                  }}
-                  onClick={() => navigate(action.path)}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    {action.icon}
-                    <Typography variant="h6" sx={{ ml: 1 }}>
-                      {action.title}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    {action.description}
-                  </Typography>
-                </Paper>
-              ))}
-            </Box>
+            <Typography variant="body2" color="text.secondary">
+              Monitor portfolio performance, workflow status, and system health in one unified view.
+            </Typography>
           </CardContent>
         </Card>
 
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader title="Recent Activity" />
+        <Card sx={{ cursor: 'pointer', '&:hover': { boxShadow: 6 } }} onClick={() => navigate('/workflows')}>
+          <CardHeader 
+            avatar={<AccountTree color="primary" />}
+            title="Workflows"
+            subheader="Automated financial processes"
+          />
           <CardContent>
-            <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-              {recentActivity.map((activity, index) => (
-                <Box key={index} sx={{ mb: 2, pb: 2, borderBottom: index < recentActivity.length - 1 ? 1 : 0, borderColor: 'divider' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                    <Typography variant="subtitle2">{activity.name}</Typography>
-                    <Chip
-                      label={activity.type}
-                      size="small"
-                      variant="outlined"
-                      color={activity.status as any}
-                    />
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    {activity.time}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
+            <Typography variant="body2" color="text.secondary">
+              Configure and manage automated workflows for risk assessment, data processing, and more.
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ cursor: 'pointer', '&:hover': { boxShadow: 6 } }} onClick={() => navigate('/data')}>
+          <CardHeader 
+            avatar={<Storage color="primary" />}
+            title="Data Management"
+            subheader="Comprehensive data solutions"
+          />
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Access and analyze financial data from multiple sources with advanced visualization tools.
+            </Typography>
           </CardContent>
         </Card>
       </Box>
-
-      {/* System Performance */}
-      <Card>
-        <CardHeader title="System Performance" />
-        <CardContent>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">Workflow Engine</Typography>
-                <Typography variant="body2">92%</Typography>
-              </Box>
-              <LinearProgress variant="determinate" value={92} color="success" />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">Data Processing</Typography>
-                <Typography variant="body2">87%</Typography>
-              </Box>
-              <LinearProgress variant="determinate" value={87} color="primary" />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="body2">Knowledge Graph</Typography>
-                <Typography variant="body2">95%</Typography>
-              </Box>
-              <LinearProgress variant="determinate" value={95} color="success" />
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
     </Container>
   );
 };

@@ -8,6 +8,7 @@ import MaterialLayout from "./components/MaterialLayout";
 
 // Import pages
 import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import Search from "./pages/Search";
 import Results from "./pages/Results";
 import About from "./pages/About";
@@ -27,6 +28,7 @@ const App = () => (
         <MaterialLayout>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/search" element={<Search />} />
             <Route path="/results" element={<Results />} />
             <Route path="/portfolios" element={<Portfolios />} />
