@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@handsontable/react": "^16.0.1",
     "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
@@ -50,6 +51,7 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
+    "handsontable": "^16.0.1",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
