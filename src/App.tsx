@@ -16,6 +16,7 @@ import Portfolios from "./pages/Portfolios";
 import Data from "./pages/Data";
 import Workflows from "./pages/Workflows";
 import KnowledgeGraph from "./pages/KnowledgeGraph";
+import KnowledgeBase from "./pages/KnowledgeBase";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/data" element={<Data />} />
             <Route path="/workflows" element={<Workflows />} />
             <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/about" element={<About />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

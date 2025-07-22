@@ -25,7 +25,8 @@ import {
   Storage as DatabaseIcon,
   CloudUpload as ImportIcon,
   Analytics as AnalyticsIcon,
-  TableChart as TableIcon
+  TableChart as TableIcon,
+  Search as SearchIcon
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -77,6 +78,7 @@ const dashboardItems: AgentItem[] = [
 
 const knowledgeGraphItems: AgentItem[] = [
   { id: "1", name: "Knowledge Graph", icon: <WorkflowIcon />, path: "/knowledge-graph" },
+  { id: "2", name: "Knowledge Base", icon: <SearchIcon />, path: "/knowledge-base" },
 ];
 
 const mockHistoryItems: HistoryItem[] = [
@@ -264,7 +266,7 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
               fontWeight: 'bold' 
             }}
           >
-            Knowledge Graph
+            Knowledge & AI
           </Typography>
           <List dense>
             {knowledgeGraphItems.map((item) => (
