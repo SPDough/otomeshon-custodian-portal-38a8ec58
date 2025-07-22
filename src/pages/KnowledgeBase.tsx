@@ -19,6 +19,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  ListItemButton,
   Divider,
   IconButton
 } from '@mui/material';
@@ -198,9 +199,9 @@ const KnowledgeBase = () => {
         </CardContent>
       </Card>
 
-      <Grid container spacing={3}>
+      <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
         {/* Main Content */}
-        <Grid item xs={12} md={8}>
+        <Box sx={{ flex: { md: '2' } }}>
           {/* Document Categories */}
           <Card sx={{ mb: 3 }}>
             <CardContent>
@@ -280,10 +281,10 @@ const KnowledgeBase = () => {
               ))}
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
         {/* Sidebar */}
-        <Grid item xs={12} md={4}>
+        <Box sx={{ flex: { md: '1' } }}>
           {/* Recent Searches */}
           <Card sx={{ mb: 3 }}>
             <CardContent>
@@ -292,9 +293,8 @@ const KnowledgeBase = () => {
               </Typography>
               <List dense>
                 {recentSearches.map((search, index) => (
-                  <ListItem
+                  <ListItemButton
                     key={index}
-                    button
                     onClick={() => setSearchQuery(search)}
                     sx={{ pl: 0 }}
                   >
@@ -307,7 +307,7 @@ const KnowledgeBase = () => {
                         }
                       }}
                     />
-                  </ListItem>
+                  </ListItemButton>
                 ))}
               </List>
             </CardContent>
@@ -321,7 +321,7 @@ const KnowledgeBase = () => {
               </Typography>
               <List dense>
                 {popularDocuments.map((doc, index) => (
-                  <ListItem key={index} button sx={{ pl: 0 }}>
+                  <ListItemButton key={index} sx={{ pl: 0 }}>
                     <ListItemIcon sx={{ minWidth: 32 }}>
                       <DocumentIcon fontSize="small" color="primary" />
                     </ListItemIcon>
@@ -333,13 +333,13 @@ const KnowledgeBase = () => {
                         }
                       }}
                     />
-                  </ListItem>
+                  </ListItemButton>
                 ))}
               </List>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Box>
   );
 };
