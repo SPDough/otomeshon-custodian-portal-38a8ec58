@@ -69,7 +69,7 @@ const Index = () => {
       {/* Hero Section with Search */}
       <Box sx={{ textAlign: 'center', mb: 8, mt: 8 }}>
         <Typography variant="h2" component="h1" gutterBottom>
-          Financial Intelligence Platform
+          Custodian Automation Platform
         </Typography>
         <Typography variant="h5" color="text.secondary" sx={{ mb: 6 }}>
           Search, analyze, and gain insights from your financial data
