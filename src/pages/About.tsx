@@ -23,7 +23,7 @@ const About = () => {
     {
       name: 'Sarah Chen',
       role: 'Chief Executive Officer',
-      bio: 'Former Goldman Sachs VP with 15+ years in financial technology and quantitative analysis.',
+      bio: 'Former State Street VP with 15+ years in custody operations and automation technology.',
       image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=400&fit=crop&crop=face',
       linkedin: '#',
       email: 'sarah.chen@company.com'
@@ -31,15 +31,15 @@ const About = () => {
     {
       name: 'Michael Rodriguez',
       role: 'Chief Technology Officer',
-      bio: 'Ex-Bloomberg technology lead specializing in real-time financial data systems and AI.',
+      bio: 'Ex-BNY Mellon technology lead specializing in custodial systems and automation platforms.',
       image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=400&fit=crop&crop=face',
       linkedin: '#',
       email: 'michael.rodriguez@company.com'
     },
     {
       name: 'Dr. Emma Thompson',
-      role: 'Head of Data Science',
-      bio: 'PhD in Quantitative Finance from MIT, former JPMorgan quant researcher with expertise in machine learning.',
+      role: 'Head of Operations Intelligence',
+      bio: 'PhD in Operations Research from MIT, former Northern Trust specialist in custody workflow optimization.',
       image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=400&fit=crop&crop=face',
       linkedin: '#',
       email: 'emma.thompson@company.com'
@@ -47,7 +47,7 @@ const About = () => {
     {
       name: 'James Park',
       role: 'Head of Product',
-      bio: 'Former Blackrock product manager with deep expertise in portfolio management and risk analytics.',
+      bio: 'Former Citi product manager with deep expertise in custodial services and regulatory compliance.',
       image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=400&fit=crop&crop=face',
       linkedin: '#',
       email: 'james.park@company.com'
@@ -57,23 +57,23 @@ const About = () => {
   const values = [
     {
       icon: <Analytics color="primary" />,
-      title: 'Data-Driven Decisions',
-      description: 'We believe in the power of data to transform financial decision-making and drive better outcomes.'
+      title: 'Operational Excellence',
+      description: 'We leverage intelligent automation to streamline custodial operations and eliminate manual errors.'
     },
     {
       icon: <Security color="primary" />,
-      title: 'Security First',
-      description: 'Enterprise-grade security and compliance are built into every aspect of our platform.'
+      title: 'Security & Compliance',
+      description: 'Enterprise-grade security and regulatory compliance are built into every aspect of our platform.'
     },
     {
       icon: <TrendingUp color="primary" />,
-      title: 'Innovation',
-      description: 'We continuously push the boundaries of what\'s possible in financial technology.'
+      title: 'Continuous Innovation',
+      description: 'We continuously advance custodial technology to deliver cutting-edge automation solutions.'
     },
     {
       icon: <Business color="primary" />,
-      title: 'Client Success',
-      description: 'Our clients\' success is our success. We\'re committed to delivering exceptional value.'
+      title: 'Client Partnership',
+      description: 'Your success is our priority. We\'re dedicated to transforming your custodial operations.'
     }
   ];
 
@@ -85,8 +85,8 @@ const About = () => {
           About Our Company
         </Typography>
         <Typography variant="h5" color="text.secondary" sx={{ mb: 4, maxWidth: 800, mx: 'auto' }}>
-          We're revolutionizing financial intelligence through advanced analytics, 
-          automated workflows, and comprehensive data management solutions.
+          We're transforming custodial operations through intelligent automation, 
+          streamlined workflows, and comprehensive data management solutions.
         </Typography>
       </Box>
 
@@ -96,8 +96,8 @@ const About = () => {
           Our Mission
         </Typography>
         <Typography variant="h6" sx={{ color: 'grey.100' }}>
-          To empower financial professionals with intelligent tools that transform complex data 
-          into actionable insights, enabling smarter decisions and better outcomes for investors worldwide.
+          To empower custodial professionals with intelligent automation tools that streamline operations, 
+          enhance compliance, and deliver superior service to asset managers and institutional investors worldwide.
         </Typography>
       </Paper>
 
@@ -131,7 +131,7 @@ const About = () => {
           Meet Our Team
         </Typography>
         <Typography variant="h6" color="text.secondary" sx={{ textAlign: 'center', mb: 6 }}>
-          Our leadership team brings decades of experience from top financial institutions and technology companies.
+          Our leadership team brings decades of experience from leading custodial banks and fintech companies.
         </Typography>
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 4 }}>
           {teamMembers.map((member, index) => (
@@ -202,7 +202,7 @@ const About = () => {
               $10B+
             </Typography>
             <Typography variant="h6" color="text.secondary">
-              Assets Under Management
+              Assets Under Custody
             </Typography>
           </Box>
           <Box>
