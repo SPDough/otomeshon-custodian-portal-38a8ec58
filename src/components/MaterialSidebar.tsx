@@ -63,6 +63,7 @@ const workflowItems: AgentItem[] = [
   { id: "2", name: "Process Flows", icon: <WorkflowIcon /> },
   { id: "3", name: "Scheduled Tasks", icon: <ScheduleIcon /> },
   { id: "4", name: "Report Generation", icon: <ReportIcon /> },
+  { id: "5", name: "Configuration", icon: <ScheduleIcon />, path: "/workflow-config" },
 ];
 
 const dataItems: AgentItem[] = [

@@ -15,6 +15,7 @@ import About from "./pages/About";
 import Portfolios from "./pages/Portfolios";
 import Data from "./pages/Data";
 import Workflows from "./pages/Workflows";
+import WorkflowConfiguration from "./pages/WorkflowConfiguration";
 import KnowledgeGraph from "./pages/KnowledgeGraph";
 import KnowledgeBase from "./pages/KnowledgeBase";
 import NotFound from "./pages/NotFound";
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/portfolios" element={<Portfolios />} />
             <Route path="/data" element={<Data />} />
             <Route path="/workflows" element={<Workflows />} />
+            <Route path="/workflow-config" element={<WorkflowConfiguration />} />
             <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/about" element={<About />} />
