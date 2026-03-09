@@ -5,9 +5,10 @@ import {
   ListItemButton, 
   ListItemIcon, 
   ListItemText, 
-  Divider, 
   Box, 
   Typography,
+  Collapse,
+  alpha,
   useTheme
 } from "@mui/material";
 import { 
@@ -16,7 +17,6 @@ import {
   BusinessCenter as BriefcaseIcon,
   Shield as ShieldIcon,
   TrendingUp as TrendingUpIcon,
-  History as HistoryIcon,
   FolderOpen as PortfolioIcon,
   AccountTree as WorkflowIcon,
   PlayArrow as AutomationIcon,
@@ -26,9 +26,14 @@ import {
   CloudUpload as ImportIcon,
   Analytics as AnalyticsIcon,
   TableChart as TableIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
+  Dashboard as DashboardIcon,
+  ExpandMore,
+  ExpandLess,
+  Hub as HubIcon
 } from "@mui/icons-material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 interface SidebarProps {
   open: boolean;
@@ -36,64 +41,157 @@ interface SidebarProps {
   variant: "permanent" | "persistent" | "temporary";
 }
 
-interface AgentItem {
+interface NavItem {
   id: string;
   name: string;
   icon: React.ReactElement;
   path?: string;
 }
 
-interface HistoryItem {
-  id: string;
-  query: string;
-  date: string;
+interface NavSection {
+  title: string;
+  items: NavItem[];
+  defaultOpen?: boolean;
 }
 
-const agentItems: AgentItem[] = [
-  { id: "1", name: "Confirms", icon: <CheckIcon /> },
-  { id: "2", name: "Settlements", icon: <FileTextIcon /> },
-  { id: "3", name: "Corporate Actions", icon: <BriefcaseIcon /> },
-  { id: "4", name: "Risk", icon: <ShieldIcon /> },
-  { id: "5", name: "Performance", icon: <TrendingUpIcon /> },
-  { id: "6", name: "Portfolios", icon: <PortfolioIcon />, path: "/portfolios" },
+const navSections: NavSection[] = [
+  {
+    title: "Overview",
+    defaultOpen: true,
+    items: [
+      { id: "dashboard", name: "Dashboard", icon: <DashboardIcon fontSize="small" />, path: "/dashboard" },
+    ],
+  },
+  {
+    title: "Agents",
+    defaultOpen: true,
+    items: [
+      { id: "confirms", name: "Confirms", icon: <CheckIcon fontSize="small" /> },
+      { id: "settlements", name: "Settlements", icon: <FileTextIcon fontSize="small" /> },
+      { id: "corp-actions", name: "Corporate Actions", icon: <BriefcaseIcon fontSize="small" /> },
+      { id: "risk", name: "Risk", icon: <ShieldIcon fontSize="small" /> },
+      { id: "performance", name: "Performance", icon: <TrendingUpIcon fontSize="small" /> },
+      { id: "portfolios", name: "Portfolios", icon: <PortfolioIcon fontSize="small" />, path: "/portfolios" },
+    ],
+  },
+  {
+    title: "Workflows",
+    defaultOpen: false,
+    items: [
+      { id: "automation", name: "Automation Rules", icon: <AutomationIcon fontSize="small" /> },
+      { id: "processes", name: "Process Flows", icon: <WorkflowIcon fontSize="small" /> },
+      { id: "scheduled", name: "Scheduled Tasks", icon: <ScheduleIcon fontSize="small" /> },
+      { id: "reports", name: "Report Generation", icon: <ReportIcon fontSize="small" /> },
+      { id: "config", name: "Configuration", icon: <ScheduleIcon fontSize="small" />, path: "/workflow-config" },
+    ],
+  },
+  {
+    title: "Data",
+    defaultOpen: false,
+    items: [
+      { id: "sources", name: "Data Sources", icon: <DatabaseIcon fontSize="small" /> },
+      { id: "import", name: "Import/Export", icon: <ImportIcon fontSize="small" /> },
+      { id: "analytics", name: "Analytics", icon: <AnalyticsIcon fontSize="small" /> },
+      { id: "tables", name: "Data Tables", icon: <TableIcon fontSize="small" /> },
+    ],
+  },
+  {
+    title: "Knowledge & AI",
+    defaultOpen: false,
+    items: [
+      { id: "graph", name: "Knowledge Graph", icon: <HubIcon fontSize="small" />, path: "/knowledge-graph" },
+      { id: "base", name: "Knowledge Base", icon: <SearchIcon fontSize="small" />, path: "/knowledge-base" },
+    ],
+  },
 ];
 
-const workflowItems: AgentItem[] = [
-  { id: "1", name: "Automation Rules", icon: <AutomationIcon /> },
-  { id: "2", name: "Process Flows", icon: <WorkflowIcon /> },
-  { id: "3", name: "Scheduled Tasks", icon: <ScheduleIcon /> },
-  { id: "4", name: "Report Generation", icon: <ReportIcon /> },
-  { id: "5", name: "Configuration", icon: <ScheduleIcon />, path: "/workflow-config" },
-];
-
-const dataItems: AgentItem[] = [
-  { id: "1", name: "Data Sources", icon: <DatabaseIcon /> },
-  { id: "2", name: "Import/Export", icon: <ImportIcon /> },
-  { id: "3", name: "Analytics", icon: <AnalyticsIcon /> },
-  { id: "4", name: "Data Tables", icon: <TableIcon /> },
-];
-
-const dashboardItems: AgentItem[] = [
-  { id: "1", name: "Dashboard", icon: <AnalyticsIcon />, path: "/dashboard" },
-];
-
-const knowledgeGraphItems: AgentItem[] = [
-  { id: "1", name: "Knowledge Graph", icon: <WorkflowIcon />, path: "/knowledge-graph" },
-  { id: "2", name: "Knowledge Base", icon: <SearchIcon />, path: "/knowledge-base" },
-];
-
-const mockHistoryItems: HistoryItem[] = [
-  { id: "1", query: "Portfolio allocation analysis", date: "2025-05-13" },
-  { id: "2", query: "Q1 performance metrics", date: "2025-05-12" },
-  { id: "3", query: "ESG compliance reports", date: "2025-05-10" },
-  { id: "4", query: "Asset under management summary", date: "2025-05-09" },
-  { id: "5", query: "Risk exposure metrics", date: "2025-05-08" },
-];
-
-const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
+const NavSectionComponent = ({ section, location }: { section: NavSection; location: ReturnType<typeof useLocation> }) => {
+  const [open, setOpen] = useState(section.defaultOpen ?? false);
   const theme = useTheme();
   
-  const drawerWidth = 240;
+  const hasActiveItem = section.items.some(item => item.path && location.pathname === item.path);
+  
+  // Auto-expand if contains active item
+  const isOpen = open || hasActiveItem;
+
+  return (
+    <Box sx={{ mb: 1 }}>
+      <ListItemButton 
+        onClick={() => setOpen(!isOpen)}
+        sx={{ 
+          py: 0.75,
+          px: 2,
+          borderRadius: 0,
+          '&:hover': {
+            bgcolor: 'transparent',
+          }
+        }}
+      >
+        <ListItemText 
+          primary={section.title}
+          primaryTypographyProps={{
+            variant: 'subtitle2',
+            sx: { 
+              color: 'text.secondary',
+              fontWeight: 600,
+              fontSize: '0.7rem',
+              letterSpacing: '0.08em',
+            }
+          }}
+        />
+        {isOpen ? <ExpandLess sx={{ fontSize: 16, color: 'text.secondary' }} /> : <ExpandMore sx={{ fontSize: 16, color: 'text.secondary' }} />}
+      </ListItemButton>
+      
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
+        <List disablePadding>
+          {section.items.map((item) => {
+            const isActive = item.path && location.pathname === item.path;
+            
+            return (
+              <ListItem key={item.id} disablePadding sx={{ px: 1 }}>
+                <ListItemButton 
+                  component={item.path ? RouterLink : "div"}
+                  to={item.path}
+                  sx={{
+                    py: 0.875,
+                    borderRadius: 1.5,
+                    bgcolor: isActive ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
+                    '&:hover': {
+                      bgcolor: isActive 
+                        ? alpha(theme.palette.primary.main, 0.12) 
+                        : alpha(theme.palette.primary.main, 0.04),
+                    },
+                  }}
+                >
+                  <ListItemIcon 
+                    sx={{ 
+                      minWidth: 32,
+                      color: isActive ? 'primary.main' : 'text.secondary',
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText 
+                    primary={item.name} 
+                    primaryTypographyProps={{
+                      fontSize: '0.875rem',
+                      fontWeight: isActive ? 500 : 400,
+                      color: isActive ? 'text.primary' : 'text.secondary',
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Collapse>
+    </Box>
+  );
+};
+
+const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
+  const location = useLocation();
+  const drawerWidth = 260;
 
   return (
     <Drawer
@@ -106,225 +204,35 @@ const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           boxSizing: 'border-box',
-          bgcolor: 'secondary.light',
+          borderRight: '1px solid',
+          borderColor: 'divider',
+          bgcolor: 'background.default',
         },
       }}
     >
-      <Box sx={{ overflow: 'auto' }}>
-        <Box sx={{ p: 2, pt: 8 }}> {/* Added padding-top to account for AppBar */}
-          <Typography 
-            variant="subtitle2" 
-            component="div" 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'secondary.dark',
-              fontWeight: 'bold' 
-            }}
-          >
-            Financial Agents
+      <Box sx={{ 
+        overflow: 'auto',
+        pt: 9,
+        pb: 2,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <List sx={{ flex: 1 }}>
+          {navSections.map((section) => (
+            <NavSectionComponent 
+              key={section.title} 
+              section={section} 
+              location={location}
+            />
+          ))}
+        </List>
+        
+        {/* Footer with version */}
+        <Box sx={{ px: 2, py: 1.5, borderTop: '1px solid', borderColor: 'divider' }}>
+          <Typography variant="caption" color="text.secondary">
+            Otomeshon v1.0.0
           </Typography>
-          <List dense>
-            {agentItems.map((agent) => (
-              <ListItem key={agent.id} disablePadding>
-                <ListItemButton 
-                  component={agent.path ? RouterLink : "button"}
-                  to={agent.path}
-                >
-                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
-                    {agent.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={agent.name} 
-                    sx={{ color: 'secondary.dark' }} 
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-        
-        <Divider />
-        
-        <Box sx={{ p: 2 }}>
-          <Typography 
-            variant="subtitle2" 
-            component="div" 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'secondary.dark',
-              fontWeight: 'bold' 
-            }}
-          >
-            Dashboard
-          </Typography>
-          <List dense>
-            {dashboardItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton 
-                  component={item.path ? RouterLink : "button"}
-                  to={item.path}
-                >
-                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.name} 
-                    sx={{ color: 'secondary.dark' }} 
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-        
-        <Divider />
-        
-        <Box sx={{ p: 2 }}>
-          <Typography 
-            variant="subtitle2" 
-            component="div" 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'secondary.dark',
-              fontWeight: 'bold' 
-            }}
-          >
-            Workflows
-          </Typography>
-          <List dense>
-            {workflowItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton 
-                  component={item.path ? RouterLink : "button"}
-                  to={item.path}
-                >
-                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.name} 
-                    sx={{ color: 'secondary.dark' }} 
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-        
-        <Divider />
-        
-        <Box sx={{ p: 2 }}>
-          <Typography 
-            variant="subtitle2" 
-            component="div" 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'secondary.dark',
-              fontWeight: 'bold' 
-            }}
-          >
-            Data
-          </Typography>
-          <List dense>
-            {dataItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton 
-                  component={item.path ? RouterLink : "button"}
-                  to={item.path}
-                >
-                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.name} 
-                    sx={{ color: 'secondary.dark' }} 
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-        
-        <Divider />
-        
-        <Box sx={{ p: 2 }}>
-          <Typography 
-            variant="subtitle2" 
-            component="div" 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'secondary.dark',
-              fontWeight: 'bold' 
-            }}
-          >
-            Knowledge & AI
-          </Typography>
-          <List dense>
-            {knowledgeGraphItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton 
-                  component={item.path ? RouterLink : "button"}
-                  to={item.path}
-                >
-                  <ListItemIcon sx={{ minWidth: 36, color: 'primary.main' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={item.name} 
-                    sx={{ color: 'secondary.dark' }} 
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-        
-        <Divider />
-        
-        <Box sx={{ p: 2 }}>
-          <Typography 
-            variant="subtitle2" 
-            component="div" 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 1,
-              color: 'secondary.dark',
-              fontWeight: 'bold',
-              mb: 1
-            }}
-          >
-            <HistoryIcon fontSize="small" /> Recent Searches
-          </Typography>
-          <List dense>
-            {mockHistoryItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemButton>
-                  <ListItemText 
-                    primary={item.query} 
-                    sx={{ 
-                      color: 'secondary.dark',
-                      '& .MuiTypography-root': {
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap'
-                      }
-                    }} 
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
         </Box>
       </Box>
     </Drawer>
