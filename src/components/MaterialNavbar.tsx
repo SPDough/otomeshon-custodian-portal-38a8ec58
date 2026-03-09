@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -11,13 +10,16 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  useTheme,
+  Avatar,
+  Chip,
+  alpha,
 } from "@mui/material";
 import { 
   Menu as MenuIcon, 
   Person as UserIcon, 
   Login as LoginIcon,
-  Logout as LogoutIcon
+  Logout as LogoutIcon,
+  Search as SearchIcon,
 } from "@mui/icons-material";
 
 interface MaterialNavbarProps {
@@ -29,10 +31,9 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const theme = useTheme();
+  const location = useLocation();
 
   const handleLogin = () => {
-    // Simulate login for demonstration
     setIsLoggedIn(true);
     setUsername("John Doe");
   };
@@ -51,41 +52,142 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
     setAnchorEl(null);
   };
 
+  const navLinks = [
+    { label: "Search", path: "/search" },
+    { label: "Portfolios", path: "/portfolios" },
+    { label: "About", path: "/about" },
+  ];
+
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <AppBar position="fixed" elevation={1} sx={{ zIndex: theme.zIndex.drawer + 1 }}>
-      <Toolbar>
-        {/* Sidebar toggle button */}
+    <AppBar position="fixed" elevation={0}>
+      <Toolbar sx={{ gap: 1 }}>
+        {/* Sidebar toggle */}
         <IconButton
           color="inherit"
           aria-label="toggle drawer"
           edge="start"
           onClick={toggleSidebar}
-          sx={{ mr: 2 }}
+          sx={{ 
+            mr: 1,
+            '&:hover': {
+              bgcolor: alpha('#000', 0.04),
+            }
+          }}
         >
           <MenuIcon />
         </IconButton>
         
-        {/* Logo/Brand */}
+        {/* Logo */}
         <Typography 
           variant="h6" 
           component={RouterLink} 
           to="/" 
           sx={{ 
-            flexGrow: 1, 
-            color: "#fff",
+            color: "text.primary",
             fontWeight: 700,
-            textDecoration: "none"
+            textDecoration: "none",
+            letterSpacing: '-0.02em',
+            mr: 4,
           }}
         >
           Otomeshon
         </Typography>
 
-        {/* Mobile Menu */}
-        {isMobile ? (
+        {/* Desktop Navigation */}
+        {!isMobile && (
           <>
+            <Box sx={{ display: 'flex', gap: 0.5, flex: 1 }}>
+              {navLinks.map((link) => (
+                <Button 
+                  key={link.path}
+                  component={RouterLink} 
+                  to={link.path}
+                  sx={{
+                    color: isActive(link.path) ? 'text.primary' : 'text.secondary',
+                    fontWeight: isActive(link.path) ? 500 : 400,
+                    px: 2,
+                    '&:hover': {
+                      bgcolor: alpha('#000', 0.04),
+                      color: 'text.primary',
+                    }
+                  }}
+                >
+                  {link.label}
+                </Button>
+              ))}
+            </Box>
+            
+            {/* Search shortcut */}
+            <Chip
+              icon={<SearchIcon sx={{ fontSize: 16 }} />}
+              label="⌘K"
+              size="small"
+              variant="outlined"
+              sx={{ 
+                borderColor: 'divider',
+                color: 'text.secondary',
+                fontSize: '0.75rem',
+                mr: 2,
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: alpha('#000', 0.04),
+                }
+              }}
+              onClick={() => {}}
+            />
+            
+            {/* User section */}
+            {isLoggedIn ? (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Avatar 
+                  sx={{ 
+                    width: 32, 
+                    height: 32, 
+                    bgcolor: 'primary.main',
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                  }}
+                >
+                  {username.charAt(0)}
+                </Avatar>
+                <Button 
+                  size="small"
+                  onClick={handleLogout}
+                  sx={{ 
+                    color: 'text.secondary',
+                    '&:hover': {
+                      color: 'text.primary',
+                    }
+                  }}
+                  startIcon={<LogoutIcon sx={{ fontSize: 18 }} />}
+                >
+                  Logout
+                </Button>
+              </Box>
+            ) : (
+              <Button 
+                variant="contained"
+                size="small"
+                startIcon={<LoginIcon sx={{ fontSize: 18 }} />}
+                onClick={handleLogin}
+                sx={{ 
+                  px: 2.5,
+                  py: 0.75,
+                }}
+              >
+                Login
+              </Button>
+            )}
+          </>
+        )}
+
+        {/* Mobile Menu */}
+        {isMobile && (
+          <>
+            <Box sx={{ flex: 1 }} />
             <IconButton
-              size="large"
-              edge="end"
               color="inherit"
               aria-label="menu"
               onClick={handleMenuOpen}
@@ -93,36 +195,40 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorEl}
-              keepMounted
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
+              PaperProps={{
+                sx: { minWidth: 200, mt: 1 }
+              }}
             >
-              <MenuItem component={RouterLink} to="/search" onClick={handleMenuClose}>
-                Search
-              </MenuItem>
-              <MenuItem component={RouterLink} to="/portfolios" onClick={handleMenuClose}>
-                Portfolios
-              </MenuItem>
-              <MenuItem component={RouterLink} to="/about" onClick={handleMenuClose}>
-                About
-              </MenuItem>
+              {navLinks.map((link) => (
+                <MenuItem 
+                  key={link.path}
+                  component={RouterLink} 
+                  to={link.path} 
+                  onClick={handleMenuClose}
+                  selected={isActive(link.path)}
+                >
+                  {link.label}
+                </MenuItem>
+              ))}
+              
               {isLoggedIn ? (
-                [
-                  <MenuItem key="username" disabled>
+                <>
+                  <MenuItem disabled>
                     <ListItemIcon>
                       <UserIcon fontSize="small" />
                     </ListItemIcon>
                     {username}
-                  </MenuItem>,
-                  <MenuItem key="logout" onClick={handleLogout}>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                       <LogoutIcon fontSize="small" />
                     </ListItemIcon>
                     Logout
                   </MenuItem>
-                ]
+                </>
               ) : (
                 <MenuItem onClick={handleLogin}>
                   <ListItemIcon>
@@ -132,67 +238,6 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
                 </MenuItem>
               )}
             </Menu>
-          </>
-        ) : (
-          <>
-            {/* Desktop Navigation */}
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Button 
-                color="inherit" 
-                component={RouterLink} 
-                to="/search"
-              >
-                Search
-              </Button>
-              <Button 
-                color="inherit" 
-                component={RouterLink} 
-                to="/portfolios"
-              >
-                Portfolios
-              </Button>
-              <Button 
-                color="inherit" 
-                component={RouterLink} 
-                to="/about"
-              >
-                About
-              </Button>
-              
-              {isLoggedIn ? (
-                <>
-                  <Button 
-                    variant="outlined"
-                    color="inherit"
-                    size="small"
-                    startIcon={<UserIcon />}
-                    sx={{ bgcolor: 'primary.dark', color: 'white' }}
-                  >
-                    {username}
-                  </Button>
-                  <Button 
-                    variant="outlined"
-                    color="inherit"
-                    size="small"
-                    startIcon={<LogoutIcon />}
-                    onClick={handleLogout}
-                    sx={{ borderColor: 'white', color: 'white' }}
-                  >
-                    Logout
-                  </Button>
-                </>
-              ) : (
-                <Button 
-                  variant="outlined" 
-                  color="inherit"
-                  startIcon={<LoginIcon />}
-                  onClick={handleLogin}
-                  sx={{ borderColor: 'white', color: 'white' }}
-                >
-                  Login
-                </Button>
-              )}
-            </Box>
           </>
         )}
       </Toolbar>
