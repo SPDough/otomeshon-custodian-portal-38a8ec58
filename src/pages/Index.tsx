@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Container,
   Typography,
@@ -10,6 +11,15 @@ import {
 } from "@mui/material";
 import {
   Dashboard as DashboardIcon,
+  Analytics,
+  AccountTree,
+  Storage,
+  TrendingUp,
+  Shield,
+  Speed,
+} from "@mui/icons-material";
+import EnhancedSearchBar from "@/components/EnhancedSearchBar";
+import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
   Analytics,
   AccountTree,
   Storage,
