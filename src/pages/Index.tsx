@@ -78,9 +78,10 @@ const Index = () => {
           ))}
         </Box>
       </Box>
+      </motion.div>
 
       {/* Stats Overview */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 2, md: 6 }, mb: { xs: 6, md: 10 }, flexWrap: 'wrap' }}>
+      <motion.div variants={fadeInUp}>
         {stats.map((stat) => (
           <Box key={stat.label} sx={{ textAlign: 'center', minWidth: 120 }}>
             <Box sx={{ display: 'inline-flex', p: 1.5, borderRadius: 2, bgcolor: alpha('#000', 0.04), color: 'text.secondary', mb: 1 }}>
