@@ -136,7 +136,7 @@ const BackOffice = () => {
                   {pendingSettlements.map((row) => (
                     <TableRow key={row.id} sx={{ '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.02) } }}>
                       <TableCell sx={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>{row.id}</TableCell>
-                      <TableCell fontWeight={500}>{row.security}</TableCell>
+                      <TableCell sx={{ fontWeight: 500 }}>{row.security}</TableCell>
                       <TableCell align="right">{row.qty}</TableCell>
                       <TableCell align="right">{row.value}</TableCell>
                       <TableCell>

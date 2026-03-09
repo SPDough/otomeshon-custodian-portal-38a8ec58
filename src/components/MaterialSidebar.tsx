@@ -66,6 +66,7 @@ const navSections: NavSection[] = [
     title: "Front Office Support",
     defaultOpen: true,
     items: [
+      { id: "front-office", name: "Overview", icon: <DashboardIcon fontSize="small" />, path: "/front-office" },
       { id: "portfolios", name: "Portfolios", icon: <PortfolioIcon fontSize="small" />, path: "/portfolios" },
       { id: "performance", name: "Performance", icon: <TrendingUpIcon fontSize="small" /> },
       { id: "corp-actions", name: "Corporate Actions", icon: <BriefcaseIcon fontSize="small" /> },
@@ -77,6 +78,7 @@ const navSections: NavSection[] = [
     title: "Middle Office Automation",
     defaultOpen: false,
     items: [
+      { id: "middle-office", name: "Overview", icon: <DashboardIcon fontSize="small" />, path: "/middle-office" },
       { id: "risk", name: "Risk Management", icon: <ShieldIcon fontSize="small" /> },
       { id: "automation", name: "Automation Rules", icon: <AutomationIcon fontSize="small" /> },
       { id: "processes", name: "Process Flows", icon: <WorkflowIcon fontSize="small" /> },
@@ -89,6 +91,7 @@ const navSections: NavSection[] = [
     title: "Back Office Validation",
     defaultOpen: false,
     items: [
+      { id: "back-office", name: "Overview", icon: <DashboardIcon fontSize="small" />, path: "/back-office" },
       { id: "confirms", name: "Trade Confirms", icon: <CheckIcon fontSize="small" /> },
       { id: "settlements", name: "Settlements", icon: <FileTextIcon fontSize="small" /> },
       { id: "reports", name: "Report Generation", icon: <ReportIcon fontSize="small" /> },
