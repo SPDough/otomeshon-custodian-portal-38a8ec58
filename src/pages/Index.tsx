@@ -1,28 +1,23 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
   Typography,
   Box,
-  Button,
   Card,
   CardContent,
-  TextField,
-  InputAdornment,
   alpha,
   Chip,
 } from "@mui/material";
 import {
-  Search,
   Dashboard as DashboardIcon,
   Analytics,
   AccountTree,
   Storage,
-  ArrowForward,
   TrendingUp,
   Shield,
   Speed,
 } from "@mui/icons-material";
+import EnhancedSearchBar from "@/components/EnhancedSearchBar";
 
 const Index = () => {
   const navigate = useNavigate();
