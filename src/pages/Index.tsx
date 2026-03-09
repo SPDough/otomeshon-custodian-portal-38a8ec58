@@ -229,51 +229,56 @@ const Index = () => {
         </Typography>
       </Box>
       
-      <Grid container spacing={3}>
+      <Box 
+        sx={{ 
+          display: 'grid', 
+          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, 
+          gap: 3 
+        }}
+      >
         {quickActions.map((action) => (
-          <Grid item xs={12} sm={6} md={3} key={action.title}>
-            <Card 
-              sx={{ 
-                height: '100%',
-                cursor: 'pointer', 
-                '&:hover': { 
-                  boxShadow: 4, 
-                  transform: 'translateY(-4px)',
-                  '& .action-icon': {
-                    bgcolor: 'primary.main',
-                    color: 'primary.contrastText',
-                  }
-                },
-                transition: 'all 0.2s ease',
-              }} 
-              onClick={() => navigate(action.path)}
-            >
-              <CardContent sx={{ p: 3 }}>
-                <Box 
-                  className="action-icon"
-                  sx={{ 
-                    display: 'inline-flex',
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: alpha('#000', 0.04),
-                    color: 'text.secondary',
-                    mb: 2,
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {action.icon}
-                </Box>
-                <Typography variant="h6" sx={{ mb: 1, fontWeight: 500 }}>
-                  {action.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-                  {action.description}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <Card 
+            key={action.title}
+            sx={{ 
+              height: '100%',
+              cursor: 'pointer', 
+              '&:hover': { 
+                boxShadow: 4, 
+                transform: 'translateY(-4px)',
+                '& .action-icon': {
+                  bgcolor: 'primary.main',
+                  color: 'primary.contrastText',
+                }
+              },
+              transition: 'all 0.2s ease',
+            }} 
+            onClick={() => navigate(action.path)}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Box 
+                className="action-icon"
+                sx={{ 
+                  display: 'inline-flex',
+                  p: 1.5,
+                  borderRadius: 2,
+                  bgcolor: alpha('#000', 0.04),
+                  color: 'text.secondary',
+                  mb: 2,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {action.icon}
+              </Box>
+              <Typography variant="h6" sx={{ mb: 1, fontWeight: 500 }}>
+                {action.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+                {action.description}
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
-      </Grid>
+      </Box>
     </Container>
   );
 };
