@@ -1,4 +1,3 @@
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
@@ -18,6 +17,9 @@ import Workflows from "./pages/Workflows";
 import WorkflowConfiguration from "./pages/WorkflowConfiguration";
 import KnowledgeGraph from "./pages/KnowledgeGraph";
 import KnowledgeBase from "./pages/KnowledgeBase";
+import FrontOffice from "./pages/FrontOffice";
+import MiddleOffice from "./pages/MiddleOffice";
+import BackOffice from "./pages/BackOffice";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +41,9 @@ const App = () => (
             <Route path="/workflow-config" element={<WorkflowConfiguration />} />
             <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/front-office" element={<FrontOffice />} />
+            <Route path="/middle-office" element={<MiddleOffice />} />
+            <Route path="/back-office" element={<BackOffice />} />
             <Route path="/about" element={<About />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
