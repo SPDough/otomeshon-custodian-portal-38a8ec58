@@ -47,9 +47,10 @@ const Index = () => {
   ];
 
   return (
+    <AnimatedPage>
     <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
       {/* Hero Section */}
-      <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 }, mt: { xs: 4, md: 8 } }}>
+      <motion.div variants={fadeInUp}>
         <Typography variant="h1" component="h1" sx={{ mb: 2, fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 600 }}>
           Custodian Automation Platform
         </Typography>
