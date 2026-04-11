@@ -89,6 +89,7 @@ const ThemedApp = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Toaster position="bottom-right" richColors closeButton />
       <BrowserRouter>
         <MaterialLayout>
           <AnimatedRoutes />
