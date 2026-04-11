@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
 import {
   Drawer,
   Box,
@@ -28,6 +29,8 @@ interface ChatDrawerProps {
 const DRAWER_WIDTH = 400;
 
 const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { messages, isLoading, send, stop, clear } = useChatStream();
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -55,13 +58,13 @@ const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
       anchor="right"
       open={open}
       onClose={onClose}
-      variant="persistent"
+      variant={isMobile ? "temporary" : "persistent"}
       sx={{
         "& .MuiDrawer-paper": {
-          width: DRAWER_WIDTH,
+          width: isMobile ? "100%" : DRAWER_WIDTH,
           boxSizing: "border-box",
           border: "none",
-          borderLeft: 1,
+          borderLeft: isMobile ? 0 : 1,
           borderColor: "divider",
         },
       }}
