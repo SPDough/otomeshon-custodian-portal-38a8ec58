@@ -22,6 +22,7 @@ import {
   Search as SearchIcon,
   DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
+  Chat as ChatIcon,
 } from "@mui/icons-material";
 import CommandPalette from "./CommandPalette";
 import { useThemeMode } from "@/contexts/ThemeModeContext";
@@ -29,9 +30,11 @@ import { useThemeMode } from "@/contexts/ThemeModeContext";
 interface MaterialNavbarProps {
   toggleSidebar?: () => void;
   isMobile?: boolean;
+  toggleChat?: () => void;
+  chatOpen?: boolean;
 }
 
-const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
+const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: MaterialNavbarProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
