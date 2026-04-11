@@ -1,50 +1,58 @@
 
 
-## Platform Configuration Section
+## Plan: Remove Radix/shadcn and consolidate on MUI
 
-A new "Platform Configuration" section with an overview landing page and individual layer pages, added to the sidebar and routing.
+### Summary
+Delete all shadcn/Radix UI components and unused wrapper components, replace the one active usage (Skeleton in `LoadingSkeleton.tsx`) with MUI's Skeleton, and remove all related npm dependencies.
 
-### Architecture
+### What changes
 
-The 9 layers (0-8) represent the platform's capability stack. Each gets a dedicated page, accessible from a new sidebar section and a landing page that visualizes the full stack.
+**1. Replace shadcn Skeleton with MUI Skeleton in `LoadingSkeleton.tsx`**
+- Swap `import { Skeleton } from "@/components/ui/skeleton"` with `import { Skeleton } from "@mui/material"`
+- Convert Tailwind class-based sizing (`className="h-8 w-80"`) to MUI sx props (`sx={{ height: 32, width: 320 }}`) or use MUI Skeleton's `variant`, `width`, `height` props
 
-### What gets built
+**2. Delete the entire `src/components/ui/` directory**
+- All ~40 shadcn component files (button, input, dialog, command, sidebar, toast, etc.)
+- These are either unused or replaced by MUI equivalents already in use
 
-**1. Landing page: `src/pages/PlatformConfig.tsx`**
-- Hero with title "Platform Configuration" and subtitle about client setup
-- Visual stack diagram showing all 9 layers (Layer 0 at bottom, Layer 8 at top) as interactive cards
-- Each layer card shows: layer number, name, brief description, status indicator (configured/pending), and click-through to its detail page
-- Uses AnimatedPage wrapper with staggered entrance animations
-- Color-coded layers (data layers = blue tones, logic layers = green, agent layers = purple, output layers = orange)
+**3. Delete unused legacy wrapper components**
+- `src/components/SearchBar.tsx` (replaced by `EnhancedSearchBar.tsx`)
+- `src/components/Sidebar.tsx` (replaced by `MaterialSidebar.tsx`)
+- `src/components/Navbar.tsx` (replaced by `MaterialNavbar.tsx`)
+- `src/components/ResultsTable.tsx` (not imported anywhere)
 
-**2. Individual layer pages (9 files):**
+**4. Delete unused utility/hook files**
+- `src/hooks/use-toast.ts` (depends on shadcn toast; app uses sonner directly)
+- `src/hooks/use-mobile.tsx` (only used by shadcn sidebar)
+- `src/components/ui/use-toast.ts` (if separate from hooks version)
 
-| File | Layer | Key UI Elements |
-|------|-------|-----------------|
-| `LayerDataCollection.tsx` | L0: Data Collection & Automations | Connection cards, ingestion schedules, source status |
-| `LayerOntology.tsx` | L1: Ontology & Data Dictionaries | Entity types, field mappings, taxonomy browser |
-| `LayerCalculations.tsx` | L2: Calculations | Calculation library, formula editor cards, test results |
-| `LayerRulesValidation.tsx` | L3: Rules & Validation | Rule sets table, validation status, exception counts |
-| `LayerIntelligence.tsx` | L4: Intelligence & Anomaly Detection | ML model cards, anomaly alerts, LLM config |
-| `LayerRAG.tsx` | L5: RAG / Industry Knowledge | Document corpus, embedding status, knowledge sources |
-| `LayerWorkflowOrchestration.tsx` | L6: Workflow Orchestration | Workflow designer cards, agent/deterministic toggle |
-| `LayerReporting.tsx` | L7: Agent-Enabled Reporting | Dashboard builder, report templates, agent status |
-| `LayerOutbound.tsx` | L8: Outbound Data & Integration | API endpoints, export targets, integration health |
+**5. Clean up `src/lib/utils.ts`**
+- Keep the file (may be used elsewhere) but verify; `cn()` uses `tailwind-merge` + `clsx` which are still useful with Tailwind
 
-Each page follows the existing pattern: AnimatedPage wrapper, MUI cards, framer-motion animations, feature cards with descriptions and status chips.
+**6. Remove npm dependencies**
+Uninstall all `@radix-ui/*` packages plus shadcn-related libraries:
+- All 27 `@radix-ui/react-*` packages
+- `cmdk`, `embla-carousel-react`, `input-otp`, `react-day-picker`, `react-resizable-panels`, `vaul`
+- `class-variance-authority` (only used by shadcn components)
+- `next-themes` (only used by shadcn sonner wrapper)
+- `tailwindcss-animate` (only used for shadcn animation classes)
 
-**3. Sidebar update: `src/components/MaterialSidebar.tsx`**
-- Add new "Platform Configuration" nav section with:
-  - Overview link (`/platform-config`)
-  - One link per layer (`/platform-config/layer-0` through `/platform-config/layer-8`)
-- Section defaults to collapsed
+Keep: `sonner` (toast library used directly), `lucide-react` (icon library used in non-shadcn components), `clsx`, `tailwind-merge`, `react-hook-form`, `@hookform/resolvers`, `zod`
 
-**4. Routing update: `src/App.tsx`**
-- Add routes for `/platform-config` and `/platform-config/layer-0` through `/platform-config/layer-8`
+**7. Clean up config files**
+- Delete `components.json` (shadcn config)
+- Remove `tailwindcss-animate` plugin from `tailwind.config.ts` if present
 
 ### Technical details
-- All pages use the existing `AnimatedPage`, `fadeInUp`, `staggerContainer` pattern
-- MUI components with `alpha()` for subtle backgrounds, consistent with existing pages
-- Layer pages are static/mock UI for now (no backend)
-- New MUI icons: `Layers`, `MenuBook`, `Functions`, `Gavel`, `Psychology`, `AutoStories`, `AccountTree`, `Assessment`, `CloudUpload`
+
+| Area | Before | After |
+|------|--------|-------|
+| UI library | MUI + shadcn/Radix (dual) | MUI only |
+| Component count in `ui/` | ~40 files | 0 (deleted) |
+| Radix packages | 27 | 0 |
+| Bundle size | ~150KB+ of unused Radix code | Eliminated |
+
+### Risk
+- Low risk: the shadcn components are confirmed unused by active pages/layout. The only active usage is `Skeleton` in `LoadingSkeleton.tsx`, which gets a straightforward MUI swap.
+- `sonner` toast will continue working (it's independent of shadcn).
 
