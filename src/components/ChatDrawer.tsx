@@ -29,6 +29,8 @@ interface ChatDrawerProps {
 const DRAWER_WIDTH = 400;
 
 const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { messages, isLoading, send, stop, clear } = useChatStream();
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
