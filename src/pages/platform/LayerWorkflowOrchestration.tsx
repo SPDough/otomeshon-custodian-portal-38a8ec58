@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
 import { AccountTree, SmartToy, Settings, PlayArrow } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
 const workflows = [
   { name: "Trade Settlement", type: "Deterministic", steps: 12, status: "active", runs: "1.2K/day" },
@@ -19,6 +20,7 @@ const LayerWorkflowOrchestration = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <PlatformBreadcrumb layerNumber={6} layerName="Workflow Orchestration" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label="Layer 6" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />

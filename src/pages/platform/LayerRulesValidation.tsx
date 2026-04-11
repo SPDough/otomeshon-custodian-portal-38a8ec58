@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
 import { Gavel, CheckCircle, Warning, Error as ErrorIcon } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
 const ruleSets = [
   { name: "Trade Validation", rules: 45, active: 42, exceptions: 3, severity: "high" },
@@ -19,6 +20,7 @@ const LayerRulesValidation = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <PlatformBreadcrumb layerNumber={3} layerName="Rules & Validation" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label="Layer 3" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />

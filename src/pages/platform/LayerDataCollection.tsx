@@ -6,6 +6,7 @@ import {
   Storage as StorageIcon, CloudDownload, Schedule, CheckCircle, Error as ErrorIcon,
 } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
 const sources = [
   { name: "Bloomberg Terminal", type: "Market Data", status: "active", schedule: "Real-time", records: "2.4M/day" },
@@ -23,6 +24,7 @@ const LayerDataCollection = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <PlatformBreadcrumb layerNumber={0} layerName="Data Collection" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label="Layer 0" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />

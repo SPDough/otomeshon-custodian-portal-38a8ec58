@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
 import { Psychology, Memory, BubbleChart, SmartToy } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
 const models = [
   { name: "Trade Anomaly Detector", type: "ML Classification", accuracy: "97.3%", status: "active", lastTrained: "2 days ago" },
@@ -19,6 +20,7 @@ const LayerIntelligence = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <PlatformBreadcrumb layerNumber={4} layerName="Intelligence" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label="Layer 4" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
