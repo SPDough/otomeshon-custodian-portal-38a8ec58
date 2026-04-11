@@ -7,7 +7,9 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { lightTheme, darkTheme } from "./theme";
 import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeModeContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import MaterialLayout from "./components/MaterialLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { DashboardSkeleton } from "./components/LoadingSkeleton";
 import RouteErrorBoundary from "./components/RouteErrorBoundary";
 
@@ -15,8 +17,13 @@ const withErrorBoundary = (Component: React.LazyExoticComponent<React.ComponentT
   <RouteErrorBoundary><Component /></RouteErrorBoundary>
 );
 
+const withProtection = (Component: React.LazyExoticComponent<React.ComponentType>) => (
+  <ProtectedRoute><RouteErrorBoundary><Component /></RouteErrorBoundary></ProtectedRoute>
+);
+
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
+const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Search = lazy(() => import("./pages/Search"));
 const Results = lazy(() => import("./pages/Results"));
@@ -51,28 +58,29 @@ const AnimatedRoutes = () => {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={withErrorBoundary(Index)} />
-          <Route path="/dashboard" element={withErrorBoundary(Dashboard)} />
-          <Route path="/search" element={withErrorBoundary(Search)} />
-          <Route path="/results" element={withErrorBoundary(Results)} />
-          <Route path="/portfolios" element={withErrorBoundary(Portfolios)} />
-          <Route path="/data" element={withErrorBoundary(Data)} />
-          <Route path="/workflows" element={withErrorBoundary(Workflows)} />
-          <Route path="/workflow-config" element={withErrorBoundary(WorkflowConfiguration)} />
-          <Route path="/knowledge-graph" element={withErrorBoundary(KnowledgeGraph)} />
-          <Route path="/knowledge-base" element={withErrorBoundary(KnowledgeBase)} />
-          <Route path="/front-office" element={withErrorBoundary(FrontOffice)} />
-          <Route path="/middle-office" element={withErrorBoundary(MiddleOffice)} />
-          <Route path="/back-office" element={withErrorBoundary(BackOffice)} />
-          <Route path="/platform-config" element={withErrorBoundary(PlatformConfig)} />
-          <Route path="/platform-config/layer-0" element={withErrorBoundary(LayerDataCollection)} />
-          <Route path="/platform-config/layer-1" element={withErrorBoundary(LayerOntology)} />
-          <Route path="/platform-config/layer-2" element={withErrorBoundary(LayerCalculations)} />
-          <Route path="/platform-config/layer-3" element={withErrorBoundary(LayerRulesValidation)} />
-          <Route path="/platform-config/layer-4" element={withErrorBoundary(LayerIntelligence)} />
-          <Route path="/platform-config/layer-5" element={withErrorBoundary(LayerRAG)} />
-          <Route path="/platform-config/layer-6" element={withErrorBoundary(LayerWorkflowOrchestration)} />
-          <Route path="/platform-config/layer-7" element={withErrorBoundary(LayerReporting)} />
-          <Route path="/platform-config/layer-8" element={withErrorBoundary(LayerOutbound)} />
+          <Route path="/auth" element={withErrorBoundary(Auth)} />
+          <Route path="/dashboard" element={withProtection(Dashboard)} />
+          <Route path="/search" element={withProtection(Search)} />
+          <Route path="/results" element={withProtection(Results)} />
+          <Route path="/portfolios" element={withProtection(Portfolios)} />
+          <Route path="/data" element={withProtection(Data)} />
+          <Route path="/workflows" element={withProtection(Workflows)} />
+          <Route path="/workflow-config" element={withProtection(WorkflowConfiguration)} />
+          <Route path="/knowledge-graph" element={withProtection(KnowledgeGraph)} />
+          <Route path="/knowledge-base" element={withProtection(KnowledgeBase)} />
+          <Route path="/front-office" element={withProtection(FrontOffice)} />
+          <Route path="/middle-office" element={withProtection(MiddleOffice)} />
+          <Route path="/back-office" element={withProtection(BackOffice)} />
+          <Route path="/platform-config" element={withProtection(PlatformConfig)} />
+          <Route path="/platform-config/layer-0" element={withProtection(LayerDataCollection)} />
+          <Route path="/platform-config/layer-1" element={withProtection(LayerOntology)} />
+          <Route path="/platform-config/layer-2" element={withProtection(LayerCalculations)} />
+          <Route path="/platform-config/layer-3" element={withProtection(LayerRulesValidation)} />
+          <Route path="/platform-config/layer-4" element={withProtection(LayerIntelligence)} />
+          <Route path="/platform-config/layer-5" element={withProtection(LayerRAG)} />
+          <Route path="/platform-config/layer-6" element={withProtection(LayerWorkflowOrchestration)} />
+          <Route path="/platform-config/layer-7" element={withProtection(LayerReporting)} />
+          <Route path="/platform-config/layer-8" element={withProtection(LayerOutbound)} />
           <Route path="/about" element={withErrorBoundary(About)} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
@@ -102,7 +110,9 @@ const ThemedApp = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeModeProvider>
-      <ThemedApp />
+      <AuthProvider>
+        <ThemedApp />
+      </AuthProvider>
     </ThemeModeProvider>
   </QueryClientProvider>
 );
