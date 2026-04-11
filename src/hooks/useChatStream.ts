@@ -2,35 +2,28 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
-function getSessionId(): string {
-  let id = localStorage.getItem("chat_session_id");
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem("chat_session_id", id);
-  }
-  return id;
-}
-
 export function useChatStream() {
   const location = useLocation();
+  const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [conversations, setConversations] = useState<{ id: string; title: string; updated_at: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
-  const sessionId = useRef(getSessionId());
+  const userId = user?.id ?? "";
 
   // Load conversation list
   const loadConversations = useCallback(async () => {
     const { data } = await supabase
       .from("chat_conversations")
       .select("id, title, updated_at")
-      .eq("session_id", sessionId.current)
+      .eq("session_id", userId)
       .order("updated_at", { ascending: false })
       .limit(20);
     if (data) setConversations(data);
@@ -70,7 +63,7 @@ export function useChatStream() {
     const title = firstMessage.length > 60 ? firstMessage.slice(0, 57) + "…" : firstMessage;
     const { data } = await supabase
       .from("chat_conversations")
-      .insert({ session_id: sessionId.current, title })
+      .insert({ session_id: userId, title })
       .select("id")
       .single();
     if (!data) throw new Error("Failed to create conversation");
