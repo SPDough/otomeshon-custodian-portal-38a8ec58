@@ -201,6 +201,9 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
           {isMobile && (
             <>
               <Box sx={{ flex: 1 }} />
+              <IconButton color="inherit" aria-label="toggle chat" onClick={toggleChat}>
+                <ChatIcon />
+              </IconButton>
               <IconButton color="inherit" aria-label="toggle dark mode" onClick={toggleMode}>
                 {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
               </IconButton>
