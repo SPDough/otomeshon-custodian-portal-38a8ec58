@@ -36,8 +36,11 @@ import LayerOutbound from "./pages/platform/LayerOutbound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const ThemedApp = () => {
+  const { mode } = useThemeMode();
+  const theme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
+
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
@@ -73,6 +76,14 @@ const App = () => (
         </MaterialLayout>
       </BrowserRouter>
     </ThemeProvider>
+  );
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <ThemeModeProvider>
+      <ThemedApp />
+    </ThemeModeProvider>
   </QueryClientProvider>
 );
 
