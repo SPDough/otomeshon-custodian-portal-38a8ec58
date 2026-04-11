@@ -11,6 +11,8 @@ import {
   Paper,
   Chip,
   useTheme,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import {
   Storage as StorageIcon,
@@ -24,6 +26,7 @@ import {
   CloudUpload as CloudUploadIcon,
   ArrowForward,
   Layers as LayersIcon,
+  Search as SearchIcon,
   CheckCircle,
   HourglassEmpty,
 } from "@mui/icons-material";
@@ -117,8 +120,11 @@ const PlatformConfig = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [filter, setFilter] = useState<'all' | 'configured' | 'pending'>('all');
+  const [search, setSearch] = useState('');
 
-  const filteredLayers = filter === 'all' ? layers : layers.filter(l => l.status === filter);
+  const filteredLayers = layers
+    .filter(l => filter === 'all' || l.status === filter)
+    .filter(l => search === '' || l.name.toLowerCase().includes(search.toLowerCase()) || l.description.toLowerCase().includes(search.toLowerCase()));
 
   const getColor = (group: string) => {
     switch (group) {
@@ -218,7 +224,24 @@ const PlatformConfig = () => {
           </Box>
         </motion.div>
 
-        <motion.div variants={staggerContainer} initial="initial" animate="animate" key={filter}>
+        <motion.div variants={fadeInUp}>
+          <TextField
+            placeholder="Search layers..."
+            size="small"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 3, width: { xs: '100%', sm: 320 } }}
+          />
+        </motion.div>
+
+        <motion.div variants={staggerContainer} initial="initial" animate="animate" key={`${filter}-${search}`}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {filteredLayers.map((layer) => {
               const color = getColor(layer.colorGroup);
