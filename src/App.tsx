@@ -37,8 +37,43 @@ import LayerOutbound from "./pages/platform/LayerOutbound";
 
 const queryClient = new QueryClient();
 
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Index />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/results" element={<Results />} />
+        <Route path="/portfolios" element={<Portfolios />} />
+        <Route path="/data" element={<Data />} />
+        <Route path="/workflows" element={<Workflows />} />
+        <Route path="/workflow-config" element={<WorkflowConfiguration />} />
+        <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
+        <Route path="/knowledge-base" element={<KnowledgeBase />} />
+        <Route path="/front-office" element={<FrontOffice />} />
+        <Route path="/middle-office" element={<MiddleOffice />} />
+        <Route path="/back-office" element={<BackOffice />} />
+        <Route path="/platform-config" element={<PlatformConfig />} />
+        <Route path="/platform-config/layer-0" element={<LayerDataCollection />} />
+        <Route path="/platform-config/layer-1" element={<LayerOntology />} />
+        <Route path="/platform-config/layer-2" element={<LayerCalculations />} />
+        <Route path="/platform-config/layer-3" element={<LayerRulesValidation />} />
+        <Route path="/platform-config/layer-4" element={<LayerIntelligence />} />
+        <Route path="/platform-config/layer-5" element={<LayerRAG />} />
+        <Route path="/platform-config/layer-6" element={<LayerWorkflowOrchestration />} />
+        <Route path="/platform-config/layer-7" element={<LayerReporting />} />
+        <Route path="/platform-config/layer-8" element={<LayerOutbound />} />
+        <Route path="/about" element={<About />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
 const ThemedApp = () => {
-  const { mode } = useThemeMode();
   const theme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
 
   return (
