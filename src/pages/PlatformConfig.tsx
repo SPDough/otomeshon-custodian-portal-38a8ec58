@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   alpha,
+  Paper,
   Chip,
   useTheme,
 } from "@mui/material";
