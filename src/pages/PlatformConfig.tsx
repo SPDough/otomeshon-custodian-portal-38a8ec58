@@ -26,6 +26,7 @@ import {
   CloudUpload as CloudUploadIcon,
   ArrowForward,
   Layers as LayersIcon,
+  Search as SearchIcon,
   CheckCircle,
   HourglassEmpty,
 } from "@mui/icons-material";
