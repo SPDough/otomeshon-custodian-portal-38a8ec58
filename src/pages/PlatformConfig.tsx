@@ -23,6 +23,8 @@ import {
   CloudUpload as CloudUploadIcon,
   ArrowForward,
   Layers as LayersIcon,
+  CheckCircle,
+  HourglassEmpty,
 } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 
