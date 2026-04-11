@@ -224,7 +224,24 @@ const PlatformConfig = () => {
           </Box>
         </motion.div>
 
-        <motion.div variants={staggerContainer} initial="initial" animate="animate" key={filter}>
+        <motion.div variants={fadeInUp}>
+          <TextField
+            placeholder="Search layers..."
+            size="small"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 3, width: { xs: '100%', sm: 320 } }}
+          />
+        </motion.div>
+
+        <motion.div variants={staggerContainer} initial="initial" animate="animate" key={`${filter}-${search}`}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {filteredLayers.map((layer) => {
               const color = getColor(layer.colorGroup);
