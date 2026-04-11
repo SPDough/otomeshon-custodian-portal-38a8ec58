@@ -43,7 +43,7 @@ export function useChatStream() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: allMessages.map(({ role, content }) => ({ role, content })) }),
+        body: JSON.stringify({ messages: allMessages.map(({ role, content }) => ({ role, content })), context: { route: location.pathname } }),
         signal: controller.signal,
       });
 
