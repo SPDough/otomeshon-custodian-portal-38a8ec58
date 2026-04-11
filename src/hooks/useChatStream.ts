@@ -23,7 +23,7 @@ export function useChatStream() {
     const { data } = await supabase
       .from("chat_conversations")
       .select("id, title, updated_at")
-      .eq("session_id", sessionId.current)
+      .eq("session_id", userId)
       .order("updated_at", { ascending: false })
       .limit(20);
     if (data) setConversations(data);
@@ -63,7 +63,7 @@ export function useChatStream() {
     const title = firstMessage.length > 60 ? firstMessage.slice(0, 57) + "…" : firstMessage;
     const { data } = await supabase
       .from("chat_conversations")
-      .insert({ session_id: sessionId.current, title })
+      .insert({ session_id: userId, title })
       .select("id")
       .single();
     if (!data) throw new Error("Failed to create conversation");
