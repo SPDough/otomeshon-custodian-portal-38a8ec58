@@ -130,6 +130,14 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
                 ))}
               </Box>
               
+              <IconButton
+                onClick={toggleMode}
+                sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
+                aria-label="toggle dark mode"
+              >
+                {mode === 'dark' ? <LightModeIcon sx={{ fontSize: 20 }} /> : <DarkModeIcon sx={{ fontSize: 20 }} />}
+              </IconButton>
+
               <Chip
                 icon={<SearchIcon sx={{ fontSize: 16 }} />}
                 label="⌘K"
