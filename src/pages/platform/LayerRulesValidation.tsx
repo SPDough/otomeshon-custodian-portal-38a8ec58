@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
-import { Gavel, CheckCircle, Warning, Error as ErrorIcon } from "@mui/icons-material";
+import { Gavel } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const ruleSets = [
 
 const LayerRulesValidation = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.success.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerRulesValidation = () => {
         <PlatformBreadcrumb layerNumber={3} layerName="Rules & Validation" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 3" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Rules & Validation</Typography>
+            <Chip label={fm("layer3.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer3.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Deterministic rule sets, validation logic, exception handling, and compliance checks.
+              {fm("layer3.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -43,7 +46,7 @@ const LayerRulesValidation = () => {
                         <Gavel />
                       </Box>
                       <Chip
-                        label={rs.exceptions === 0 ? 'Clean' : `${rs.exceptions} Exceptions`}
+                        label={rs.exceptions === 0 ? fm("layer3.clean") : fm("layer3.exceptions", { count: rs.exceptions })}
                         size="small"
                         sx={{
                           bgcolor: rs.severity === 'ok' ? alpha(theme.palette.success.main, 0.1) : rs.severity === 'warning' ? alpha(theme.palette.warning.main, 0.1) : alpha(theme.palette.error.main, 0.1),
@@ -54,7 +57,7 @@ const LayerRulesValidation = () => {
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 500, mb: 0.5 }}>{rs.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {rs.active}/{rs.rules} rules active
+                      {fm("layer3.rulesActive", { active: rs.active, total: rs.rules })}
                     </Typography>
                   </CardContent>
                 </Card>

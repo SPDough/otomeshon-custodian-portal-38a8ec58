@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
-import { AccountTree, SmartToy, Settings, PlayArrow } from "@mui/icons-material";
+import { AccountTree, SmartToy, Settings } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const workflows = [
 
 const LayerWorkflowOrchestration = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.secondary.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerWorkflowOrchestration = () => {
         <PlatformBreadcrumb layerNumber={6} layerName="Workflow Orchestration" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 6" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Workflow Orchestration</Typography>
+            <Chip label={fm("layer6.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer6.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Design and manage workflows with agentic and deterministic execution modes.
+              {fm("layer6.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -45,7 +48,7 @@ const LayerWorkflowOrchestration = () => {
                       <Box sx={{ display: 'flex', gap: 1 }}>
                         <Chip label={wf.type} size="small" variant="outlined" sx={{ borderColor: 'divider' }} />
                         <Chip
-                          label={wf.status === 'active' ? 'Active' : 'Draft'}
+                          label={wf.status === 'active' ? fm("layer6.statusActive") : fm("layer6.statusDraft")}
                           size="small"
                           sx={{
                             bgcolor: wf.status === 'active' ? alpha(theme.palette.success.main, 0.1) : alpha(theme.palette.text.secondary, 0.1),
@@ -57,7 +60,7 @@ const LayerWorkflowOrchestration = () => {
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 500, mb: 0.5 }}>{wf.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {wf.steps} steps · {wf.runs}
+                      {fm("layer6.stepsRuns", { steps: wf.steps, runs: wf.runs })}
                     </Typography>
                   </CardContent>
                 </Card>

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
-import { Psychology, Memory, BubbleChart, SmartToy } from "@mui/icons-material";
+import { BubbleChart, SmartToy } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const models = [
 
 const LayerIntelligence = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.success.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerIntelligence = () => {
         <PlatformBreadcrumb layerNumber={4} layerName="Intelligence" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 4" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Intelligence & Anomaly Detection</Typography>
+            <Chip label={fm("layer4.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer4.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Machine learning models, anomaly alerting, and LLM configuration for intelligent automation.
+              {fm("layer4.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -43,7 +46,7 @@ const LayerIntelligence = () => {
                         {model.type.includes('LLM') ? <SmartToy /> : <BubbleChart />}
                       </Box>
                       <Chip
-                        label={model.status === 'active' ? 'Active' : model.status === 'training' ? 'Training' : 'Inactive'}
+                        label={model.status === 'active' ? fm("layer4.statusActive") : model.status === 'training' ? fm("layer4.statusTraining") : fm("layer4.statusInactive")}
                         size="small"
                         sx={{
                           bgcolor: model.status === 'active' ? alpha(theme.palette.success.main, 0.1) : model.status === 'training' ? alpha(theme.palette.info.main, 0.1) : alpha(theme.palette.text.secondary, 0.1),
@@ -55,8 +58,8 @@ const LayerIntelligence = () => {
                     <Typography variant="h6" sx={{ fontWeight: 500, mb: 0.5 }}>{model.name}</Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{model.type}</Typography>
                     <Box sx={{ display: 'flex', gap: 2 }}>
-                      <Typography variant="caption" color="text.secondary">Accuracy: {model.accuracy}</Typography>
-                      <Typography variant="caption" color="text.secondary">Trained: {model.lastTrained}</Typography>
+                      <Typography variant="caption" color="text.secondary">{fm("layer4.accuracy", { value: model.accuracy })}</Typography>
+                      <Typography variant="caption" color="text.secondary">{fm("layer4.trained", { value: model.lastTrained })}</Typography>
                     </Box>
                   </CardContent>
                 </Card>
