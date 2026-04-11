@@ -16,7 +16,11 @@ export function useChatStream() {
   const [conversations, setConversations] = useState<{ id: string; title: string; updated_at: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
-  const userId = user?.id ?? "";
+
+  const getUserId = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user?.id ?? "";
+  };
 
   // Load conversation list
   const loadConversations = useCallback(async () => {
