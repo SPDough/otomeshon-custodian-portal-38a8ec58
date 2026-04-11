@@ -36,6 +36,7 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
   const [username, setUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [commandOpen, setCommandOpen] = useState(false);
+  const { mode, toggleMode } = useThemeMode();
   const location = useLocation();
 
   // ⌘K shortcut
