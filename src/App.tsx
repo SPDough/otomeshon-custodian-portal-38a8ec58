@@ -8,6 +8,11 @@ import { lightTheme, darkTheme } from "./theme";
 import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeModeContext";
 import MaterialLayout from "./components/MaterialLayout";
 import { DashboardSkeleton } from "./components/LoadingSkeleton";
+import RouteErrorBoundary from "./components/RouteErrorBoundary";
+
+const withErrorBoundary = (Component: React.LazyExoticComponent<React.ComponentType>) => (
+  <RouteErrorBoundary><Component /></RouteErrorBoundary>
+);
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
