@@ -3,8 +3,11 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Button } from "@mui/material";
 import { Home as HomeIcon } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
+import { useIntl } from "react-intl";
 
 const NotFound = () => {
+  const intl = useIntl();
+
   return (
     <AnimatedPage>
       <Container maxWidth="sm" sx={{ py: 12, textAlign: 'center' }}>
@@ -13,19 +16,13 @@ const NotFound = () => {
             404
           </Typography>
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
-            Page Not Found
+            {intl.formatMessage({ id: "notFound.title" })}
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ mb: 5 }}>
-            The page you're looking for doesn't exist or has been moved.
+            {intl.formatMessage({ id: "notFound.description" })}
           </Typography>
-          <Button
-            component={Link}
-            to="/"
-            variant="contained"
-            size="large"
-            startIcon={<HomeIcon />}
-          >
-            Return Home
+          <Button component={Link} to="/" variant="contained" size="large" startIcon={<HomeIcon />}>
+            {intl.formatMessage({ id: "notFound.returnHome" })}
           </Button>
         </motion.div>
       </Container>

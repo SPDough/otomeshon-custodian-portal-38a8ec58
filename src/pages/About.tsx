@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
-import {
-  Container, Typography, Box, Card, CardContent, Avatar, Chip, Button, Paper,
-} from '@mui/material';
+import { Container, Typography, Box, Card, CardContent, Avatar, Chip, Button, Paper } from '@mui/material';
 import { TrendingUp, Security, Analytics, Business, LinkedIn, Email } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import { useIntl } from "react-intl";
 
 const About = () => {
+  const intl = useIntl();
+
   const teamMembers = [
     { name: 'Sarah Chen', role: 'Chief Executive Officer', bio: 'Former State Street VP with 15+ years in custody operations and automation technology.', image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=400&fit=crop&crop=face', linkedin: '#', email: 'sarah.chen@company.com' },
     { name: 'Michael Rodriguez', role: 'Chief Technology Officer', bio: 'Ex-BNY Mellon technology lead specializing in custodial systems and automation platforms.', image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=400&fit=crop&crop=face', linkedin: '#', email: 'michael.rodriguez@company.com' },
@@ -14,10 +15,10 @@ const About = () => {
   ];
 
   const values = [
-    { icon: <Analytics color="primary" />, title: 'Operational Excellence', description: 'We leverage intelligent automation to streamline custodial operations and eliminate manual errors.' },
-    { icon: <Security color="primary" />, title: 'Security & Compliance', description: 'Enterprise-grade security and regulatory compliance are built into every aspect of our platform.' },
-    { icon: <TrendingUp color="primary" />, title: 'Continuous Innovation', description: 'We continuously advance custodial technology to deliver cutting-edge automation solutions.' },
-    { icon: <Business color="primary" />, title: 'Client Partnership', description: "Your success is our priority. We're dedicated to transforming your custodial operations." },
+    { icon: <Analytics color="primary" />, title: intl.formatMessage({ id: 'about.operationalExcellence' }), description: intl.formatMessage({ id: 'about.operationalExcellenceDesc' }) },
+    { icon: <Security color="primary" />, title: intl.formatMessage({ id: 'about.securityCompliance' }), description: intl.formatMessage({ id: 'about.securityComplianceDesc' }) },
+    { icon: <TrendingUp color="primary" />, title: intl.formatMessage({ id: 'about.continuousInnovation' }), description: intl.formatMessage({ id: 'about.continuousInnovationDesc' }) },
+    { icon: <Business color="primary" />, title: intl.formatMessage({ id: 'about.clientPartnership' }), description: intl.formatMessage({ id: 'about.clientPartnershipDesc' }) },
   ];
 
   return (
@@ -25,24 +26,22 @@ const About = () => {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <motion.div variants={fadeInUp}>
           <Box sx={{ textAlign: 'center', mb: 8 }}>
-            <Typography variant="h2" component="h1" gutterBottom>About Our Company</Typography>
+            <Typography variant="h2" component="h1" gutterBottom>{intl.formatMessage({ id: 'about.title' })}</Typography>
             <Typography variant="h5" color="text.secondary" sx={{ mb: 4, maxWidth: 800, mx: 'auto' }}>
-              We're transforming custodial operations through intelligent automation, streamlined workflows, and comprehensive data management solutions.
+              {intl.formatMessage({ id: 'about.subtitle' })}
             </Typography>
           </Box>
         </motion.div>
 
         <motion.div variants={fadeInUp}>
           <Paper sx={{ p: 4, mb: 6, bgcolor: 'primary.main', color: 'white' }}>
-            <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>Our Mission</Typography>
-            <Typography variant="h6" sx={{ color: 'grey.100' }}>
-              To empower custodial professionals with intelligent automation tools that streamline operations, enhance compliance, and deliver superior service worldwide.
-            </Typography>
+            <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>{intl.formatMessage({ id: 'about.missionTitle' })}</Typography>
+            <Typography variant="h6" sx={{ color: 'grey.100' }}>{intl.formatMessage({ id: 'about.missionText' })}</Typography>
           </Paper>
         </motion.div>
 
         <Box sx={{ mb: 8 }}>
-          <motion.div variants={fadeInUp}><Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>Our Values</Typography></motion.div>
+          <motion.div variants={fadeInUp}><Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>{intl.formatMessage({ id: 'about.valuesTitle' })}</Typography></motion.div>
           <motion.div variants={staggerContainer} initial="initial" animate="animate">
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 4 }}>
               {values.map((value, index) => (
@@ -62,8 +61,8 @@ const About = () => {
 
         <Box sx={{ mb: 8 }}>
           <motion.div variants={fadeInUp}>
-            <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>Meet Our Team</Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ textAlign: 'center', mb: 6 }}>Our leadership team brings decades of experience from leading custodial banks and fintech companies.</Typography>
+            <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>{intl.formatMessage({ id: 'about.teamTitle' })}</Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ textAlign: 'center', mb: 6 }}>{intl.formatMessage({ id: 'about.teamSubtitle' })}</Typography>
           </motion.div>
           <motion.div variants={staggerContainer} initial="initial" animate="animate">
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 4 }}>
@@ -89,9 +88,14 @@ const About = () => {
 
         <motion.div variants={fadeInUp}>
           <Paper sx={{ p: 4, textAlign: 'center', bgcolor: 'grey.50' }}>
-            <Typography variant="h4" gutterBottom>By the Numbers</Typography>
+            <Typography variant="h4" gutterBottom>{intl.formatMessage({ id: 'about.byTheNumbers' })}</Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr 1fr' }, gap: 4, mt: 4 }}>
-              {[{ val: '50+', label: 'Enterprise Clients' }, { val: '$10B+', label: 'Assets Under Custody' }, { val: '99.9%', label: 'Platform Uptime' }, { val: '24/7', label: 'Expert Support' }].map((s) => (
+              {[
+                { val: '50+', label: intl.formatMessage({ id: 'about.enterpriseClients' }) },
+                { val: '$10B+', label: intl.formatMessage({ id: 'about.assetsUnderCustody' }) },
+                { val: '99.9%', label: intl.formatMessage({ id: 'about.platformUptime' }) },
+                { val: '24/7', label: intl.formatMessage({ id: 'about.expertSupport' }) },
+              ].map((s) => (
                 <Box key={s.label}><Typography variant="h3" color="primary.main" gutterBottom>{s.val}</Typography><Typography variant="h6" color="text.secondary">{s.label}</Typography></Box>
               ))}
             </Box>
