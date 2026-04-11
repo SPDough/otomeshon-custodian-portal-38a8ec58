@@ -1,93 +1,98 @@
 
 
-# Evaluation: Otomeshon vs. Linear / Retool / Mercury / Ramp
+# Multilingual Enhancement with FormatJS (react-intl)
 
-## What you've built well
-- Clean MUI-based design system with Inter, consistent spacing, dark mode
-- Collapsible sidebar with section grouping and active-state highlighting
-- Command palette (Cmd+K), AI chat with streaming + persistence
-- Context-aware AI assistant with conversation history
-- Good page structure: lazy loading, error boundaries, animated transitions
+## Overview
+Add full internationalization to Otomeshon supporting **English, Japanese (日本語), Spanish (Español), and French (Français)** using FormatJS/react-intl. FormatJS is the right choice here — its ICU message format handles Japanese number formatting (e.g., `¥1,247,500` vs `$1,247,500`), plural rules, and date formatting natively via the browser's `Intl` API.
 
-## The gaps — organized by category
+## Architecture
 
-### 1. All data is hardcoded / mock
-**The single biggest gap.** Linear, Retool, Mercury, and Ramp are all fundamentally data-driven. Every number on your dashboard, portfolio table, and activity feed is a static constant. There are no database queries, no real CRUD operations, no loading/error/empty states driven by actual data. The "Create Portfolio" dialog doesn't persist anything. The login button sets a local boolean.
+```text
+src/
+├── i18n/
+│   ├── messages/
+│   │   ├── en.json          # English (default)
+│   │   ├── ja.json          # Japanese
+│   │   ├── es.json          # Spanish
+│   │   └── fr.json          # French
+│   ├── compiled/            # Pre-compiled AST (production perf)
+│   ├── IntlContext.tsx       # Locale state + provider
+│   └── types.d.ts           # TypeScript message ID autocomplete
+```
 
-**What to build:**
-- Database-backed portfolios, workflows, and activity feeds
-- Real authentication (email/password + Google OAuth)
-- Proper loading/error/empty states on every data-fetching page
-- Optimistic updates and cache invalidation via React Query
+## Implementation Steps
 
-### 2. No real interactivity or state management
-Linear and Retool feel alive because every click does something meaningful. Here, most sidebar items are dead links (no `path`), quick actions navigate to placeholder pages, and there's no drag-and-drop, inline editing, filtering, sorting, or pagination.
+### Step 1: Install and configure FormatJS
+- Install `react-intl`
+- Create `IntlContext` wrapping `IntlProvider` with locale state persisted to `localStorage`
+- Wrap `<ThemedApp>` with the provider in `App.tsx`
 
-**What to build:**
-- Functional data tables with sort, filter, search, pagination (like Retool's tables)
-- Inline editing for portfolio names, values, risk levels
-- Bulk actions (select rows, bulk delete/export)
-- Drill-down from summary cards into filtered detail views
+### Step 2: Create message resource files
+Extract all hardcoded strings from these files into keyed JSON:
+- **MaterialNavbar** — "Search", "Portfolios", "About", "Login", "Logout"
+- **MaterialSidebar** — all section titles and nav item names (~30 strings)
+- **Dashboard** — stat titles, activity descriptions, quick action labels
+- **Portfolios** — table headers, dialog labels, form fields, toasts
+- **Auth** — form labels, buttons, error messages
+- **Index / About / NotFound** — page copy
+- **ChatDrawer** — placeholder text, send button
+- **CommandPalette** — search placeholder, category labels
 
-### 3. Shallow information density
-Mercury and Ramp pack dense, scannable information into every pixel. Your dashboard has 4 stat cards and 3 progress bars — it feels like a template. Linear's sidebar shows counts, badges, and status indicators.
+Each file follows ICU message format:
+```json
+{
+  "nav.search": "Search",
+  "nav.login": "Login",
+  "dashboard.portfolioValue": "Portfolio Value",
+  "portfolio.totalValue": "{value, number, ::currency/USD}",
+  "dashboard.timeAgo": "{time} ago"
+}
+```
 
-**What to build:**
-- Sparkline charts in stat cards showing trends over time
-- Real charting (Recharts/Nivo) — portfolio performance over time, asset allocation donuts, risk heatmaps
-- Sidebar badges showing counts (e.g., "3" next to Risk Alerts)
-- Data-dense tables with compact row heights and more columns
+Japanese file uses the same keys with localized currency:
+```json
+{
+  "nav.search": "検索",
+  "nav.login": "ログイン",
+  "dashboard.portfolioValue": "ポートフォリオ評価額",
+  "portfolio.totalValue": "{value, number, ::currency/JPY}"
+}
+```
 
-### 4. No notification/feedback system
-Ramp and Mercury have toast notifications, in-app notification centers, and status banners. You have `sonner` installed but only use it for chat errors.
+### Step 3: Replace hardcoded strings in components
+- Use `<FormattedMessage id="key" />` for JSX text
+- Use `intl.formatMessage()` (from `useIntl()`) for props, aria-labels, and toast messages
+- Use `<FormattedNumber>` for all currency and numeric values — this gives correct Japanese grouping (e.g., `1,247,500` vs `124万7500`)
+- Use `<FormattedDate>` / `<FormattedRelativeTime>` for timestamps
 
-**What to build:**
-- Notification center (bell icon in navbar with dropdown)
-- Real-time alerts for workflow completions, risk threshold breaches
-- Success/error toasts on all CRUD operations
+### Step 4: Add language switcher to navbar
+- Globe icon button next to the dark mode toggle
+- Dropdown menu showing flag + language name in native script (English, 日本語, Español, Français)
+- Persist selection to `localStorage`
+- Auto-detect browser locale on first visit via `navigator.language`
 
-### 5. Navigation feels incomplete
-~15 sidebar items have no `path` (Performance, Corporate Actions, Risk Management, etc.). Users clicking these get nothing. Linear never has dead-end nav items.
+### Step 5: TypeScript safety
+- Define `types.d.ts` extending `FormatjsIntl.Message` with keys from `en.json`
+- This gives autocomplete and compile-time errors for invalid message IDs
 
-**What to build:**
-- Either wire up all nav items to real pages, or remove unimplemented ones and add a "Coming Soon" state
-- Breadcrumbs on every page (you have PlatformBreadcrumb but it's not used broadly)
+### Step 6: Compile messages for production
+- Add `formatjs compile` script to `package.json` for AST pre-compilation
+- Lazy-load locale files so only the active language is bundled
 
-### 6. No keyboard-driven workflows
-Linear is famous for keyboard shortcuts. You have Cmd+K but nothing else.
+## Scope & Scale
+- **~150–200 message keys** across all current pages
+- **4 JSON files** (~200 lines each)
+- **~15 component files** need string replacement
+- No database changes required — locale preference stored client-side
 
-**What to build:**
-- Keyboard shortcuts for common actions (N for new, E for edit, / for search)
-- Shortcut hints in tooltips and command palette
-- Focus management and keyboard navigation in tables
+## Technical Details
 
-### 7. No settings, preferences, or profile page
-Mercury and Ramp have extensive settings. You have nothing — no user profile, no preferences, no API key management, no team settings.
-
-### 8. Typography and spacing polish
-Linear uses extremely tight, purposeful spacing. Your pages have generous padding but inconsistent density. Card headers use `CardHeader` defaults which are large. Tables have default MUI row heights which feel loose compared to Linear's compact rows.
-
----
-
-## Recommended implementation order
-
-| Priority | Work item | Impact |
-|----------|-----------|--------|
-| 1 | Real auth + database-backed portfolios | Transforms from prototype to app |
-| 2 | Data tables with sort/filter/pagination | Core interaction pattern |
-| 3 | Charts and data visualization | Information density |
-| 4 | Wire up all sidebar nav items | Eliminates dead ends |
-| 5 | Notification center | Feedback loop |
-| 6 | Keyboard shortcuts | Power-user experience |
-| 7 | Settings/profile pages | Completeness |
-| 8 | Spacing/density polish pass | Visual refinement |
-
-### Technical approach
-- Use Lovable Cloud for auth (email + Google) and all data persistence
-- Use React Query (already installed) for server state
-- Use Recharts for charting (lightweight, React-native)
-- Add RLS policies so users only see their own data
-- Compact MUI theme overrides for tighter table/card density
-
-Shall I start implementing from priority 1 (real authentication + database-backed portfolios)?
+| Aspect | Detail |
+|--------|--------|
+| Library | `react-intl` (FormatJS) ~20KB gzipped |
+| Number format | ICU `{value, number}` — browser Intl handles JPY, EUR, USD automatically |
+| Date format | `<FormattedDate>` respects locale (年月日 for ja, dd/MM/yyyy for fr) |
+| Plurals | ICU `{count, plural, one {# item} other {# items}}` |
+| Fallback | Missing translations fall back to English |
+| Detection | `navigator.language` on first visit |
 
