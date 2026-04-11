@@ -20,8 +20,11 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
   Search as SearchIcon,
+  DarkMode as DarkModeIcon,
+  LightMode as LightModeIcon,
 } from "@mui/icons-material";
 import CommandPalette from "./CommandPalette";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 
 interface MaterialNavbarProps {
   toggleSidebar?: () => void;
