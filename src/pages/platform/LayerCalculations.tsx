@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
 import { Functions, CheckCircle, Warning } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
 const calculations = [
   { name: "TWR Performance", category: "Returns", tests: 24, passing: 24, status: "passing" },
@@ -19,6 +20,7 @@ const LayerCalculations = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <PlatformBreadcrumb layerNumber={2} layerName="Calculations" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label="Layer 2" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />

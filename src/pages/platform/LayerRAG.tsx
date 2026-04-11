@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme, LinearProgress } from "@mui/material";
 import { AutoStories, Description, CloudDone, Sync } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
 const knowledgeSources = [
   { name: "Regulatory Filings (SEC)", docs: 12400, embedded: 12400, status: "complete" },
@@ -19,6 +20,7 @@ const LayerRAG = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <PlatformBreadcrumb layerNumber={5} layerName="RAG Knowledge" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label="Layer 5" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
