@@ -1,48 +1,45 @@
-import { Box, Card, CardContent, CardHeader } from "@mui/material";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Box, Card, CardContent, CardHeader, Skeleton } from "@mui/material";
 
 export const DashboardSkeleton = () => (
   <Box sx={{ py: 4 }}>
-    <Skeleton className="h-8 w-80 mb-2" />
-    <Skeleton className="h-5 w-96 mb-6" />
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <Skeleton variant="text" width={320} height={40} sx={{ mb: 1 }} />
+    <Skeleton variant="text" width={384} height={28} sx={{ mb: 3 }} />
+    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 2, mb: 3 }}>
       {[...Array(4)].map((_, i) => (
         <Card key={i}>
           <CardContent>
-            <Skeleton className="h-5 w-24 mb-3" />
-            <Skeleton className="h-10 w-32 mb-2" />
-            <Skeleton className="h-4 w-20" />
+            <Skeleton variant="text" width={96} height={28} sx={{ mb: 1.5 }} />
+            <Skeleton variant="rectangular" width={128} height={40} sx={{ mb: 1 }} />
+            <Skeleton variant="text" width={80} height={20} />
           </CardContent>
         </Card>
       ))}
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="md:col-span-2">
-        <Card><CardContent><Skeleton className="h-48 w-full" /></CardContent></Card>
-      </div>
-      <Card><CardContent><Skeleton className="h-48 w-full" /></CardContent></Card>
-    </div>
+    </Box>
+    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 2 }}>
+      <Card><CardContent><Skeleton variant="rectangular" height={192} /></CardContent></Card>
+      <Card><CardContent><Skeleton variant="rectangular" height={192} /></CardContent></Card>
+    </Box>
   </Box>
 );
 
 export const TableSkeleton = ({ rows = 5 }: { rows?: number }) => (
   <Card>
-    <CardHeader title={<Skeleton className="h-6 w-40" />} />
+    <CardHeader title={<Skeleton variant="text" width={160} height={32} />} />
     <CardContent>
-      <div className="space-y-3">
-        <div className="flex gap-4">
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-4 flex-1" />
+            <Skeleton key={i} variant="text" sx={{ flex: 1 }} height={20} />
           ))}
-        </div>
+        </Box>
         {[...Array(rows)].map((_, i) => (
-          <div key={i} className="flex gap-4">
+          <Box key={i} sx={{ display: 'flex', gap: 2 }}>
             {[...Array(5)].map((_, j) => (
-              <Skeleton key={j} className="h-8 flex-1" />
+              <Skeleton key={j} variant="rectangular" sx={{ flex: 1 }} height={32} />
             ))}
-          </div>
+          </Box>
         ))}
-      </div>
+      </Box>
     </CardContent>
   </Card>
 );
@@ -50,8 +47,8 @@ export const TableSkeleton = ({ rows = 5 }: { rows?: number }) => (
 export const GraphSkeleton = () => (
   <Card>
     <CardContent>
-      <Skeleton className="h-6 w-48 mb-4" />
-      <Skeleton className="h-[400px] w-full rounded-lg" />
+      <Skeleton variant="text" width={192} height={32} sx={{ mb: 2 }} />
+      <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 1 }} />
     </CardContent>
   </Card>
 );
