@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useIntl } from 'react-intl';
 import { motion } from "framer-motion";
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
@@ -10,6 +11,8 @@ registerAllModules();
 
 const Data = () => {
   const hotTableRef = useRef(null);
+  const intl = useIntl();
+  const fm = (id: string) => intl.formatMessage({ id });
 
   const data = [
     ['Asset Name', 'Symbol', 'Price', 'Market Cap', 'Sector', 'P/E Ratio'],
@@ -26,29 +29,15 @@ const Data = () => {
   ];
 
   const hotSettings = {
-    data,
-    rowHeaders: true,
-    colHeaders: true,
-    contextMenu: true,
-    manualRowResize: true,
-    manualColumnResize: true,
-    manualRowMove: true,
-    manualColumnMove: true,
-    filters: true,
-    dropdownMenu: true,
-    columnSorting: true,
-    multiColumnSorting: true,
-    autoWrapRow: true,
-    autoWrapCol: true,
-    licenseKey: 'non-commercial-and-evaluation',
-    height: 'auto',
+    data, rowHeaders: true, colHeaders: true, contextMenu: true, manualRowResize: true,
+    manualColumnResize: true, manualRowMove: true, manualColumnMove: true, filters: true,
+    dropdownMenu: true, columnSorting: true, multiColumnSorting: true, autoWrapRow: true,
+    autoWrapCol: true, licenseKey: 'non-commercial-and-evaluation', height: 'auto',
     stretchH: 'all' as const,
     columns: [
-      { type: 'text', width: 150 },
-      { type: 'text', width: 80 },
+      { type: 'text', width: 150 }, { type: 'text', width: 80 },
       { type: 'numeric', numericFormat: { pattern: '$0,0.00' }, width: 100 },
-      { type: 'text', width: 120 },
-      { type: 'text', width: 180 },
+      { type: 'text', width: 120 }, { type: 'text', width: 180 },
       { type: 'numeric', numericFormat: { pattern: '0.0' }, width: 100 },
     ],
   };
@@ -58,30 +47,18 @@ const Data = () => {
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>
-              Data Sandbox
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Interactive data table for exploring and manipulating financial data.
-              You can sort, filter, edit cells, and perform various data operations.
-            </Typography>
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("data.title")}</Typography>
+            <Typography variant="body1" color="text.secondary">{fm("data.subtitle")}</Typography>
           </Box>
         </motion.div>
-
         <motion.div variants={fadeInUp}>
           <Paper elevation={2} sx={{ p: 3, borderRadius: 2, overflow: 'hidden' }}>
-            <Box sx={{ width: '100%', overflow: 'auto' }}>
-              <HotTable ref={hotTableRef} settings={hotSettings} />
-            </Box>
+            <Box sx={{ width: '100%', overflow: 'auto' }}><HotTable ref={hotTableRef} settings={hotSettings} /></Box>
           </Paper>
         </motion.div>
-
         <motion.div variants={fadeInUp}>
           <Box sx={{ mt: 3 }}>
-            <Typography variant="body2" color="text.secondary">
-              Features: Right-click for context menu, drag columns/rows to reorder,
-              use dropdown filters, sort by clicking column headers.
-            </Typography>
+            <Typography variant="body2" color="text.secondary">{fm("data.features")}</Typography>
           </Box>
         </motion.div>
       </Container>

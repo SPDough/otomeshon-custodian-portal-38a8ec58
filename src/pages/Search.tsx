@@ -1,9 +1,7 @@
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { motion } from "framer-motion";
-import {
-  Container, Typography, Box, TextField, Button, Card, CardContent, Chip,
-  List, ListItem, ListItemText, ListItemIcon, Tabs, Tab, InputAdornment,
-} from '@mui/material';
+import { Container, Typography, Box, TextField, Button, Card, CardContent, Chip, List, ListItem, ListItemText, ListItemIcon, Tabs, Tab, InputAdornment } from '@mui/material';
 import { Search as SearchIcon, TableChart, AccountTree, Analytics, FilterList } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 
@@ -15,6 +13,8 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [tabValue, setTabValue] = useState(0);
+  const intl = useIntl();
+  const fm = (id: string) => intl.formatMessage({ id });
 
   const dataResults = [
     { name: 'Portfolio Returns Q3', type: 'Dataset', description: 'Quarterly portfolio performance data' },
@@ -36,16 +36,16 @@ const Search = () => {
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <motion.div variants={fadeInUp}>
-          <Typography variant="h4" component="h1" gutterBottom>Global Search</Typography>
+          <Typography variant="h4" component="h1" gutterBottom>{fm("search.title")}</Typography>
           <Card sx={{ mb: 4 }}>
             <CardContent>
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                <TextField fullWidth variant="outlined" placeholder="Search across data, workflows, and knowledge graph..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                <TextField fullWidth variant="outlined" placeholder={fm("search.placeholder")} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
                   InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment> }} />
-                <Button variant="contained" sx={{ minWidth: 100 }}>Search</Button>
+                <Button variant="contained" sx={{ minWidth: 100 }}>{fm("search.searchBtn")}</Button>
               </Box>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Chip label="Advanced Filters" icon={<FilterList />} variant="outlined" />
+                <Chip label={fm("search.advancedFilters")} icon={<FilterList />} variant="outlined" />
                 <Chip label="Recent: Portfolio" size="small" />
                 <Chip label="Recent: Risk" size="small" />
                 <Chip label="Recent: FIBO" size="small" />
@@ -57,14 +57,14 @@ const Search = () => {
         <motion.div variants={fadeInUp}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)}>
-              <Tab label="Data" icon={<TableChart />} />
-              <Tab label="Workflows" icon={<AccountTree />} />
-              <Tab label="Ontology" icon={<Analytics />} />
+              <Tab label={fm("search.tabData")} icon={<TableChart />} />
+              <Tab label={fm("search.tabWorkflows")} icon={<AccountTree />} />
+              <Tab label={fm("search.tabOntology")} icon={<Analytics />} />
             </Tabs>
           </Box>
 
           <TabPanel value={tabValue} index={0}>
-            <Typography variant="h6" gutterBottom>Data Results</Typography>
+            <Typography variant="h6" gutterBottom>{fm("search.dataResults")}</Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
               {dataResults.map((r, i) => (
                 <Card key={i} sx={{ '&:hover': { boxShadow: 4, transform: 'translateY(-2px)' }, transition: 'all 0.2s ease' }}>
@@ -75,12 +75,12 @@ const Search = () => {
           </TabPanel>
 
           <TabPanel value={tabValue} index={1}>
-            <Typography variant="h6" gutterBottom>Workflow Results</Typography>
+            <Typography variant="h6" gutterBottom>{fm("search.workflowResults")}</Typography>
             <List>{workflowResults.map((r, i) => (<ListItem key={i} divider><ListItemIcon><AccountTree /></ListItemIcon><ListItemText primary={r.name} secondary={<Box><Chip label={r.type} size="small" sx={{ mr: 1 }} />{r.description}</Box>} /></ListItem>))}</List>
           </TabPanel>
 
           <TabPanel value={tabValue} index={2}>
-            <Typography variant="h6" gutterBottom>Ontology Results</Typography>
+            <Typography variant="h6" gutterBottom>{fm("search.ontologyResults")}</Typography>
             <List>{ontologyResults.map((r, i) => (<ListItem key={i} divider><ListItemIcon><Analytics /></ListItemIcon><ListItemText primary={r.name} secondary={<Box><Chip label={r.type} size="small" sx={{ mr: 1 }} />{r.description}</Box>} /></ListItem>))}</List>
           </TabPanel>
         </motion.div>

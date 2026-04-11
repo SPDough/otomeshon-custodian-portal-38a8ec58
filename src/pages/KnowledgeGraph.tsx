@@ -1,9 +1,7 @@
 import { useState, useCallback } from 'react';
+import { useIntl } from 'react-intl';
 import { motion } from "framer-motion";
-import { 
-  Box, Typography, Paper, Container, Tabs, Tab, Card, CardContent, Button, TextField, Chip,
-  List, ListItem, ListItemText, ListItemIcon, IconButton, Accordion, AccordionSummary, AccordionDetails
-} from '@mui/material';
+import { Box, Typography, Paper, Container, Tabs, Tab, Card, CardContent, Button, TextField, Chip, List, ListItem, ListItemText, ListItemIcon, IconButton, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { AccountTree, Timeline, Search, FilterList, ZoomIn, ZoomOut, CenterFocusStrong, ExpandMore, Business, TrendingUp, Security, Category } from '@mui/icons-material';
 import KnowledgeGraphVisualization from '@/components/KnowledgeGraphVisualization';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
@@ -32,14 +30,16 @@ const KnowledgeGraph = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<any>(null);
   const handleNodeSelect = useCallback((node: any) => { setSelectedEntity(node); }, []);
+  const intl = useIntl();
+  const fm = (id: string) => intl.formatMessage({ id });
 
   return (
     <AnimatedPage>
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Knowledge Graph & FIBO Ontology</Typography>
-            <Typography variant="body1" color="text.secondary">Explore your financial data through the FIBO framework. Build and navigate knowledge graphs to discover relationships.</Typography>
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("knowledgeGraph.title")}</Typography>
+            <Typography variant="body1" color="text.secondary">{fm("knowledgeGraph.subtitle")}</Typography>
           </Box>
         </motion.div>
 
@@ -47,9 +47,9 @@ const KnowledgeGraph = () => {
           <Paper elevation={2} sx={{ borderRadius: 2 }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)} aria-label="knowledge graph tabs">
-                <Tab label="Graph Visualization" icon={<AccountTree />} iconPosition="start" />
-                <Tab label="FIBO Ontology" icon={<Category />} iconPosition="start" />
-                <Tab label="Data Mapping" icon={<Timeline />} iconPosition="start" />
+                <Tab label={fm("knowledgeGraph.tabVisualization")} icon={<AccountTree />} iconPosition="start" />
+                <Tab label={fm("knowledgeGraph.tabOntology")} icon={<Category />} iconPosition="start" />
+                <Tab label={fm("knowledgeGraph.tabDataMapping")} icon={<Timeline />} iconPosition="start" />
               </Tabs>
             </Box>
 
@@ -59,7 +59,7 @@ const KnowledgeGraph = () => {
                   <Card>
                     <CardContent>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h6">Interactive Knowledge Graph</Typography>
+                        <Typography variant="h6">{fm("knowledgeGraph.interactiveGraph")}</Typography>
                         <Box sx={{ display: 'flex', gap: 1 }}>
                           <IconButton size="small"><ZoomIn /></IconButton>
                           <IconButton size="small"><ZoomOut /></IconButton>
@@ -72,8 +72,8 @@ const KnowledgeGraph = () => {
                     </CardContent>
                   </Card>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Card><CardContent><Typography variant="h6" gutterBottom>Controls</Typography><Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}><TextField size="small" placeholder="Search entities..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} InputProps={{ startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} /> }} /><Button variant="outlined" startIcon={<FilterList />} size="small">Apply Filters</Button></Box></CardContent></Card>
-                    <Card><CardContent><Typography variant="h6" gutterBottom>Selected Entity</Typography>{selectedEntity ? (<Box><Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{selectedEntity.label}</Typography><Chip label={selectedEntity.type} size="small" sx={{ mt: 0.5, mb: 1 }} /><Typography variant="body2" color="text.secondary">{selectedEntity.description}</Typography></Box>) : (<Typography variant="body2" color="text.secondary">Click a node to view details</Typography>)}</CardContent></Card>
+                    <Card><CardContent><Typography variant="h6" gutterBottom>{fm("knowledgeGraph.controls")}</Typography><Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}><TextField size="small" placeholder={fm("knowledgeGraph.searchEntities")} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} InputProps={{ startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} /> }} /><Button variant="outlined" startIcon={<FilterList />} size="small">{fm("knowledgeGraph.applyFilters")}</Button></Box></CardContent></Card>
+                    <Card><CardContent><Typography variant="h6" gutterBottom>{fm("knowledgeGraph.selectedEntity")}</Typography>{selectedEntity ? (<Box><Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{selectedEntity.label}</Typography><Chip label={selectedEntity.type} size="small" sx={{ mt: 0.5, mb: 1 }} /><Typography variant="body2" color="text.secondary">{selectedEntity.description}</Typography></Box>) : (<Typography variant="body2" color="text.secondary">{fm("knowledgeGraph.clickNode")}</Typography>)}</CardContent></Card>
                   </Box>
                 </Box>
               </Box>
@@ -82,15 +82,15 @@ const KnowledgeGraph = () => {
             <TabPanel value={tabValue} index={1}>
               <Box sx={{ p: 3 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 3 }}>
-                  <Card><CardContent><Typography variant="h6" gutterBottom>FIBO Ontology Browser</Typography>
+                  <Card><CardContent><Typography variant="h6" gutterBottom>{fm("knowledgeGraph.ontologyBrowser")}</Typography>
                     {fiboEntities.map((entity) => (
                       <Accordion key={entity.id}>
                         <AccordionSummary expandIcon={<ExpandMore />}><Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><Business color="primary" /><Box><Typography variant="subtitle1">{entity.name}</Typography><Chip label={entity.type} size="small" variant="outlined" sx={{ mt: 0.5 }} /></Box></Box></AccordionSummary>
-                        <AccordionDetails><Typography variant="body2" color="text.secondary" paragraph>{entity.description}</Typography><Typography variant="subtitle2" gutterBottom>Relationships:</Typography><Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>{entity.relationships.map((rel) => (<Chip key={rel} label={rel} size="small" color="secondary" variant="outlined" />))}</Box></AccordionDetails>
+                        <AccordionDetails><Typography variant="body2" color="text.secondary" paragraph>{entity.description}</Typography><Typography variant="subtitle2" gutterBottom>{fm("knowledgeGraph.relationships")}</Typography><Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>{entity.relationships.map((rel) => (<Chip key={rel} label={rel} size="small" color="secondary" variant="outlined" />))}</Box></AccordionDetails>
                       </Accordion>
                     ))}
                   </CardContent></Card>
-                  <Card><CardContent><Typography variant="h6" gutterBottom>FIBO Modules</Typography><List><ListItem><ListItemIcon><Business color="primary" /></ListItemIcon><ListItemText primary="Foundations" secondary="Core concepts and utilities" /></ListItem><ListItem><ListItemIcon><TrendingUp color="secondary" /></ListItemIcon><ListItemText primary="Business Entities" secondary="Organizations and legal structures" /></ListItem><ListItem><ListItemIcon><Security color="success" /></ListItemIcon><ListItemText primary="Securities" secondary="Financial instruments and contracts" /></ListItem></List></CardContent></Card>
+                  <Card><CardContent><Typography variant="h6" gutterBottom>{fm("knowledgeGraph.fiboModules")}</Typography><List><ListItem><ListItemIcon><Business color="primary" /></ListItemIcon><ListItemText primary={fm("knowledgeGraph.foundations")} secondary={fm("knowledgeGraph.foundationsDesc")} /></ListItem><ListItem><ListItemIcon><TrendingUp color="secondary" /></ListItemIcon><ListItemText primary={fm("knowledgeGraph.businessEntities")} secondary={fm("knowledgeGraph.businessEntitiesDesc")} /></ListItem><ListItem><ListItemIcon><Security color="success" /></ListItemIcon><ListItemText primary={fm("knowledgeGraph.securities")} secondary={fm("knowledgeGraph.securitiesDesc")} /></ListItem></List></CardContent></Card>
                 </Box>
               </Box>
             </TabPanel>
@@ -98,8 +98,8 @@ const KnowledgeGraph = () => {
             <TabPanel value={tabValue} index={2}>
               <Box sx={{ p: 3 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
-                  <Card><CardContent><Typography variant="h6" gutterBottom>Data Source Mapping</Typography><Typography variant="body2" color="text.secondary" paragraph>Map your data sources to FIBO ontology concepts</Typography><List>{dataConnections.map((c, i) => (<ListItem key={i} divider><ListItemText primary={<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><Chip label={c.source} size="small" /><Typography variant="body2" color="text.secondary">{c.relationship}</Typography><Chip label={c.target} size="small" color="primary" /></Box>} /></ListItem>))}</List></CardContent></Card>
-                  <Card><CardContent><Typography variant="h6" gutterBottom>Semantic Query Builder</Typography><Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}><TextField label="SPARQL Query" multiline rows={8} placeholder={`PREFIX fibo: <https://spec.edmcouncil.org/fibo/ontology/>\nSELECT ?entity ?type\nWHERE {\n  ?entity rdf:type ?type .\n}`} sx={{ fontFamily: 'monospace' }} /><Button variant="contained" startIcon={<Search />}>Execute Query</Button></Box></CardContent></Card>
+                  <Card><CardContent><Typography variant="h6" gutterBottom>{fm("knowledgeGraph.dataSourceMapping")}</Typography><Typography variant="body2" color="text.secondary" paragraph>{fm("knowledgeGraph.dataSourceMappingDesc")}</Typography><List>{dataConnections.map((c, i) => (<ListItem key={i} divider><ListItemText primary={<Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><Chip label={c.source} size="small" /><Typography variant="body2" color="text.secondary">{c.relationship}</Typography><Chip label={c.target} size="small" color="primary" /></Box>} /></ListItem>))}</List></CardContent></Card>
+                  <Card><CardContent><Typography variant="h6" gutterBottom>{fm("knowledgeGraph.semanticQueryBuilder")}</Typography><Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}><TextField label={fm("knowledgeGraph.sparqlLabel")} multiline rows={8} placeholder={`PREFIX fibo: <https://spec.edmcouncil.org/fibo/ontology/>\nSELECT ?entity ?type\nWHERE {\n  ?entity rdf:type ?type .\n}`} sx={{ fontFamily: 'monospace' }} /><Button variant="contained" startIcon={<Search />}>{fm("knowledgeGraph.executeQuery")}</Button></Box></CardContent></Card>
                 </Box>
               </Box>
             </TabPanel>
