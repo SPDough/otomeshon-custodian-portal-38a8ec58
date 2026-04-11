@@ -1,16 +1,83 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
+function getSessionId(): string {
+  let id = localStorage.getItem("chat_session_id");
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("chat_session_id", id);
+  }
+  return id;
+}
+
 export function useChatStream() {
   const location = useLocation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversations, setConversations] = useState<{ id: string; title: string; updated_at: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const sessionId = useRef(getSessionId());
+
+  // Load conversation list
+  const loadConversations = useCallback(async () => {
+    const { data } = await supabase
+      .from("chat_conversations")
+      .select("id, title, updated_at")
+      .eq("session_id", sessionId.current)
+      .order("updated_at", { ascending: false })
+      .limit(20);
+    if (data) setConversations(data);
+  }, []);
+
+  // Load messages for a conversation
+  const loadConversation = useCallback(async (convId: string) => {
+    const { data } = await supabase
+      .from("chat_messages")
+      .select("role, content")
+      .eq("conversation_id", convId)
+      .order("created_at", { ascending: true });
+    if (data) {
+      setMessages(data as ChatMessage[]);
+      setConversationId(convId);
+    }
+  }, []);
+
+  // Start a new conversation
+  const newConversation = useCallback(() => {
+    setMessages([]);
+    setConversationId(null);
+  }, []);
+
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations]);
+
+  // Persist a message to the DB
+  const persistMessage = async (convId: string, role: string, content: string) => {
+    await supabase.from("chat_messages").insert({ conversation_id: convId, role, content });
+  };
+
+  // Ensure a conversation exists, create if needed
+  const ensureConversation = async (firstMessage: string): Promise<string> => {
+    if (conversationId) return conversationId;
+    const title = firstMessage.length > 60 ? firstMessage.slice(0, 57) + "…" : firstMessage;
+    const { data } = await supabase
+      .from("chat_conversations")
+      .insert({ session_id: sessionId.current, title })
+      .select("id")
+      .single();
+    if (!data) throw new Error("Failed to create conversation");
+    setConversationId(data.id);
+    loadConversations();
+    return data.id;
+  };
 
   const send = useCallback(async (input: string) => {
     const userMsg: ChatMessage = { role: "user", content: input };
@@ -21,6 +88,16 @@ export function useChatStream() {
     abortRef.current = controller;
 
     let assistantSoFar = "";
+    let convId: string;
+
+    try {
+      convId = await ensureConversation(input);
+      await persistMessage(convId, "user", input);
+    } catch {
+      toast.error("Failed to save message.");
+      setIsLoading(false);
+      return;
+    }
 
     const upsert = (chunk: string) => {
       assistantSoFar += chunk;
@@ -103,6 +180,13 @@ export function useChatStream() {
           } catch { /* ignore */ }
         }
       }
+
+      // Persist the full assistant response
+      if (assistantSoFar) {
+        await persistMessage(convId, "assistant", assistantSoFar);
+        // Update conversation timestamp
+        await supabase.from("chat_conversations").update({ updated_at: new Date().toISOString() }).eq("id", convId);
+      }
     } catch (e: any) {
       if (e.name !== "AbortError") {
         console.error("Chat stream error:", e);
@@ -112,15 +196,33 @@ export function useChatStream() {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [messages]);
+  }, [messages, conversationId, location.pathname]);
 
   const stop = useCallback(() => {
     abortRef.current?.abort();
   }, []);
 
-  const clear = useCallback(() => {
+  const clear = useCallback(async () => {
+    if (conversationId) {
+      await supabase.from("chat_conversations").delete().eq("id", conversationId);
+      loadConversations();
+    }
     setMessages([]);
-  }, []);
+    setConversationId(null);
+  }, [conversationId, loadConversations]);
 
-  return { messages, isLoading, send, stop, clear };
+  const deleteConversation = useCallback(async (convId: string) => {
+    await supabase.from("chat_conversations").delete().eq("id", convId);
+    if (convId === conversationId) {
+      setMessages([]);
+      setConversationId(null);
+    }
+    loadConversations();
+  }, [conversationId, loadConversations]);
+
+  return {
+    messages, isLoading, send, stop, clear,
+    conversations, conversationId,
+    loadConversation, newConversation, deleteConversation,
+  };
 }
