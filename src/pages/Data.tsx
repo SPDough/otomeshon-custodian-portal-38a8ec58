@@ -1,16 +1,16 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
+import { motion } from "framer-motion";
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import { Box, Typography, Paper, Container } from '@mui/material';
 import 'handsontable/dist/handsontable.full.min.css';
+import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 
-// Register Handsontable's modules
 registerAllModules();
 
 const Data = () => {
   const hotTableRef = useRef(null);
 
-  // Sample data for the data sandbox
   const data = [
     ['Asset Name', 'Symbol', 'Price', 'Market Cap', 'Sector', 'P/E Ratio'],
     ['Apple Inc.', 'AAPL', 150.25, '2.4T', 'Technology', 28.5],
@@ -26,7 +26,7 @@ const Data = () => {
   ];
 
   const hotSettings = {
-    data: data,
+    data,
     rowHeaders: true,
     colHeaders: true,
     contextMenu: true,
@@ -54,48 +54,38 @@ const Data = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography 
-          variant="h4" 
-          component="h1" 
-          sx={{ 
-            fontWeight: 'bold', 
-            color: 'primary.main',
-            mb: 2
-          }}
-        >
-          Data Sandbox
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Interactive data table for exploring and manipulating financial data. 
-          You can sort, filter, edit cells, and perform various data operations.
-        </Typography>
-      </Box>
+    <AnimatedPage>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <motion.div variants={fadeInUp}>
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>
+              Data Sandbox
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Interactive data table for exploring and manipulating financial data.
+              You can sort, filter, edit cells, and perform various data operations.
+            </Typography>
+          </Box>
+        </motion.div>
 
-      <Paper 
-        elevation={2}
-        sx={{ 
-          p: 3,
-          borderRadius: 2,
-          overflow: 'hidden'
-        }}
-      >
-        <Box sx={{ width: '100%', overflow: 'auto' }}>
-          <HotTable
-            ref={hotTableRef}
-            settings={hotSettings}
-          />
-        </Box>
-      </Paper>
+        <motion.div variants={fadeInUp}>
+          <Paper elevation={2} sx={{ p: 3, borderRadius: 2, overflow: 'hidden' }}>
+            <Box sx={{ width: '100%', overflow: 'auto' }}>
+              <HotTable ref={hotTableRef} settings={hotSettings} />
+            </Box>
+          </Paper>
+        </motion.div>
 
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="body2" color="text.secondary">
-          Features: Right-click for context menu, drag columns/rows to reorder, 
-          use dropdown filters, sort by clicking column headers.
-        </Typography>
-      </Box>
-    </Container>
+        <motion.div variants={fadeInUp}>
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="body2" color="text.secondary">
+              Features: Right-click for context menu, drag columns/rows to reorder,
+              use dropdown filters, sort by clicking column headers.
+            </Typography>
+          </Box>
+        </motion.div>
+      </Container>
+    </AnimatedPage>
   );
 };
 

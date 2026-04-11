@@ -1,33 +1,35 @@
-
 import { Link } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Sidebar from "@/components/Sidebar";
+import { motion } from "framer-motion";
+import { Container, Typography, Box, Button } from "@mui/material";
+import { Home as HomeIcon } from "@mui/icons-material";
+import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 
 const NotFound = () => {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex flex-1 flex-col items-center justify-center bg-white px-4 py-20">
-          <div className="text-center">
-            <h1 className="mb-4 text-6xl font-extrabold text-purple-600">404</h1>
-            <h2 className="mb-6 text-3xl font-bold text-gray-800">Page Not Found</h2>
-            <p className="mb-10 text-xl text-gray-600">
-              The page you're looking for doesn't exist or has been moved.
-            </p>
-            <Link
-              to="/"
-              className="rounded-md bg-purple-600 px-6 py-3 text-white transition-colors hover:bg-purple-700"
-            >
-              Return Home
-            </Link>
-          </div>
-        </main>
-      </div>
-      <Footer />
-    </div>
+    <AnimatedPage>
+      <Container maxWidth="sm" sx={{ py: 12, textAlign: 'center' }}>
+        <motion.div variants={fadeInUp}>
+          <Typography variant="h1" color="primary" sx={{ fontSize: '6rem', fontWeight: 800, mb: 2 }}>
+            404
+          </Typography>
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+            Page Not Found
+          </Typography>
+          <Typography variant="h6" color="text.secondary" sx={{ mb: 5 }}>
+            The page you're looking for doesn't exist or has been moved.
+          </Typography>
+          <Button
+            component={Link}
+            to="/"
+            variant="contained"
+            size="large"
+            startIcon={<HomeIcon />}
+          >
+            Return Home
+          </Button>
+        </motion.div>
+      </Container>
+    </AnimatedPage>
   );
 };
 
