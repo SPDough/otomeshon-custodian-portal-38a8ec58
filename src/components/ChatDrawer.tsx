@@ -184,9 +184,24 @@ const ChatDrawer = ({ open, onClose }: ChatDrawerProps) => {
             ))}
 
             {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-              <Box sx={{ display: "flex", gap: 1, alignItems: "center", color: "text.secondary" }}>
-                <CircularProgress size={14} />
-                <Typography variant="caption">Thinking…</Typography>
+              <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", pl: 1, py: 1 }}>
+                {[0, 1, 2].map((i) => (
+                  <Box
+                    key={i}
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      bgcolor: "text.secondary",
+                      animation: "bounce 1.4s infinite ease-in-out both",
+                      animationDelay: `${i * 0.16}s`,
+                      "@keyframes bounce": {
+                        "0%, 80%, 100%": { transform: "scale(0.4)", opacity: 0.4 },
+                        "40%": { transform: "scale(1)", opacity: 1 },
+                      },
+                    }}
+                  />
+                ))}
               </Box>
             )}
 
