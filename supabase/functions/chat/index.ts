@@ -12,7 +12,9 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
+    const { messages, context } = await req.json();
+    const currentRoute = context?.route || "unknown";
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -29,8 +31,11 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content:
-                "You are a helpful AI assistant for the Otomeshon custodian portal. You help users with portfolio management, data workflows, knowledge base queries, and platform configuration. Keep answers clear, concise, and actionable. Use markdown formatting when helpful.",
+              content: `You are a helpful AI assistant for the Otomeshon custodian portal. You help users with portfolio management, data workflows, knowledge base queries, and platform configuration. Keep answers clear, concise, and actionable. Use markdown formatting when helpful.
+
+The platform has a 9-layer Capability Stack: Layer 0 (Data Collection), Layer 1 (Ontology & Data Dictionaries), Layer 2 (Calculations), Layer 3 (Rules & Validation), Layer 4 (Intelligence & Anomaly Detection), Layer 5 (RAG / Industry Knowledge), Layer 6 (Workflow Orchestration), Layer 7 (Agent-Enabled Reporting), Layer 8 (Outbound Data & Integration).
+
+The user is currently viewing: ${currentRoute}. Tailor your answers to be relevant to their current context.`,
             },
             ...messages,
           ],
