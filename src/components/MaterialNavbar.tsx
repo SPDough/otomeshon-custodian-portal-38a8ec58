@@ -134,6 +134,17 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
               </Box>
               
               <IconButton
+                onClick={toggleChat}
+                sx={{ 
+                  color: chatOpen ? 'primary.main' : 'text.secondary',
+                  '&:hover': { color: 'primary.main' },
+                }}
+                aria-label="toggle chat"
+              >
+                <ChatIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+
+              <IconButton
                 onClick={toggleMode}
                 sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
                 aria-label="toggle dark mode"
