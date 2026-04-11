@@ -1,8 +1,10 @@
+import { useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import theme from "./theme";
+import { lightTheme, darkTheme } from "./theme";
+import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeModeContext";
 import MaterialLayout from "./components/MaterialLayout";
 
 // Import pages
@@ -34,8 +36,11 @@ import LayerOutbound from "./pages/platform/LayerOutbound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const ThemedApp = () => {
+  const { mode } = useThemeMode();
+  const theme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
+
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
@@ -71,6 +76,14 @@ const App = () => (
         </MaterialLayout>
       </BrowserRouter>
     </ThemeProvider>
+  );
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <ThemeModeProvider>
+      <ThemedApp />
+    </ThemeModeProvider>
   </QueryClientProvider>
 );
 

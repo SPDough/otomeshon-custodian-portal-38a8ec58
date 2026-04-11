@@ -20,8 +20,11 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
   Search as SearchIcon,
+  DarkMode as DarkModeIcon,
+  LightMode as LightModeIcon,
 } from "@mui/icons-material";
 import CommandPalette from "./CommandPalette";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 
 interface MaterialNavbarProps {
   toggleSidebar?: () => void;
@@ -33,6 +36,7 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
   const [username, setUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [commandOpen, setCommandOpen] = useState(false);
+  const { mode, toggleMode } = useThemeMode();
   const location = useLocation();
 
   // ⌘K shortcut
@@ -126,6 +130,14 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
                 ))}
               </Box>
               
+              <IconButton
+                onClick={toggleMode}
+                sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
+                aria-label="toggle dark mode"
+              >
+                {mode === 'dark' ? <LightModeIcon sx={{ fontSize: 20 }} /> : <DarkModeIcon sx={{ fontSize: 20 }} />}
+              </IconButton>
+
               <Chip
                 icon={<SearchIcon sx={{ fontSize: 16 }} />}
                 label="⌘K"
@@ -175,6 +187,9 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
           {isMobile && (
             <>
               <Box sx={{ flex: 1 }} />
+              <IconButton color="inherit" aria-label="toggle dark mode" onClick={toggleMode}>
+                {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+              </IconButton>
               <IconButton color="inherit" aria-label="search" onClick={() => setCommandOpen(true)}>
                 <SearchIcon />
               </IconButton>
