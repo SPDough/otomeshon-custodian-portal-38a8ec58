@@ -1,19 +1,19 @@
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { motion } from "framer-motion";
-import {
-  Container, Typography, Box, Card, CardContent, CardHeader, Button, ButtonGroup,
-  Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, LinearProgress,
-} from '@mui/material';
+import { Container, Typography, Box, Card, CardContent, CardHeader, Button, ButtonGroup, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, LinearProgress } from '@mui/material';
 import { TrendingUp, Assessment, Download, Share, Refresh, Analytics } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 
 const Results = () => {
   const [viewMode, setViewMode] = useState('overview');
+  const intl = useIntl();
+  const fm = (id: string) => intl.formatMessage({ id });
 
   const workflowResults = [
-    { name: 'Risk Assessment', status: 'Completed', progress: 100, duration: '2.3s' },
-    { name: 'Portfolio Optimization', status: 'Running', progress: 75, duration: '5.1s' },
-    { name: 'Compliance Check', status: 'Queued', progress: 0, duration: '-' },
+    { name: 'Risk Assessment', status: fm("results.statusCompleted"), progress: 100, duration: '2.3s' },
+    { name: 'Portfolio Optimization', status: fm("results.statusRunning"), progress: 75, duration: '5.1s' },
+    { name: 'Compliance Check', status: fm("results.statusQueued"), progress: 0, duration: '-' },
   ];
 
   const analysisData = [
@@ -35,11 +35,11 @@ const Results = () => {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <motion.div variants={fadeInUp}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-            <Typography variant="h4" component="h1">Results & Analytics</Typography>
+            <Typography variant="h4" component="h1">{fm("results.title")}</Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button startIcon={<Refresh />} variant="outlined">Refresh</Button>
-              <Button startIcon={<Download />} variant="outlined">Export</Button>
-              <Button startIcon={<Share />} variant="contained">Share</Button>
+              <Button startIcon={<Refresh />} variant="outlined">{fm("results.refresh")}</Button>
+              <Button startIcon={<Download />} variant="outlined">{fm("results.export")}</Button>
+              <Button startIcon={<Share />} variant="contained">{fm("results.share")}</Button>
             </Box>
           </Box>
         </motion.div>
@@ -49,7 +49,7 @@ const Results = () => {
             <ButtonGroup variant="outlined">
               {['overview', 'detailed', 'workflows'].map((mode) => (
                 <Button key={mode} variant={viewMode === mode ? 'contained' : 'outlined'} onClick={() => setViewMode(mode)}>
-                  {mode === 'overview' ? 'Overview' : mode === 'detailed' ? 'Detailed Analysis' : 'Workflow Results'}
+                  {mode === 'overview' ? fm("results.overview") : mode === 'detailed' ? fm("results.detailedAnalysis") : fm("results.workflowResults")}
                 </Button>
               ))}
             </ButtonGroup>
@@ -61,10 +61,10 @@ const Results = () => {
             <motion.div variants={staggerContainer} initial="initial" animate="animate">
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr 1fr' }, gap: 3, mb: 3 }}>
                 {[
-                  { icon: <TrendingUp color="primary" />, title: "Portfolio Value", value: "$1,247,500", sub: "+12.45% YTD", color: "primary" },
-                  { icon: <Assessment color="primary" />, title: "Risk Score", value: "Medium", sub: "Risk Level: 6/10", color: "warning.main" },
-                  { icon: <Analytics color="primary" />, title: "Active Workflows", value: "3", sub: "2 Running, 1 Queued", color: "info.main" },
-                  { icon: <TrendingUp color="primary" />, title: "Compliance", value: "98.5%", sub: "All checks passed", color: "success.main" },
+                  { icon: <TrendingUp color="primary" />, title: fm("results.portfolioValue"), value: "$1,247,500", sub: fm("results.ytd"), color: "primary" },
+                  { icon: <Assessment color="primary" />, title: fm("results.riskScore"), value: fm("results.medium"), sub: fm("results.riskLevel"), color: "warning.main" },
+                  { icon: <Analytics color="primary" />, title: fm("results.activeWorkflows"), value: "3", sub: fm("results.activeWorkflowsSub"), color: "info.main" },
+                  { icon: <TrendingUp color="primary" />, title: fm("results.compliance"), value: "98.5%", sub: fm("results.complianceSub"), color: "success.main" },
                 ].map((s) => (
                   <motion.div key={s.title} variants={fadeInUp}>
                     <Card sx={{ '&:hover': { boxShadow: 4, transform: 'translateY(-2px)' }, transition: 'all 0.2s ease' }}>
@@ -82,11 +82,11 @@ const Results = () => {
             <motion.div variants={fadeInUp}>
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 3 }}>
                 <Card>
-                  <CardHeader title="Key Performance Metrics" />
+                  <CardHeader title={fm("results.keyMetrics")} />
                   <CardContent>
                     <TableContainer>
                       <Table>
-                        <TableHead><TableRow><TableCell>Metric</TableCell><TableCell align="right">Value</TableCell><TableCell align="right">Change</TableCell><TableCell align="right">Trend</TableCell></TableRow></TableHead>
+                        <TableHead><TableRow><TableCell>{fm("results.colMetric")}</TableCell><TableCell align="right">{fm("results.colValue")}</TableCell><TableCell align="right">{fm("results.colChange")}</TableCell><TableCell align="right">{fm("results.colTrend")}</TableCell></TableRow></TableHead>
                         <TableBody>
                           {analysisData.map((row) => (
                             <TableRow key={row.metric}>
@@ -102,7 +102,7 @@ const Results = () => {
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardHeader title="Top Holdings" />
+                  <CardHeader title={fm("results.topHoldings")} />
                   <CardContent>
                     {portfolioData.map((h) => (
                       <Box key={h.asset} sx={{ mb: 2 }}>
@@ -120,19 +120,19 @@ const Results = () => {
         {viewMode === 'workflows' && (
           <motion.div variants={fadeInUp}>
             <Card>
-              <CardHeader title="Workflow Execution Results" />
+              <CardHeader title={fm("results.workflowExecution")} />
               <CardContent>
                 <TableContainer component={Paper}>
                   <Table>
-                    <TableHead><TableRow><TableCell>Workflow</TableCell><TableCell>Status</TableCell><TableCell>Progress</TableCell><TableCell>Duration</TableCell><TableCell>Actions</TableCell></TableRow></TableHead>
+                    <TableHead><TableRow><TableCell>{fm("results.colWorkflow")}</TableCell><TableCell>{fm("results.colStatus")}</TableCell><TableCell>{fm("results.colProgress")}</TableCell><TableCell>{fm("results.colDuration")}</TableCell><TableCell>{fm("results.colActions")}</TableCell></TableRow></TableHead>
                     <TableBody>
                       {workflowResults.map((w) => (
                         <TableRow key={w.name}>
                           <TableCell>{w.name}</TableCell>
-                          <TableCell><Chip label={w.status} color={w.status === 'Completed' ? 'success' : w.status === 'Running' ? 'warning' : 'default'} size="small" /></TableCell>
+                          <TableCell><Chip label={w.status} color={w.status === fm("results.statusCompleted") ? 'success' : w.status === fm("results.statusRunning") ? 'warning' : 'default'} size="small" /></TableCell>
                           <TableCell><Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><LinearProgress variant="determinate" value={w.progress} sx={{ width: 100, height: 6, borderRadius: 3 }} /><Typography variant="body2">{w.progress}%</Typography></Box></TableCell>
                           <TableCell>{w.duration}</TableCell>
-                          <TableCell><Button size="small" variant="outlined">View Details</Button></TableCell>
+                          <TableCell><Button size="small" variant="outlined">{fm("results.viewDetails")}</Button></TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
