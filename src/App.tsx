@@ -1,4 +1,5 @@
 import { useMemo, lazy, Suspense } from "react";
+import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -88,6 +89,7 @@ const ThemedApp = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Toaster position="bottom-right" richColors closeButton />
       <BrowserRouter>
         <MaterialLayout>
           <AnimatedRoutes />
