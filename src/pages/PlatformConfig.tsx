@@ -120,8 +120,11 @@ const PlatformConfig = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [filter, setFilter] = useState<'all' | 'configured' | 'pending'>('all');
+  const [search, setSearch] = useState('');
 
-  const filteredLayers = filter === 'all' ? layers : layers.filter(l => l.status === filter);
+  const filteredLayers = layers
+    .filter(l => filter === 'all' || l.status === filter)
+    .filter(l => search === '' || l.name.toLowerCase().includes(search.toLowerCase()) || l.description.toLowerCase().includes(search.toLowerCase()));
 
   const getColor = (group: string) => {
     switch (group) {
