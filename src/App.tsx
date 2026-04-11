@@ -74,6 +74,7 @@ const AnimatedRoutes = () => {
 };
 
 const ThemedApp = () => {
+  const { mode } = useThemeMode();
   const theme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
 
   return (
