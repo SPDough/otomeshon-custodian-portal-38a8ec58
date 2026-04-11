@@ -7,11 +7,13 @@ import {
 import {
   Menu as MenuIcon, Login as LoginIcon, Logout as LogoutIcon,
   Search as SearchIcon, DarkMode as DarkModeIcon, LightMode as LightModeIcon,
-  Chat as ChatIcon,
+  Chat as ChatIcon, Language as LanguageIcon,
 } from "@mui/icons-material";
 import CommandPalette from "./CommandPalette";
 import { useThemeMode } from "@/contexts/ThemeModeContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIntl } from "react-intl";
+import { useLocale, localeLabels, type SupportedLocale } from "@/i18n/IntlContext";
 
 interface MaterialNavbarProps {
   toggleSidebar?: () => void;
@@ -23,10 +25,13 @@ interface MaterialNavbarProps {
 const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: MaterialNavbarProps) => {
   const { user, signOut } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [langAnchorEl, setLangAnchorEl] = useState<null | HTMLElement>(null);
   const [commandOpen, setCommandOpen] = useState(false);
   const { mode, toggleMode } = useThemeMode();
   const location = useLocation();
   const navigate = useNavigate();
+  const intl = useIntl();
+  const { locale, setLocale } = useLocale();
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -49,9 +54,9 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
   const handleMenuClose = () => setAnchorEl(null);
 
   const navLinks = [
-    { label: "Search", path: "/search" },
-    { label: "Portfolios", path: "/portfolios" },
-    { label: "About", path: "/about" },
+    { label: intl.formatMessage({ id: "nav.search" }), path: "/search" },
+    { label: intl.formatMessage({ id: "nav.portfolios" }), path: "/portfolios" },
+    { label: intl.formatMessage({ id: "nav.about" }), path: "/about" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -85,14 +90,32 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
 
               <IconButton onClick={toggleChat}
                 sx={{ color: chatOpen ? 'primary.main' : 'text.secondary', '&:hover': { color: 'primary.main' } }}
-                aria-label="toggle chat">
+                aria-label={intl.formatMessage({ id: "nav.toggleChat" })}>
                 <ChatIcon sx={{ fontSize: 20 }} />
               </IconButton>
 
               <IconButton onClick={toggleMode}
-                sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }} aria-label="toggle dark mode">
+                sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
+                aria-label={intl.formatMessage({ id: "nav.toggleDarkMode" })}>
                 {mode === 'dark' ? <LightModeIcon sx={{ fontSize: 20 }} /> : <DarkModeIcon sx={{ fontSize: 20 }} />}
               </IconButton>
+
+              {/* Language switcher */}
+              <IconButton
+                onClick={(e) => setLangAnchorEl(e.currentTarget)}
+                sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
+                aria-label="language">
+                <LanguageIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+              <Menu anchorEl={langAnchorEl} open={Boolean(langAnchorEl)} onClose={() => setLangAnchorEl(null)}
+                PaperProps={{ sx: { minWidth: 160, mt: 1 } }}>
+                {localeLabels.map((l) => (
+                  <MenuItem key={l.code} selected={locale === l.code}
+                    onClick={() => { setLocale(l.code); setLangAnchorEl(null); }}>
+                    {l.flag}&nbsp;&nbsp;{l.label}
+                  </MenuItem>
+                ))}
+              </Menu>
 
               <Chip icon={<SearchIcon sx={{ fontSize: 16 }} />} label="⌘K" size="small" variant="outlined"
                 sx={{ borderColor: 'divider', color: 'text.secondary', fontSize: '0.75rem', mr: 2, cursor: 'pointer',
@@ -107,13 +130,13 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
                   <Button size="small" onClick={handleLogout}
                     sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
                     startIcon={<LogoutIcon sx={{ fontSize: 18 }} />}>
-                    Logout
+                    {intl.formatMessage({ id: "nav.logout" })}
                   </Button>
                 </Box>
               ) : (
                 <Button variant="contained" size="small" startIcon={<LoginIcon sx={{ fontSize: 18 }} />}
                   component={RouterLink} to="/auth" sx={{ px: 2.5, py: 0.75 }}>
-                  Login
+                  {intl.formatMessage({ id: "nav.login" })}
                 </Button>
               )}
             </>
@@ -122,9 +145,13 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
           {isMobile && (
             <>
               <Box sx={{ flex: 1 }} />
-              <IconButton color="inherit" aria-label="toggle chat" onClick={toggleChat}><ChatIcon /></IconButton>
-              <IconButton color="inherit" aria-label="toggle dark mode" onClick={toggleMode}>
+              <IconButton color="inherit" aria-label={intl.formatMessage({ id: "nav.toggleChat" })} onClick={toggleChat}><ChatIcon /></IconButton>
+              <IconButton color="inherit" aria-label={intl.formatMessage({ id: "nav.toggleDarkMode" })} onClick={toggleMode}>
                 {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+              </IconButton>
+              <IconButton color="inherit" aria-label="language"
+                onClick={(e) => setLangAnchorEl(e.currentTarget)}>
+                <LanguageIcon />
               </IconButton>
               <IconButton color="inherit" aria-label="search" onClick={() => setCommandOpen(true)}><SearchIcon /></IconButton>
               <IconButton color="inherit" aria-label="menu" onClick={handleMenuOpen}><MenuIcon /></IconButton>
@@ -136,11 +163,11 @@ const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: Mater
                 ))}
                 {user ? (
                   <MenuItem onClick={handleLogout}>
-                    <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>Logout
+                    <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>{intl.formatMessage({ id: "nav.logout" })}
                   </MenuItem>
                 ) : (
                   <MenuItem component={RouterLink} to="/auth" onClick={handleMenuClose}>
-                    <ListItemIcon><LoginIcon fontSize="small" /></ListItemIcon>Login
+                    <ListItemIcon><LoginIcon fontSize="small" /></ListItemIcon>{intl.formatMessage({ id: "nav.login" })}
                   </MenuItem>
                 )}
               </Menu>

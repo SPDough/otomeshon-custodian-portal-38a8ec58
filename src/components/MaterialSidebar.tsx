@@ -1,39 +1,18 @@
 import { 
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemButton, 
-  ListItemIcon, 
-  ListItemText, 
-  Box, 
-  Typography,
-  Collapse,
-  alpha,
-  useTheme
+  Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, 
+  Box, Typography, Collapse, alpha, useTheme
 } from "@mui/material";
 import { 
-  CheckCircle as CheckIcon,
-  Description as FileTextIcon,
-  BusinessCenter as BriefcaseIcon,
-  Shield as ShieldIcon,
-  TrendingUp as TrendingUpIcon,
-  FolderOpen as PortfolioIcon,
-  AccountTree as WorkflowIcon,
-  PlayArrow as AutomationIcon,
-  Schedule as ScheduleIcon,
-  Assessment as ReportIcon,
-  Storage as DatabaseIcon,
-  CloudUpload as ImportIcon,
-  Analytics as AnalyticsIcon,
-  TableChart as TableIcon,
-  Search as SearchIcon,
-  Dashboard as DashboardIcon,
-  ExpandMore,
-  ExpandLess,
-  Hub as HubIcon
+  CheckCircle as CheckIcon, Description as FileTextIcon, BusinessCenter as BriefcaseIcon,
+  Shield as ShieldIcon, TrendingUp as TrendingUpIcon, FolderOpen as PortfolioIcon,
+  AccountTree as WorkflowIcon, PlayArrow as AutomationIcon, Schedule as ScheduleIcon,
+  Assessment as ReportIcon, Storage as DatabaseIcon, CloudUpload as ImportIcon,
+  Analytics as AnalyticsIcon, TableChart as TableIcon, Search as SearchIcon,
+  Dashboard as DashboardIcon, ExpandMore, ExpandLess, Hub as HubIcon
 } from "@mui/icons-material";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 interface SidebarProps {
   open: boolean;
@@ -43,77 +22,77 @@ interface SidebarProps {
 
 interface NavItem {
   id: string;
-  name: string;
+  nameId: string;
   icon: React.ReactElement;
   path?: string;
 }
 
 interface NavSection {
-  title: string;
+  titleId: string;
   items: NavItem[];
   defaultOpen?: boolean;
 }
 
 const navSections: NavSection[] = [
   {
-    title: "Overview",
+    titleId: "sidebar.overview",
     defaultOpen: true,
     items: [
-      { id: "dashboard", name: "Dashboard", icon: <DashboardIcon fontSize="small" />, path: "/dashboard" },
+      { id: "dashboard", nameId: "sidebar.dashboard", icon: <DashboardIcon fontSize="small" />, path: "/dashboard" },
     ],
   },
   {
-    title: "Front Office Support",
+    titleId: "sidebar.frontOffice",
     defaultOpen: true,
     items: [
-      { id: "front-office", name: "Overview", icon: <DashboardIcon fontSize="small" />, path: "/front-office" },
-      { id: "portfolios", name: "Portfolios", icon: <PortfolioIcon fontSize="small" />, path: "/portfolios" },
-      { id: "performance", name: "Performance", icon: <TrendingUpIcon fontSize="small" /> },
-      { id: "corp-actions", name: "Corporate Actions", icon: <BriefcaseIcon fontSize="small" /> },
-      { id: "graph", name: "Knowledge Graph", icon: <HubIcon fontSize="small" />, path: "/knowledge-graph" },
-      { id: "base", name: "Knowledge Base", icon: <SearchIcon fontSize="small" />, path: "/knowledge-base" },
+      { id: "front-office", nameId: "sidebar.frontOfficeOverview", icon: <DashboardIcon fontSize="small" />, path: "/front-office" },
+      { id: "portfolios", nameId: "sidebar.portfolios", icon: <PortfolioIcon fontSize="small" />, path: "/portfolios" },
+      { id: "performance", nameId: "sidebar.performance", icon: <TrendingUpIcon fontSize="small" /> },
+      { id: "corp-actions", nameId: "sidebar.corporateActions", icon: <BriefcaseIcon fontSize="small" /> },
+      { id: "graph", nameId: "sidebar.knowledgeGraph", icon: <HubIcon fontSize="small" />, path: "/knowledge-graph" },
+      { id: "base", nameId: "sidebar.knowledgeBase", icon: <SearchIcon fontSize="small" />, path: "/knowledge-base" },
     ],
   },
   {
-    title: "Middle Office Automation",
+    titleId: "sidebar.middleOffice",
     defaultOpen: false,
     items: [
-      { id: "middle-office", name: "Overview", icon: <DashboardIcon fontSize="small" />, path: "/middle-office" },
-      { id: "risk", name: "Risk Management", icon: <ShieldIcon fontSize="small" /> },
-      { id: "automation", name: "Automation Rules", icon: <AutomationIcon fontSize="small" /> },
-      { id: "processes", name: "Process Flows", icon: <WorkflowIcon fontSize="small" /> },
-      { id: "scheduled", name: "Scheduled Tasks", icon: <ScheduleIcon fontSize="small" /> },
-      { id: "analytics", name: "Analytics", icon: <AnalyticsIcon fontSize="small" /> },
-      { id: "config", name: "Workflow Config", icon: <ScheduleIcon fontSize="small" />, path: "/workflow-config" },
+      { id: "middle-office", nameId: "sidebar.middleOfficeOverview", icon: <DashboardIcon fontSize="small" />, path: "/middle-office" },
+      { id: "risk", nameId: "sidebar.riskManagement", icon: <ShieldIcon fontSize="small" /> },
+      { id: "automation", nameId: "sidebar.automationRules", icon: <AutomationIcon fontSize="small" /> },
+      { id: "processes", nameId: "sidebar.processFlows", icon: <WorkflowIcon fontSize="small" /> },
+      { id: "scheduled", nameId: "sidebar.scheduledTasks", icon: <ScheduleIcon fontSize="small" /> },
+      { id: "analytics", nameId: "sidebar.analytics", icon: <AnalyticsIcon fontSize="small" /> },
+      { id: "config", nameId: "sidebar.workflowConfig", icon: <ScheduleIcon fontSize="small" />, path: "/workflow-config" },
     ],
   },
   {
-    title: "Back Office Validation",
+    titleId: "sidebar.backOffice",
     defaultOpen: false,
     items: [
-      { id: "back-office", name: "Overview", icon: <DashboardIcon fontSize="small" />, path: "/back-office" },
-      { id: "confirms", name: "Trade Confirms", icon: <CheckIcon fontSize="small" /> },
-      { id: "settlements", name: "Settlements", icon: <FileTextIcon fontSize="small" /> },
-      { id: "reports", name: "Report Generation", icon: <ReportIcon fontSize="small" /> },
-      { id: "sources", name: "Data Sources", icon: <DatabaseIcon fontSize="small" /> },
-      { id: "import", name: "Import/Export", icon: <ImportIcon fontSize="small" /> },
-      { id: "tables", name: "Data Tables", icon: <TableIcon fontSize="small" /> },
+      { id: "back-office", nameId: "sidebar.backOfficeOverview", icon: <DashboardIcon fontSize="small" />, path: "/back-office" },
+      { id: "confirms", nameId: "sidebar.tradeConfirms", icon: <CheckIcon fontSize="small" /> },
+      { id: "settlements", nameId: "sidebar.settlements", icon: <FileTextIcon fontSize="small" /> },
+      { id: "reports", nameId: "sidebar.reportGeneration", icon: <ReportIcon fontSize="small" /> },
+      { id: "sources", nameId: "sidebar.dataSources", icon: <DatabaseIcon fontSize="small" /> },
+      { id: "import", nameId: "sidebar.importExport", icon: <ImportIcon fontSize="small" /> },
+      { id: "tables", nameId: "sidebar.dataTables", icon: <TableIcon fontSize="small" /> },
     ],
   },
   {
-    title: "Platform Configuration",
+    titleId: "sidebar.platformConfig",
     defaultOpen: false,
     items: [
-      { id: "platform-overview", name: "Capability Stack", icon: <DashboardIcon fontSize="small" />, path: "/platform-config" },
-      { id: "layer-0", name: "L0: Data Collection", icon: <DatabaseIcon fontSize="small" />, path: "/platform-config/layer-0" },
-      { id: "layer-1", name: "L1: Ontology", icon: <SearchIcon fontSize="small" />, path: "/platform-config/layer-1" },
-      { id: "layer-2", name: "L2: Calculations", icon: <AnalyticsIcon fontSize="small" />, path: "/platform-config/layer-2" },
-      { id: "layer-3", name: "L3: Rules", icon: <ShieldIcon fontSize="small" />, path: "/platform-config/layer-3" },
-      { id: "layer-4", name: "L4: Intelligence", icon: <HubIcon fontSize="small" />, path: "/platform-config/layer-4" },
-      { id: "layer-5", name: "L5: RAG Knowledge", icon: <SearchIcon fontSize="small" />, path: "/platform-config/layer-5" },
-      { id: "layer-6", name: "L6: Workflows", icon: <WorkflowIcon fontSize="small" />, path: "/platform-config/layer-6" },
-      { id: "layer-7", name: "L7: Reporting", icon: <ReportIcon fontSize="small" />, path: "/platform-config/layer-7" },
-      { id: "layer-8", name: "L8: Outbound", icon: <ImportIcon fontSize="small" />, path: "/platform-config/layer-8" },
+      { id: "platform-overview", nameId: "sidebar.capabilityStack", icon: <DashboardIcon fontSize="small" />, path: "/platform-config" },
+      { id: "layer-0", nameId: "sidebar.l0DataCollection", icon: <DatabaseIcon fontSize="small" />, path: "/platform-config/layer-0" },
+      { id: "layer-1", nameId: "sidebar.l1Ontology", icon: <SearchIcon fontSize="small" />, path: "/platform-config/layer-1" },
+      { id: "layer-2", nameId: "sidebar.l2Calculations", icon: <AnalyticsIcon fontSize="small" />, path: "/platform-config/layer-2" },
+      { id: "layer-3", nameId: "sidebar.l3Rules", icon: <ShieldIcon fontSize="small" />, path: "/platform-config/layer-3" },
+      { id: "layer-4", nameId: "sidebar.l4Intelligence", icon: <HubIcon fontSize="small" />, path: "/platform-config/layer-4" },
+      { id: "layer-5", nameId: "sidebar.l5RAG", icon: <SearchIcon fontSize="small" />, path: "/platform-config/layer-5" },
+      { id: "layer-6", nameId: "sidebar.l6Workflows", icon: <WorkflowIcon fontSize="small" />, path: "/platform-config/layer-6" },
+      { id: "layer-7", nameId: "sidebar.l7Reporting", icon: <ReportIcon fontSize="small" />, path: "/platform-config/layer-7" },
+      { id: "layer-8", nameId: "sidebar.l8Outbound", icon: <ImportIcon fontSize="small" />, path: "/platform-config/layer-8" },
     ],
   },
 ];
@@ -121,35 +100,22 @@ const navSections: NavSection[] = [
 const NavSectionComponent = ({ section, location }: { section: NavSection; location: ReturnType<typeof useLocation> }) => {
   const [open, setOpen] = useState(section.defaultOpen ?? false);
   const theme = useTheme();
+  const intl = useIntl();
   
   const hasActiveItem = section.items.some(item => item.path && location.pathname === item.path);
-  
-  // Auto-expand if contains active item
   const isOpen = open || hasActiveItem;
 
   return (
     <Box sx={{ mb: 1 }}>
       <ListItemButton 
         onClick={() => setOpen(!isOpen)}
-        sx={{ 
-          py: 0.75,
-          px: 2,
-          borderRadius: 0,
-          '&:hover': {
-            bgcolor: 'transparent',
-          }
-        }}
+        sx={{ py: 0.75, px: 2, borderRadius: 0, '&:hover': { bgcolor: 'transparent' } }}
       >
         <ListItemText 
-          primary={section.title}
+          primary={intl.formatMessage({ id: section.titleId })}
           primaryTypographyProps={{
             variant: 'subtitle2',
-            sx: { 
-              color: 'text.secondary',
-              fontWeight: 600,
-              fontSize: '0.7rem',
-              letterSpacing: '0.08em',
-            }
+            sx: { color: 'text.secondary', fontWeight: 600, fontSize: '0.7rem', letterSpacing: '0.08em' }
           }}
         />
         {isOpen ? <ExpandLess sx={{ fontSize: 16, color: 'text.secondary' }} /> : <ExpandMore sx={{ fontSize: 16, color: 'text.secondary' }} />}
@@ -159,33 +125,24 @@ const NavSectionComponent = ({ section, location }: { section: NavSection; locat
         <List disablePadding>
           {section.items.map((item) => {
             const isActive = item.path && location.pathname === item.path;
-            
             return (
               <ListItem key={item.id} disablePadding sx={{ px: 1 }}>
                 <ListItemButton 
                   component={item.path ? RouterLink : "div"}
                   to={item.path}
                   sx={{
-                    py: 0.875,
-                    borderRadius: 1.5,
+                    py: 0.875, borderRadius: 1.5,
                     bgcolor: isActive ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
                     '&:hover': {
-                      bgcolor: isActive 
-                        ? alpha(theme.palette.primary.main, 0.12) 
-                        : alpha(theme.palette.primary.main, 0.04),
+                      bgcolor: isActive ? alpha(theme.palette.primary.main, 0.12) : alpha(theme.palette.primary.main, 0.04),
                     },
                   }}
                 >
-                  <ListItemIcon 
-                    sx={{ 
-                      minWidth: 32,
-                      color: isActive ? 'primary.main' : 'text.secondary',
-                    }}
-                  >
+                  <ListItemIcon sx={{ minWidth: 32, color: isActive ? 'primary.main' : 'text.secondary' }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText 
-                    primary={item.name} 
+                    primary={intl.formatMessage({ id: item.nameId })} 
                     primaryTypographyProps={{
                       fontSize: '0.875rem',
                       fontWeight: isActive ? 500 : 400,
@@ -204,47 +161,29 @@ const NavSectionComponent = ({ section, location }: { section: NavSection; locat
 
 const MaterialSidebar = ({ open, onClose, variant }: SidebarProps) => {
   const location = useLocation();
+  const intl = useIntl();
   const drawerWidth = 260;
 
   return (
     <Drawer
-      variant={variant}
-      open={open}
-      onClose={onClose}
+      variant={variant} open={open} onClose={onClose}
       sx={{
-        width: drawerWidth,
-        flexShrink: 0,
+        width: drawerWidth, flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          borderRight: '1px solid',
-          borderColor: 'divider',
-          bgcolor: 'background.default',
+          width: drawerWidth, boxSizing: 'border-box',
+          borderRight: '1px solid', borderColor: 'divider', bgcolor: 'background.default',
         },
       }}
     >
-      <Box sx={{ 
-        overflow: 'auto',
-        pt: 9,
-        pb: 2,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
+      <Box sx={{ overflow: 'auto', pt: 9, pb: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <List sx={{ flex: 1 }}>
           {navSections.map((section) => (
-            <NavSectionComponent 
-              key={section.title} 
-              section={section} 
-              location={location}
-            />
+            <NavSectionComponent key={section.titleId} section={section} location={location} />
           ))}
         </List>
-        
-        {/* Footer with version */}
         <Box sx={{ px: 2, py: 1.5, borderTop: '1px solid', borderColor: 'divider' }}>
           <Typography variant="caption" color="text.secondary">
-            Otomeshon v1.0.0
+            {intl.formatMessage({ id: "app.version" })}
           </Typography>
         </Box>
       </Box>

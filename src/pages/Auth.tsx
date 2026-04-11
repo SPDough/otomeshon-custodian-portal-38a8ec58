@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
+import { useIntl } from "react-intl";
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -19,6 +20,7 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const intl = useIntl();
 
   useEffect(() => {
     if (user) navigate("/dashboard", { replace: true });
@@ -33,12 +35,11 @@ const Auth = () => {
     try {
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
+          email, password,
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        setMessage("Check your email to confirm your account.");
+        setMessage(intl.formatMessage({ id: "auth.checkEmail" }));
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -68,51 +69,39 @@ const Auth = () => {
       <Card sx={{ width: "100%" }}>
         <CardContent sx={{ p: 4 }}>
           <Typography variant="h5" fontWeight={700} textAlign="center" mb={1}>
-            {isSignUp ? "Create your account" : "Welcome back"}
+            {isSignUp ? intl.formatMessage({ id: "auth.createAccount" }) : intl.formatMessage({ id: "auth.welcomeBack" })}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center" mb={3}>
-            {isSignUp ? "Get started with Otomeshon" : "Sign in to Otomeshon"}
+            {isSignUp ? intl.formatMessage({ id: "auth.getStarted" }) : intl.formatMessage({ id: "auth.signInTo" })}
           </Typography>
 
-          <Button
-            fullWidth
-            variant="outlined"
-            startIcon={<GoogleIcon />}
-            onClick={handleGoogleSignIn}
-            sx={{ mb: 2, py: 1.25 }}
-          >
-            Continue with Google
+          <Button fullWidth variant="outlined" startIcon={<GoogleIcon />}
+            onClick={handleGoogleSignIn} sx={{ mb: 2, py: 1.25 }}>
+            {intl.formatMessage({ id: "auth.continueWithGoogle" })}
           </Button>
 
           <Divider sx={{ my: 2 }}>
-            <Typography variant="caption" color="text.secondary">or</Typography>
+            <Typography variant="caption" color="text.secondary">{intl.formatMessage({ id: "auth.or" })}</Typography>
           </Divider>
 
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
 
           <Box component="form" onSubmit={handleEmailAuth}>
-            <TextField
-              fullWidth label="Email" type="email" value={email}
-              onChange={(e) => setEmail(e.target.value)} required sx={{ mb: 2 }}
-            />
-            <TextField
-              fullWidth label="Password" type="password" value={password}
+            <TextField fullWidth label={intl.formatMessage({ id: "auth.email" })} type="email" value={email}
+              onChange={(e) => setEmail(e.target.value)} required sx={{ mb: 2 }} />
+            <TextField fullWidth label={intl.formatMessage({ id: "auth.password" })} type="password" value={password}
               onChange={(e) => setPassword(e.target.value)} required
-              inputProps={{ minLength: 6 }} sx={{ mb: 3 }}
-            />
-            <Button
-              fullWidth type="submit" variant="contained" disabled={loading}
-              sx={{ py: 1.25 }}
-            >
-              {loading ? <CircularProgress size={22} /> : isSignUp ? "Create Account" : "Sign In"}
+              inputProps={{ minLength: 6 }} sx={{ mb: 3 }} />
+            <Button fullWidth type="submit" variant="contained" disabled={loading} sx={{ py: 1.25 }}>
+              {loading ? <CircularProgress size={22} /> : isSignUp ? intl.formatMessage({ id: "auth.createAccountBtn" }) : intl.formatMessage({ id: "auth.signIn" })}
             </Button>
           </Box>
 
           <Typography variant="body2" textAlign="center" mt={3} color="text.secondary">
-            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+            {isSignUp ? intl.formatMessage({ id: "auth.alreadyHaveAccount" }) : intl.formatMessage({ id: "auth.dontHaveAccount" })}{" "}
             <Button size="small" onClick={() => { setIsSignUp(!isSignUp); setError(null); setMessage(null); }}>
-              {isSignUp ? "Sign in" : "Sign up"}
+              {isSignUp ? intl.formatMessage({ id: "auth.signInLink" }) : intl.formatMessage({ id: "auth.signUp" })}
             </Button>
           </Typography>
         </CardContent>
