@@ -218,9 +218,9 @@ const PlatformConfig = () => {
           </Box>
         </motion.div>
 
-        <motion.div variants={staggerContainer} initial="initial" animate="animate">
+        <motion.div variants={staggerContainer} initial="initial" animate="animate" key={filter}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-            {layers.map((layer) => {
+            {filteredLayers.map((layer) => {
               const color = getColor(layer.colorGroup);
               return (
                 <motion.div key={layer.number} variants={fadeInUp}>
