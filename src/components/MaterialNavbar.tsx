@@ -22,6 +22,7 @@ import {
   Search as SearchIcon,
   DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
+  Chat as ChatIcon,
 } from "@mui/icons-material";
 import CommandPalette from "./CommandPalette";
 import { useThemeMode } from "@/contexts/ThemeModeContext";
@@ -29,9 +30,11 @@ import { useThemeMode } from "@/contexts/ThemeModeContext";
 interface MaterialNavbarProps {
   toggleSidebar?: () => void;
   isMobile?: boolean;
+  toggleChat?: () => void;
+  chatOpen?: boolean;
 }
 
-const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
+const MaterialNavbar = ({ toggleSidebar, isMobile, toggleChat, chatOpen }: MaterialNavbarProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -130,6 +133,17 @@ const MaterialNavbar = ({ toggleSidebar, isMobile }: MaterialNavbarProps) => {
                 ))}
               </Box>
               
+              <IconButton
+                onClick={toggleChat}
+                sx={{ 
+                  color: chatOpen ? 'primary.main' : 'text.secondary',
+                  '&:hover': { color: 'primary.main' },
+                }}
+                aria-label="toggle chat"
+              >
+                <ChatIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+
               <IconButton
                 onClick={toggleMode}
                 sx={{ color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
