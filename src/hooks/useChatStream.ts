@@ -16,14 +16,20 @@ export function useChatStream() {
   const [conversations, setConversations] = useState<{ id: string; title: string; updated_at: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
-  const userId = user?.id ?? "";
+
+  const getUserId = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user?.id ?? "";
+  };
 
   // Load conversation list
   const loadConversations = useCallback(async () => {
+    const uid = await getUserId();
+    if (!uid) return;
     const { data } = await supabase
       .from("chat_conversations")
       .select("id, title, updated_at")
-      .eq("session_id", userId)
+      .eq("session_id", uid)
       .order("updated_at", { ascending: false })
       .limit(20);
     if (data) setConversations(data);
@@ -60,10 +66,12 @@ export function useChatStream() {
   // Ensure a conversation exists, create if needed
   const ensureConversation = async (firstMessage: string): Promise<string> => {
     if (conversationId) return conversationId;
+    const uid = await getUserId();
+    if (!uid) throw new Error("Not authenticated");
     const title = firstMessage.length > 60 ? firstMessage.slice(0, 57) + "…" : firstMessage;
     const { data } = await supabase
       .from("chat_conversations")
-      .insert({ session_id: userId, title })
+      .insert({ session_id: uid, title })
       .select("id")
       .single();
     if (!data) throw new Error("Failed to create conversation");
