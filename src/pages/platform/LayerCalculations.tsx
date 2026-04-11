@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
 import { Functions, CheckCircle, Warning } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const calculations = [
 
 const LayerCalculations = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.info.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerCalculations = () => {
         <PlatformBreadcrumb layerNumber={2} layerName="Calculations" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 2" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Calculations</Typography>
+            <Chip label={fm("layer2.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer2.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Calculation library, formula definitions, and automated test result validation.
+              {fm("layer2.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -44,7 +47,7 @@ const LayerCalculations = () => {
                       </Box>
                       <Chip
                         icon={calc.status === 'passing' ? <CheckCircle sx={{ fontSize: 14 }} /> : <Warning sx={{ fontSize: 14 }} />}
-                        label={`${calc.passing}/${calc.tests} tests`}
+                        label={fm("layer2.testsLabel", { passing: calc.passing, total: calc.tests })}
                         size="small"
                         sx={{
                           bgcolor: calc.status === 'passing' ? alpha(theme.palette.success.main, 0.1) : alpha(theme.palette.warning.main, 0.1),

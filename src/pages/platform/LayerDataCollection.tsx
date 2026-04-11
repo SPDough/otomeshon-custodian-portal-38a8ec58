@@ -5,6 +5,7 @@ import {
 import {
   Storage as StorageIcon, CloudDownload, Schedule, CheckCircle, Error as ErrorIcon,
 } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -19,6 +20,8 @@ const sources = [
 
 const LayerDataCollection = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string) => intl.formatMessage({ id });
   const color = theme.palette.info.main;
 
   return (
@@ -27,12 +30,12 @@ const LayerDataCollection = () => {
         <PlatformBreadcrumb layerNumber={0} layerName="Data Collection" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 0" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Chip label={fm("layer0.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
             <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>
-              Data Collection & Automations
+              {fm("layer0.title")}
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Configure data source connections, ingestion schedules, and automation rules for incoming data streams.
+              {fm("layer0.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -50,7 +53,7 @@ const LayerDataCollection = () => {
                       </Box>
                       <Chip
                         icon={src.status === 'active' ? <CheckCircle sx={{ fontSize: 14 }} /> : undefined}
-                        label={src.status === 'active' ? 'Active' : src.status === 'error' ? 'Error' : 'Pending'}
+                        label={src.status === 'active' ? fm("layer0.statusActive") : src.status === 'error' ? fm("layer0.statusError") : fm("layer0.statusPending")}
                         size="small"
                         sx={{
                           bgcolor: src.status === 'active' ? alpha(theme.palette.success.main, 0.1) : src.status === 'error' ? alpha(theme.palette.error.main, 0.1) : alpha(theme.palette.warning.main, 0.1),

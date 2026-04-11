@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
-import { CloudUpload, Api, Send, Storage, CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
+import { Api, Send, CheckCircle, Error as ErrorIcon } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const integrations = [
 
 const LayerOutbound = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.warning.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerOutbound = () => {
         <PlatformBreadcrumb layerNumber={8} layerName="Outbound Integration" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 8" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Outbound Data & System Integration</Typography>
+            <Chip label={fm("layer8.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer8.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              API endpoints, export targets, and downstream system integration health monitoring.
+              {fm("layer8.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -44,7 +47,7 @@ const LayerOutbound = () => {
                       </Box>
                       <Chip
                         icon={int.status === 'healthy' ? <CheckCircle sx={{ fontSize: 14 }} /> : <ErrorIcon sx={{ fontSize: 14 }} />}
-                        label={int.status === 'healthy' ? 'Healthy' : 'Degraded'}
+                        label={int.status === 'healthy' ? fm("layer8.statusHealthy") : fm("layer8.statusDegraded")}
                         size="small"
                         sx={{
                           bgcolor: int.status === 'healthy' ? alpha(theme.palette.success.main, 0.1) : alpha(theme.palette.warning.main, 0.1),
@@ -55,7 +58,7 @@ const LayerOutbound = () => {
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 500, mb: 0.5 }}>{int.name}</Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{int.type} · {int.direction}</Typography>
-                    <Typography variant="caption" color="text.secondary">Latency: {int.latency}</Typography>
+                    <Typography variant="caption" color="text.secondary">{fm("layer8.latency", { value: int.latency })}</Typography>
                   </CardContent>
                 </Card>
               </motion.div>

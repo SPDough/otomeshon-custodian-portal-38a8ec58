@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
-import { Assessment, Dashboard, PictureAsPdf, SmartToy, Schedule } from "@mui/icons-material";
+import { Dashboard, PictureAsPdf, SmartToy, Schedule } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const reports = [
 
 const LayerReporting = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string) => intl.formatMessage({ id });
   const color = theme.palette.secondary.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerReporting = () => {
         <PlatformBreadcrumb layerNumber={7} layerName="Reporting" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 7" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>Agent-Enabled Reporting</Typography>
+            <Chip label={fm("layer7.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer7.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Dashboard builder, report templates, and autonomous agent configuration for operations reporting.
+              {fm("layer7.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -43,9 +46,9 @@ const LayerReporting = () => {
                         {report.type === 'Dashboard' ? <Dashboard /> : <PictureAsPdf />}
                       </Box>
                       <Box sx={{ display: 'flex', gap: 1 }}>
-                        {report.agent && <Chip icon={<SmartToy sx={{ fontSize: 14 }} />} label="Agent" size="small" variant="outlined" sx={{ borderColor: 'divider' }} />}
+                        {report.agent && <Chip icon={<SmartToy sx={{ fontSize: 14 }} />} label={fm("layer7.agent")} size="small" variant="outlined" sx={{ borderColor: 'divider' }} />}
                         <Chip
-                          label={report.status === 'active' ? 'Active' : 'Draft'}
+                          label={report.status === 'active' ? fm("layer7.statusActive") : fm("layer7.statusDraft")}
                           size="small"
                           sx={{
                             bgcolor: report.status === 'active' ? alpha(theme.palette.success.main, 0.1) : alpha(theme.palette.text.secondary, 0.1),

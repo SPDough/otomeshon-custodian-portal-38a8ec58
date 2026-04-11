@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
-import { MenuBook, Category, Schema, Link as LinkIcon } from "@mui/icons-material";
+import { Category } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const entities = [
 
 const LayerOntology = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.info.main;
 
   return (
@@ -23,12 +26,12 @@ const LayerOntology = () => {
         <PlatformBreadcrumb layerNumber={1} layerName="Ontology" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 1" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Chip label={fm("layer1.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
             <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>
-              Ontology & Data Dictionaries
+              {fm("layer1.title")}
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Define entity types, field mappings, taxonomy structures, and alignment to industry standards like FIBO.
+              {fm("layer1.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -50,7 +53,7 @@ const LayerOntology = () => {
                       </Box>
                       <Typography variant="h6" sx={{ fontWeight: 500, mb: 0.5 }}>{entity.name}</Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        {entity.mapped}/{entity.fields} fields mapped ({pct}%)
+                        {fm("layer1.fieldsMapped", { mapped: entity.mapped, total: entity.fields, pct })}
                       </Typography>
                       <Box sx={{ width: '100%', height: 4, borderRadius: 2, bgcolor: alpha(color, 0.1) }}>
                         <Box sx={{ width: `${pct}%`, height: '100%', borderRadius: 2, bgcolor: pct === 100 ? 'success.main' : color }} />

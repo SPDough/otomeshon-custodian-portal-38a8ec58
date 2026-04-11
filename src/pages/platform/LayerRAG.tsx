@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme, LinearProgress } from "@mui/material";
-import { AutoStories, Description, CloudDone, Sync } from "@mui/icons-material";
+import { Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme } from "@mui/material";
+import { CloudDone, Sync } from "@mui/icons-material";
+import { useIntl } from "react-intl";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import PlatformBreadcrumb from "@/components/PlatformBreadcrumb";
 
@@ -15,6 +16,8 @@ const knowledgeSources = [
 
 const LayerRAG = () => {
   const theme = useTheme();
+  const intl = useIntl();
+  const fm = (id: string, values?: Record<string, string | number>) => intl.formatMessage({ id }, values);
   const color = theme.palette.success.main;
 
   return (
@@ -23,10 +26,10 @@ const LayerRAG = () => {
         <PlatformBreadcrumb layerNumber={5} layerName="RAG Knowledge" />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
-            <Chip label="Layer 5" size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>RAG / Industry Knowledge</Typography>
+            <Chip label={fm("layer5.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(color, 0.1), color, fontWeight: 600 }} />
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("layer5.title")}</Typography>
             <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, lineHeight: 1.6 }}>
-              Document corpus management, embedding pipelines, and knowledge source configuration for retrieval-augmented generation.
+              {fm("layer5.subtitle")}
             </Typography>
           </Box>
         </motion.div>
@@ -45,7 +48,7 @@ const LayerRAG = () => {
                           {src.status === 'complete' ? <CloudDone /> : <Sync />}
                         </Box>
                         <Chip
-                          label={src.status === 'complete' ? 'Embedded' : 'Processing'}
+                          label={src.status === 'complete' ? fm("layer5.statusEmbedded") : fm("layer5.statusProcessing")}
                           size="small"
                           sx={{
                             bgcolor: src.status === 'complete' ? alpha(theme.palette.success.main, 0.1) : alpha(theme.palette.info.main, 0.1),
@@ -56,7 +59,7 @@ const LayerRAG = () => {
                       </Box>
                       <Typography variant="h6" sx={{ fontWeight: 500, mb: 0.5 }}>{src.name}</Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        {src.embedded.toLocaleString()}/{src.docs.toLocaleString()} documents ({pct}%)
+                        {fm("layer5.docsProgress", { embedded: intl.formatNumber(src.embedded), total: intl.formatNumber(src.docs), pct })}
                       </Typography>
                       <Box sx={{ width: '100%', height: 4, borderRadius: 2, bgcolor: alpha(color, 0.1) }}>
                         <Box sx={{ width: `${pct}%`, height: '100%', borderRadius: 2, bgcolor: pct === 100 ? 'success.main' : 'info.main' }} />
