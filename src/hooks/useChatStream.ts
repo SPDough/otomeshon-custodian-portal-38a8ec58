@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
@@ -6,6 +7,7 @@ export type ChatMessage = { role: "user" | "assistant"; content: string };
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 export function useChatStream() {
+  const location = useLocation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
