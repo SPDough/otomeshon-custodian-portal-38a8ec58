@@ -8,6 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { lightTheme, darkTheme } from "./theme";
 import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeModeContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LocaleProvider } from "./i18n/IntlContext";
 import MaterialLayout from "./components/MaterialLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { DashboardSkeleton } from "./components/LoadingSkeleton";
@@ -111,7 +112,9 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeModeProvider>
       <AuthProvider>
-        <ThemedApp />
+        <LocaleProvider>
+          <ThemedApp />
+        </LocaleProvider>
       </AuthProvider>
     </ThemeModeProvider>
   </QueryClientProvider>
