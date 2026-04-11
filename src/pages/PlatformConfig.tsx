@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -115,6 +116,9 @@ const layers = [
 const PlatformConfig = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const [filter, setFilter] = useState<'all' | 'configured' | 'pending'>('all');
+
+  const filteredLayers = filter === 'all' ? layers : layers.filter(l => l.status === filter);
 
   const getColor = (group: string) => {
     switch (group) {
@@ -154,7 +158,17 @@ const PlatformConfig = () => {
         {/* Stats Summary Bar */}
         <motion.div variants={fadeInUp}>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, gap: 2, mb: 4 }}>
-            <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Paper
+              variant="outlined"
+              onClick={() => setFilter('all')}
+              sx={{
+                p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer',
+                borderColor: filter === 'all' ? 'primary.main' : 'divider',
+                bgcolor: filter === 'all' ? alpha(theme.palette.primary.main, 0.04) : 'transparent',
+                transition: 'all 0.2s ease',
+                '&:hover': { borderColor: 'primary.main' },
+              }}
+            >
               <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', display: 'flex' }}>
                 <LayersIcon />
               </Box>
@@ -163,7 +177,17 @@ const PlatformConfig = () => {
                 <Typography variant="body2" color="text.secondary">Total Layers</Typography>
               </Box>
             </Paper>
-            <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Paper
+              variant="outlined"
+              onClick={() => setFilter(filter === 'configured' ? 'all' : 'configured')}
+              sx={{
+                p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer',
+                borderColor: filter === 'configured' ? 'success.main' : 'divider',
+                bgcolor: filter === 'configured' ? alpha(theme.palette.success.main, 0.04) : 'transparent',
+                transition: 'all 0.2s ease',
+                '&:hover': { borderColor: 'success.main' },
+              }}
+            >
               <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: alpha(theme.palette.success.main, 0.1), color: 'success.main', display: 'flex' }}>
                 <CheckCircle />
               </Box>
@@ -172,7 +196,17 @@ const PlatformConfig = () => {
                 <Typography variant="body2" color="text.secondary">Configured</Typography>
               </Box>
             </Paper>
-            <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Paper
+              variant="outlined"
+              onClick={() => setFilter(filter === 'pending' ? 'all' : 'pending')}
+              sx={{
+                p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2, cursor: 'pointer',
+                borderColor: filter === 'pending' ? 'warning.main' : 'divider',
+                bgcolor: filter === 'pending' ? alpha(theme.palette.warning.main, 0.04) : 'transparent',
+                transition: 'all 0.2s ease',
+                '&:hover': { borderColor: 'warning.main' },
+              }}
+            >
               <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: alpha(theme.palette.warning.main, 0.1), color: 'warning.main', display: 'flex' }}>
                 <HourglassEmpty />
               </Box>
@@ -184,9 +218,9 @@ const PlatformConfig = () => {
           </Box>
         </motion.div>
 
-        <motion.div variants={staggerContainer} initial="initial" animate="animate">
+        <motion.div variants={staggerContainer} initial="initial" animate="animate" key={filter}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-            {layers.map((layer) => {
+            {filteredLayers.map((layer) => {
               const color = getColor(layer.colorGroup);
               return (
                 <motion.div key={layer.number} variants={fadeInUp}>
