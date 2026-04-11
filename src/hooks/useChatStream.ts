@@ -10,12 +10,13 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 export function useChatStream() {
   const location = useLocation();
+  const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [conversations, setConversations] = useState<{ id: string; title: string; updated_at: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
-  const sessionId = useRef(getSessionId());
+  const userId = user?.id ?? "";
 
   // Load conversation list
   const loadConversations = useCallback(async () => {
