@@ -116,6 +116,9 @@ const layers = [
 const PlatformConfig = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const [filter, setFilter] = useState<'all' | 'configured' | 'pending'>('all');
+
+  const filteredLayers = filter === 'all' ? layers : layers.filter(l => l.status === filter);
 
   const getColor = (group: string) => {
     switch (group) {
