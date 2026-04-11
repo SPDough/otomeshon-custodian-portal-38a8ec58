@@ -100,6 +100,22 @@ const navSections: NavSection[] = [
       { id: "tables", name: "Data Tables", icon: <TableIcon fontSize="small" /> },
     ],
   },
+  {
+    title: "Platform Configuration",
+    defaultOpen: false,
+    items: [
+      { id: "platform-overview", name: "Capability Stack", icon: <DashboardIcon fontSize="small" />, path: "/platform-config" },
+      { id: "layer-0", name: "L0: Data Collection", icon: <DatabaseIcon fontSize="small" />, path: "/platform-config/layer-0" },
+      { id: "layer-1", name: "L1: Ontology", icon: <SearchIcon fontSize="small" />, path: "/platform-config/layer-1" },
+      { id: "layer-2", name: "L2: Calculations", icon: <AnalyticsIcon fontSize="small" />, path: "/platform-config/layer-2" },
+      { id: "layer-3", name: "L3: Rules", icon: <ShieldIcon fontSize="small" />, path: "/platform-config/layer-3" },
+      { id: "layer-4", name: "L4: Intelligence", icon: <HubIcon fontSize="small" />, path: "/platform-config/layer-4" },
+      { id: "layer-5", name: "L5: RAG Knowledge", icon: <SearchIcon fontSize="small" />, path: "/platform-config/layer-5" },
+      { id: "layer-6", name: "L6: Workflows", icon: <WorkflowIcon fontSize="small" />, path: "/platform-config/layer-6" },
+      { id: "layer-7", name: "L7: Reporting", icon: <ReportIcon fontSize="small" />, path: "/platform-config/layer-7" },
+      { id: "layer-8", name: "L8: Outbound", icon: <ImportIcon fontSize="small" />, path: "/platform-config/layer-8" },
+    ],
+  },
 ];
 
 const NavSectionComponent = ({ section, location }: { section: NavSection; location: ReturnType<typeof useLocation> }) => {
