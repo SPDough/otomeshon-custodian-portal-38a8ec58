@@ -2,19 +2,11 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
-
-function getSessionId(): string {
-  let id = localStorage.getItem("chat_session_id");
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem("chat_session_id", id);
-  }
-  return id;
-}
 
 export function useChatStream() {
   const location = useLocation();
