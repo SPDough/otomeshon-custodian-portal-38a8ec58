@@ -151,6 +151,39 @@ const PlatformConfig = () => {
           </Box>
         </motion.div>
 
+        {/* Stats Summary Bar */}
+        <motion.div variants={fadeInUp}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, gap: 2, mb: 4 }}>
+            <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', display: 'flex' }}>
+                <LayersIcon />
+              </Box>
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{layers.length}</Typography>
+                <Typography variant="body2" color="text.secondary">Total Layers</Typography>
+              </Box>
+            </Paper>
+            <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: alpha(theme.palette.success.main, 0.1), color: 'success.main', display: 'flex' }}>
+                <CheckCircle />
+              </Box>
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{layers.filter(l => l.status === 'configured').length}</Typography>
+                <Typography variant="body2" color="text.secondary">Configured</Typography>
+              </Box>
+            </Paper>
+            <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: alpha(theme.palette.warning.main, 0.1), color: 'warning.main', display: 'flex' }}>
+                <HourglassEmpty />
+              </Box>
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{layers.filter(l => l.status === 'pending').length}</Typography>
+                <Typography variant="body2" color="text.secondary">Pending</Typography>
+              </Box>
+            </Paper>
+          </Box>
+        </motion.div>
+
         <motion.div variants={staggerContainer} initial="initial" animate="animate">
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {layers.map((layer) => {
