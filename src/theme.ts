@@ -38,13 +38,31 @@ const sharedTypography = {
 const sharedShape = { borderRadius: 12 };
 
 const sharedShadows: ThemeOptions['shadows'] = [
-  'none',
-  '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-  '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-  '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-  ...Array(19).fill('0 25px 50px -12px rgb(0 0 0 / 0.25)'),
+  'none',                                                                         // 0
+  '0 1px 2px 0 rgb(0 0 0 / 0.05)',                                               // 1
+  '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',              // 2
+  '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',           // 3
+  '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',         // 4
+  '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',        // 5
+  '0 25px 50px -12px rgb(0 0 0 / 0.25)',                                         // 6
+  '0 1px 2px 0 rgb(0 0 0 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.1)',               // 7
+  '0 2px 4px -1px rgb(0 0 0 / 0.06), 0 4px 6px -1px rgb(0 0 0 / 0.1)',          // 8
+  '0 4px 6px -2px rgb(0 0 0 / 0.05), 0 10px 15px -3px rgb(0 0 0 / 0.1)',        // 9
+  '0 8px 10px -4px rgb(0 0 0 / 0.04), 0 20px 25px -5px rgb(0 0 0 / 0.1)',       // 10
+  '0 10px 15px -4px rgb(0 0 0 / 0.05), 0 24px 32px -8px rgb(0 0 0 / 0.1)',      // 11
+  '0 12px 18px -6px rgb(0 0 0 / 0.05), 0 28px 36px -8px rgb(0 0 0 / 0.12)',     // 12
+  '0 14px 20px -6px rgb(0 0 0 / 0.06), 0 32px 40px -10px rgb(0 0 0 / 0.12)',    // 13
+  '0 16px 24px -8px rgb(0 0 0 / 0.06), 0 36px 44px -10px rgb(0 0 0 / 0.14)',    // 14
+  '0 18px 28px -8px rgb(0 0 0 / 0.07), 0 40px 48px -12px rgb(0 0 0 / 0.14)',    // 15
+  '0 20px 32px -10px rgb(0 0 0 / 0.07), 0 44px 52px -12px rgb(0 0 0 / 0.16)',   // 16
+  '0 22px 34px -10px rgb(0 0 0 / 0.08), 0 46px 54px -14px rgb(0 0 0 / 0.16)',   // 17
+  '0 24px 38px -12px rgb(0 0 0 / 0.08), 0 48px 56px -14px rgb(0 0 0 / 0.18)',   // 18
+  '0 26px 40px -12px rgb(0 0 0 / 0.09), 0 50px 58px -16px rgb(0 0 0 / 0.18)',   // 19
+  '0 28px 44px -14px rgb(0 0 0 / 0.09), 0 52px 60px -16px rgb(0 0 0 / 0.20)',   // 20
+  '0 30px 46px -14px rgb(0 0 0 / 0.1), 0 54px 62px -18px rgb(0 0 0 / 0.20)',    // 21
+  '0 32px 48px -16px rgb(0 0 0 / 0.1), 0 56px 64px -18px rgb(0 0 0 / 0.22)',    // 22
+  '0 34px 52px -16px rgb(0 0 0 / 0.12), 0 58px 68px -20px rgb(0 0 0 / 0.22)',   // 23
+  '0 36px 56px -18px rgb(0 0 0 / 0.14), 0 60px 72px -20px rgb(0 0 0 / 0.25)',   // 24
 ] as ThemeOptions['shadows'];
 
 const sharedComponents = (isDark: boolean) => ({
