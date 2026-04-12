@@ -10,8 +10,11 @@ const corsHeaders = {
 const MODEL_MAP: Record<string, string> = {
   "gemini-2.5-flash": "google/gemini-2.5-flash",
   "gemini-2.5-pro": "google/gemini-2.5-pro",
+  "gemini-3-flash-preview": "google/gemini-3-flash-preview",
+  "gemini-3.1-pro-preview": "google/gemini-3.1-pro-preview",
   "gpt-5-mini": "openai/gpt-5-mini",
   "gpt-5": "openai/gpt-5",
+  "gpt-5-nano": "openai/gpt-5-nano",
 };
 
 serve(async (req) => {
