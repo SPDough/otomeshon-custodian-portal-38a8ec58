@@ -9,12 +9,14 @@ import {
 import {
   ArrowBack, Delete as DeleteIcon, SmartToy as AgentIcon,
   Add as AddIcon, Close as CloseIcon,
+  DataUsage as UsageIcon,
 } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
+import { useAgentTestConversations } from "@/hooks/useAgentTestHistory";
 import AgentTestPanel from "@/components/AgentTestPanel";
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gpt-5-mini", "gpt-5"];
@@ -53,6 +55,16 @@ const AgentDetail = () => {
   const { agents, isLoading, updateAgent, deleteAgent } = useAgents();
 
   const agent = agents.find((a) => a.id === id);
+  const { data: conversations = [] } = useAgentTestConversations(id ?? "");
+
+  const tokenStats = useMemo(() => {
+    const total = conversations.reduce((s, c) => s + (c.total_tokens ?? 0), 0);
+    const prompt = conversations.reduce((s, c) => s + (c.prompt_tokens ?? 0), 0);
+    const completion = conversations.reduce((s, c) => s + (c.completion_tokens ?? 0), 0);
+    const count = conversations.length;
+    const withTokens = conversations.filter((c) => (c.total_tokens ?? 0) > 0).length;
+    return { total, prompt, completion, count, withTokens };
+  }, [conversations]);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -546,6 +558,45 @@ const AgentDetail = () => {
             </Box>
           </CardContent>
         </Card>
+
+        {/* Token Usage Summary */}
+        {tokenStats.total > 0 && (
+          <Card sx={{ mb: 3 }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
+                <UsageIcon sx={{ color: theme.palette.info.main }} />
+                <Typography variant="h6" fontWeight={600}>Token Usage Summary</Typography>
+                <Chip label={`${tokenStats.count} sessions`} size="small" variant="outlined" />
+              </Box>
+              <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Total Tokens</Typography>
+                  <Typography variant="h5" fontWeight={700} color="info.main">
+                    {tokenStats.total.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Prompt Tokens</Typography>
+                  <Typography variant="h6" fontWeight={600}>
+                    {tokenStats.prompt.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Completion Tokens</Typography>
+                  <Typography variant="h6" fontWeight={600}>
+                    {tokenStats.completion.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Avg per Session</Typography>
+                  <Typography variant="h6" fontWeight={600}>
+                    {tokenStats.withTokens > 0 ? Math.round(tokenStats.total / tokenStats.withTokens).toLocaleString() : "—"}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Test Panel */}
         <AgentTestPanel agent={agent} />
