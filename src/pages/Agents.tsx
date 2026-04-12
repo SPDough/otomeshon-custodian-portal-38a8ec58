@@ -270,6 +270,23 @@ const Agents = () => {
           color={editColor}
         />
       )}
+
+      {/* Create agent dialog */}
+      <CreateAgentDialog
+        open={showCreateDialog}
+        onClose={() => setShowCreateDialog(false)}
+        saving={createAgent.isPending}
+        onSave={(data) => {
+          createAgent.mutate(data, {
+            onSuccess: (agent) => {
+              toast.success(fm("agents.createSave"));
+              setShowCreateDialog(false);
+              navigate(`/agents/${agent.id}`);
+            },
+            onError: () => toast.error("Creation failed"),
+          });
+        }}
+      />
     </AnimatedPage>
   );
 };
