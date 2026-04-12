@@ -20,6 +20,7 @@ import {
   useCreateTestConversation,
   useSaveTestMessage,
   useDeleteTestConversation,
+  useUpdateTokenUsage,
 } from "@/hooks/useAgentTestHistory";
 
 const AVAILABLE_MODELS = [
@@ -58,13 +59,21 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const createConvo = useCreateTestConversation();
   const saveMessage = useSaveTestMessage();
   const deleteConvo = useDeleteTestConversation();
+  const updateTokenUsage = useUpdateTokenUsage();
+  const [tokenUsage, setTokenUsage] = useState<{ prompt_tokens: number; completion_tokens: number; total_tokens: number } | null>(null);
 
-  // Load messages when switching conversations
+  // Load messages and token usage when switching conversations
   useEffect(() => {
     if (loadedMessages && activeConvoId) {
       setMessages(loadedMessages.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })));
+      const convo = conversations.find((c) => c.id === activeConvoId);
+      if (convo && convo.total_tokens > 0) {
+        setTokenUsage({ prompt_tokens: convo.prompt_tokens, completion_tokens: convo.completion_tokens, total_tokens: convo.total_tokens });
+      } else {
+        setTokenUsage(null);
+      }
     }
-  }, [loadedMessages, activeConvoId]);
+  }, [loadedMessages, activeConvoId, conversations]);
 
   const scrollToBottom = () => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
@@ -109,6 +118,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     abortRef.current = controller;
 
     let assistantSoFar = "";
+    let streamUsage: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null = null;
 
     const upsert = (chunk: string) => {
       assistantSoFar += chunk;
@@ -179,6 +189,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             const parsed = JSON.parse(json);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) upsert(content);
+            if (parsed.usage) streamUsage = parsed.usage;
           } catch {
             buffer = line + "\n" + buffer;
             break;
@@ -198,13 +209,31 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             const parsed = JSON.parse(json);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) upsert(content);
+            if (parsed.usage) streamUsage = parsed.usage;
           } catch { /* ignore */ }
         }
       }
 
-      // Save assistant message after streaming completes
+      // Save assistant message and token usage after streaming completes
       if (convoId && assistantSoFar) {
         saveMessage.mutate({ conversationId: convoId, role: "assistant", content: assistantSoFar });
+      }
+      if (streamUsage) {
+        const usage = {
+          prompt_tokens: streamUsage.prompt_tokens ?? 0,
+          completion_tokens: streamUsage.completion_tokens ?? 0,
+          total_tokens: streamUsage.total_tokens ?? 0,
+        };
+        setTokenUsage(usage);
+        if (convoId) {
+          updateTokenUsage.mutate({
+            conversationId: convoId,
+            agentId: agent.id,
+            promptTokens: usage.prompt_tokens,
+            completionTokens: usage.completion_tokens,
+            totalTokens: usage.total_tokens,
+          });
+        }
       }
     } catch (e: any) {
       if (e.name !== "AbortError") {
@@ -215,7 +244,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [input, isLoading, messages, agent, activeConvoId, activeModel, activeTemp, createConvo, saveMessage]);
+  }, [input, isLoading, messages, agent, activeConvoId, activeModel, activeTemp, createConvo, saveMessage, updateTokenUsage]);
 
   const stop = () => abortRef.current?.abort();
 
@@ -223,6 +252,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     setMessages([]);
     setInput("");
     setActiveConvoId(null);
+    setTokenUsage(null);
   };
 
   const loadConversation = (id: string) => {
@@ -334,10 +364,21 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 </Typography>
               </Box>
             </Tooltip>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
               <Chip label={`${agent.max_tokens ?? 4096} tokens`} size="small" variant="outlined" />
               {agent.guardrails?.length > 0 && (
                 <Chip label={`${agent.guardrails.length} guardrail${agent.guardrails.length > 1 ? "s" : ""}`} size="small" color="warning" variant="outlined" />
+              )}
+              {tokenUsage && (
+                <Tooltip title={`Prompt: ${tokenUsage.prompt_tokens} · Completion: ${tokenUsage.completion_tokens}`}>
+                  <Chip
+                    label={`${tokenUsage.total_tokens.toLocaleString()} tokens used`}
+                    size="small"
+                    color="info"
+                    variant="outlined"
+                    sx={{ fontWeight: 600 }}
+                  />
+                </Tooltip>
               )}
             </Box>
           </Box>
@@ -424,6 +465,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                         secondary={
                           <Typography variant="caption" color="text.secondary" noWrap sx={{ fontSize: "0.7rem" }}>
                             {convo.model_used} · {Number(convo.temperature_used).toFixed(1)}
+                            {convo.total_tokens > 0 && ` · ${convo.total_tokens.toLocaleString()} tok`}
                           </Typography>
                         }
                       />

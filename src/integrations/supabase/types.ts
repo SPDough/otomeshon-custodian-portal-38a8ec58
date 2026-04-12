@@ -53,28 +53,37 @@ export type Database = {
       agent_test_conversations: {
         Row: {
           agent_id: string
+          completion_tokens: number
           created_at: string
           id: string
           model_used: string
+          prompt_tokens: number
           temperature_used: number
+          total_tokens: number
           updated_at: string
           user_id: string
         }
         Insert: {
           agent_id: string
+          completion_tokens?: number
           created_at?: string
           id?: string
           model_used?: string
+          prompt_tokens?: number
           temperature_used?: number
+          total_tokens?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           agent_id?: string
+          completion_tokens?: number
           created_at?: string
           id?: string
           model_used?: string
+          prompt_tokens?: number
           temperature_used?: number
+          total_tokens?: number
           updated_at?: string
           user_id?: string
         }

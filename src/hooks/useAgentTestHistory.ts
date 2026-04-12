@@ -8,6 +8,9 @@ export interface TestConversation {
   user_id: string;
   model_used: string;
   temperature_used: number;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
   created_at: string;
   updated_at: string;
 }
@@ -113,6 +116,40 @@ export function useSaveTestMessage() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["agent-test-messages", data.conversation_id] });
+    },
+  });
+}
+
+export function useUpdateTokenUsage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      conversationId,
+      agentId,
+      promptTokens,
+      completionTokens,
+      totalTokens,
+    }: {
+      conversationId: string;
+      agentId: string;
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+    }) => {
+      const { error } = await supabase
+        .from("agent_test_conversations")
+        .update({
+          prompt_tokens: promptTokens,
+          completion_tokens: completionTokens,
+          total_tokens: totalTokens,
+        })
+        .eq("id", conversationId);
+      if (error) throw error;
+      return { conversationId, agentId };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["agent-test-conversations", data.agentId] });
     },
   });
 }
