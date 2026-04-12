@@ -27,6 +27,16 @@ const AVAILABLE_DATA_BINDINGS = [
   "NAV Feed", "FX Rates", "Corporate Actions Feed", "Regulatory Reports",
 ];
 
+const AVAILABLE_CALC_POLICIES = [
+  "NAV Computation", "Fee Accruals", "FX Conversion", "P&L Attribution",
+  "Risk Metrics", "Performance Attribution", "Tax Lot Accounting",
+];
+
+const AVAILABLE_RULE_SETS = [
+  "Trade Limits", "Concentration Checks", "Regulatory Thresholds", "Approval Gates",
+  "Compliance Screening", "Margin Requirements", "Counterparty Exposure",
+];
+
 const AgentDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
