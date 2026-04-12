@@ -179,8 +179,25 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 ))}
               </Select>
             </FormControl>
+            <Tooltip title="Temperature override" placement="top">
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 160 }}>
+                <Typography variant="caption" color="text.secondary" noWrap>Temp</Typography>
+                <Slider
+                  size="small"
+                  value={overrideTemp ?? agent.temperature ?? 0.7}
+                  onChange={(_, v) => setOverrideTemp(v as number)}
+                  min={0}
+                  max={2}
+                  step={0.05}
+                  valueLabelDisplay="auto"
+                  sx={{ flex: 1 }}
+                />
+                <Typography variant="caption" fontWeight={600} sx={{ minWidth: 28, textAlign: "right" }}>
+                  {(overrideTemp ?? agent.temperature ?? 0.7).toFixed(2)}
+                </Typography>
+              </Box>
+            </Tooltip>
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Chip label={`temp ${agent.temperature?.toFixed(2) ?? "0.70"}`} size="small" variant="outlined" />
               <Chip label={`${agent.max_tokens ?? 4096} tokens`} size="small" variant="outlined" />
               {agent.guardrails?.length > 0 && (
                 <Chip label={`${agent.guardrails.length} guardrail${agent.guardrails.length > 1 ? "s" : ""}`} size="small" color="warning" variant="outlined" />
