@@ -1,12 +1,25 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
-  Select, MenuItem, FormControl, InputLabel, Slider, Tooltip,
+  Select, MenuItem, FormControl, InputLabel, Slider, Tooltip, List, ListItemButton,
+  ListItemText, ListItemIcon, Divider,
 } from "@mui/material";
-import { Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon } from "@mui/icons-material";
+import {
+  Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon,
+  History as HistoryIcon, Add as AddIcon, Delete as DeleteIcon,
+  ChatBubbleOutline as ChatIcon,
+} from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { format } from "date-fns";
 import type { Agent } from "@/hooks/useAgents";
+import {
+  useAgentTestConversations,
+  useTestConversationMessages,
+  useCreateTestConversation,
+  useSaveTestMessage,
+  useDeleteTestConversation,
+} from "@/hooks/useAgentTestHistory";
 
 const AVAILABLE_MODELS = [
   { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
@@ -33,12 +46,30 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [overrideModel, setOverrideModel] = useState<string>("");
   const [overrideTemp, setOverrideTemp] = useState<number | null>(null);
+  const [activeConvoId, setActiveConvoId] = useState<string | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  const { data: conversations = [] } = useAgentTestConversations(agent.id);
+  const { data: loadedMessages } = useTestConversationMessages(activeConvoId);
+  const createConvo = useCreateTestConversation();
+  const saveMessage = useSaveTestMessage();
+  const deleteConvo = useDeleteTestConversation();
+
+  // Load messages when switching conversations
+  useEffect(() => {
+    if (loadedMessages && activeConvoId) {
+      setMessages(loadedMessages.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })));
+    }
+  }, [loadedMessages, activeConvoId]);
 
   const scrollToBottom = () => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
+
+  const activeModel = overrideModel || agent.model || "gemini-2.5-flash";
+  const activeTemp = overrideTemp ?? agent.temperature ?? 0.7;
 
   const send = useCallback(async () => {
     const text = input.trim();
@@ -49,6 +80,28 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     setInput("");
     setIsLoading(true);
     scrollToBottom();
+
+    // Create conversation if this is the first message
+    let convoId = activeConvoId;
+    if (!convoId) {
+      try {
+        const convo = await createConvo.mutateAsync({
+          agentId: agent.id,
+          modelUsed: activeModel,
+          temperatureUsed: activeTemp,
+        });
+        convoId = convo.id;
+        setActiveConvoId(convo.id);
+      } catch (e) {
+        console.error("Failed to create conversation:", e);
+        toast.error("Failed to save conversation.");
+      }
+    }
+
+    // Save user message
+    if (convoId) {
+      saveMessage.mutate({ conversationId: convoId, role: "user", content: text });
+    }
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -81,8 +134,8 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
           messages: allMessages.map(({ role, content }) => ({ role, content })),
           agentConfig: {
             persona: agent.persona,
-            model: overrideModel || agent.model,
-            temperature: overrideTemp ?? agent.temperature,
+            model: activeModel,
+            temperature: activeTemp,
             max_tokens: agent.max_tokens,
             guardrails: agent.guardrails,
           },
@@ -146,6 +199,11 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
           } catch { /* ignore */ }
         }
       }
+
+      // Save assistant message after streaming completes
+      if (convoId && assistantSoFar) {
+        saveMessage.mutate({ conversationId: convoId, role: "assistant", content: assistantSoFar });
+      }
     } catch (e: any) {
       if (e.name !== "AbortError") {
         console.error("Agent test error:", e);
@@ -155,10 +213,37 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [input, isLoading, messages, agent]);
+  }, [input, isLoading, messages, agent, activeConvoId, activeModel, activeTemp, createConvo, saveMessage]);
 
   const stop = () => abortRef.current?.abort();
-  const clear = () => { setMessages([]); setInput(""); };
+
+  const startNew = () => {
+    setMessages([]);
+    setInput("");
+    setActiveConvoId(null);
+  };
+
+  const loadConversation = (id: string) => {
+    setActiveConvoId(id);
+    setShowHistory(false);
+  };
+
+  const handleDeleteConvo = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    deleteConvo.mutate(
+      { id, agentId: agent.id },
+      {
+        onSuccess: () => {
+          if (activeConvoId === id) startNew();
+          toast.success("Conversation deleted.");
+        },
+      }
+    );
+  };
+
+  const getConvoPreview = (convo: typeof conversations[0]) => {
+    return format(new Date(convo.created_at), "MMM d, h:mm a");
+  };
 
   return (
     <Card>
@@ -170,7 +255,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             <FormControl size="small" sx={{ minWidth: 180 }}>
               <InputLabel>Model</InputLabel>
               <Select
-                value={overrideModel || agent.model || "gemini-2.5-flash"}
+                value={activeModel}
                 label="Model"
                 onChange={(e) => setOverrideModel(e.target.value)}
               >
@@ -184,7 +269,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 <Typography variant="caption" color="text.secondary" noWrap>Temp</Typography>
                 <Slider
                   size="small"
-                  value={overrideTemp ?? agent.temperature ?? 0.7}
+                  value={activeTemp}
                   onChange={(_, v) => setOverrideTemp(v as number)}
                   min={0}
                   max={2}
@@ -193,7 +278,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                   sx={{ flex: 1 }}
                 />
                 <Typography variant="caption" fontWeight={600} sx={{ minWidth: 28, textAlign: "right" }}>
-                  {(overrideTemp ?? agent.temperature ?? 0.7).toFixed(2)}
+                  {activeTemp.toFixed(2)}
                 </Typography>
               </Box>
             </Tooltip>
@@ -204,77 +289,149 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
               )}
             </Box>
           </Box>
-          <IconButton size="small" onClick={clear} disabled={messages.length === 0 && !input}>
-            <ClearIcon fontSize="small" />
-          </IconButton>
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            <Tooltip title="Conversation history">
+              <IconButton size="small" onClick={() => setShowHistory((s) => !s)}>
+                <HistoryIcon fontSize="small" color={showHistory ? "primary" : "inherit"} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="New conversation">
+              <IconButton size="small" onClick={startNew} disabled={messages.length === 0}>
+                <AddIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Clear current">
+              <IconButton size="small" onClick={startNew} disabled={messages.length === 0 && !input}>
+                <ClearIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Box>
 
-        {/* Messages */}
-        <Box sx={{ height: 360, overflowY: "auto", px: 3, py: 2 }}>
-          {messages.length === 0 && (
-            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", opacity: 0.5 }}>
-              <Typography variant="body2" color="text.secondary">
-                Send a message to test this agent with its configured persona, model, and settings.
-              </Typography>
-            </Box>
-          )}
-          {messages.map((msg, i) => (
+        <Box sx={{ display: "flex" }}>
+          {/* History sidebar */}
+          {showHistory && (
             <Box
-              key={i}
               sx={{
-                display: "flex",
-                justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
-                mb: 1.5,
+                width: 240,
+                borderRight: 1,
+                borderColor: "divider",
+                height: 360,
+                overflowY: "auto",
+                flexShrink: 0,
               }}
             >
-              <Box
-                sx={{
-                  maxWidth: "80%",
-                  px: 2,
-                  py: 1.5,
-                  borderRadius: 2,
-                  bgcolor: msg.role === "user"
-                    ? alpha(theme.palette.primary.main, 0.1)
-                    : alpha(theme.palette.text.primary, 0.04),
-                  "& p": { m: 0 },
-                  "& pre": {
-                    bgcolor: alpha(theme.palette.text.primary, 0.06),
-                    p: 1.5,
-                    borderRadius: 1,
-                    overflowX: "auto",
-                    fontSize: "0.85rem",
-                  },
-                  "& code": { fontSize: "0.85rem" },
-                }}
-              >
-                {msg.role === "assistant" ? (
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
-                ) : (
-                  <Typography variant="body2">{msg.content}</Typography>
-                )}
-              </Box>
-            </Box>
-          ))}
-          {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-            <Box sx={{ display: "flex", gap: 0.5, py: 1 }}>
-              {[0, 1, 2].map((i) => (
-                <Box
-                  key={i}
-                  sx={{
-                    width: 8, height: 8, borderRadius: "50%",
-                    bgcolor: "text.disabled",
-                    animation: "bounce 1.4s infinite",
-                    animationDelay: `${i * 0.16}s`,
-                    "@keyframes bounce": {
-                      "0%, 80%, 100%": { transform: "scale(0)" },
-                      "40%": { transform: "scale(1)" },
-                    },
-                  }}
-                />
-              ))}
+              {conversations.length === 0 ? (
+                <Box sx={{ p: 2, textAlign: "center" }}>
+                  <Typography variant="caption" color="text.secondary">
+                    No saved conversations yet.
+                  </Typography>
+                </Box>
+              ) : (
+                <List dense disablePadding>
+                  {conversations.map((convo) => (
+                    <ListItemButton
+                      key={convo.id}
+                      selected={activeConvoId === convo.id}
+                      onClick={() => loadConversation(convo.id)}
+                      sx={{ py: 1, px: 1.5 }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 28 }}>
+                        <ChatIcon fontSize="small" color="action" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <Typography variant="caption" fontWeight={500} noWrap>
+                            {getConvoPreview(convo)}
+                          </Typography>
+                        }
+                        secondary={
+                          <Typography variant="caption" color="text.secondary" noWrap sx={{ fontSize: "0.7rem" }}>
+                            {convo.model_used} · {Number(convo.temperature_used).toFixed(1)}
+                          </Typography>
+                        }
+                      />
+                      <IconButton
+                        size="small"
+                        onClick={(e) => handleDeleteConvo(e, convo.id)}
+                        sx={{ opacity: 0.5, "&:hover": { opacity: 1 } }}
+                      >
+                        <DeleteIcon sx={{ fontSize: 14 }} />
+                      </IconButton>
+                    </ListItemButton>
+                  ))}
+                </List>
+              )}
             </Box>
           )}
-          <div ref={bottomRef} />
+
+          {/* Messages */}
+          <Box sx={{ height: 360, overflowY: "auto", px: 3, py: 2, flex: 1 }}>
+            {messages.length === 0 && (
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", opacity: 0.5 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Send a message to test this agent with its configured persona, model, and settings.
+                </Typography>
+              </Box>
+            )}
+            {messages.map((msg, i) => (
+              <Box
+                key={i}
+                sx={{
+                  display: "flex",
+                  justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                  mb: 1.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    maxWidth: "80%",
+                    px: 2,
+                    py: 1.5,
+                    borderRadius: 2,
+                    bgcolor: msg.role === "user"
+                      ? alpha(theme.palette.primary.main, 0.1)
+                      : alpha(theme.palette.text.primary, 0.04),
+                    "& p": { m: 0 },
+                    "& pre": {
+                      bgcolor: alpha(theme.palette.text.primary, 0.06),
+                      p: 1.5,
+                      borderRadius: 1,
+                      overflowX: "auto",
+                      fontSize: "0.85rem",
+                    },
+                    "& code": { fontSize: "0.85rem" },
+                  }}
+                >
+                  {msg.role === "assistant" ? (
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  ) : (
+                    <Typography variant="body2">{msg.content}</Typography>
+                  )}
+                </Box>
+              </Box>
+            ))}
+            {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
+              <Box sx={{ display: "flex", gap: 0.5, py: 1 }}>
+                {[0, 1, 2].map((i) => (
+                  <Box
+                    key={i}
+                    sx={{
+                      width: 8, height: 8, borderRadius: "50%",
+                      bgcolor: "text.disabled",
+                      animation: "bounce 1.4s infinite",
+                      animationDelay: `${i * 0.16}s`,
+                      "@keyframes bounce": {
+                        "0%, 80%, 100%": { transform: "scale(0)" },
+                        "40%": { transform: "scale(1)" },
+                      },
+                    }}
+                  />
+                ))}
+              </Box>
+            )}
+            <div ref={bottomRef} />
+          </Box>
         </Box>
 
         {/* Input */}
