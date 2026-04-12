@@ -23,7 +23,7 @@ const withProtection = (Component: React.LazyExoticComponent<React.ComponentType
 );
 
 // Lazy-loaded pages
-import Index from "./pages/Index";
+const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Search = lazy(() => import("./pages/Search"));
