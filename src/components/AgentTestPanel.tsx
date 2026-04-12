@@ -332,15 +332,28 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 flexShrink: 0,
               }}
             >
-              {conversations.length === 0 ? (
+              <Box sx={{ p: 1, borderBottom: 1, borderColor: "divider" }}>
+                <TextField
+                  size="small"
+                  fullWidth
+                  placeholder="Search history..."
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                  InputProps={{
+                    startAdornment: <SearchIcon sx={{ fontSize: 16, mr: 0.5, color: "text.disabled" }} />,
+                  }}
+                  sx={{ "& .MuiInputBase-root": { fontSize: "0.75rem", py: 0.25 } }}
+                />
+              </Box>
+              {filteredConversations.length === 0 ? (
                 <Box sx={{ p: 2, textAlign: "center" }}>
                   <Typography variant="caption" color="text.secondary">
-                    No saved conversations yet.
+                    {conversations.length === 0 ? "No saved conversations yet." : "No matching conversations."}
                   </Typography>
                 </Box>
               ) : (
                 <List dense disablePadding>
-                  {conversations.map((convo) => (
+                  {filteredConversations.map((convo) => (
                     <ListItemButton
                       key={convo.id}
                       selected={activeConvoId === convo.id}
