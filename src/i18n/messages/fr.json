@@ -532,5 +532,19 @@
   "layer8.subtitle": "Points d'accès API, cibles d'export et surveillance de la santé de l'intégration des systèmes en aval.",
   "layer8.statusHealthy": "Sain",
   "layer8.statusDegraded": "Dégradé",
-  "layer8.latency": "Latence : {value}"
+  "layer8.latency": "Latence : {value}",
+
+  "breadcrumb.dashboard": "Tableau de bord",
+  "breadcrumb.frontOffice": "Front Office",
+  "breadcrumb.portfolios": "Portefeuilles",
+  "breadcrumb.knowledgeGraph": "Graphe de Connaissances",
+  "breadcrumb.knowledgeBase": "Base de Connaissances",
+  "breadcrumb.middleOffice": "Middle Office",
+  "breadcrumb.workflowConfig": "Configuration des Flux",
+  "breadcrumb.backOffice": "Back Office",
+  "breadcrumb.dataSandbox": "Bac à Sable de Données",
+  "breadcrumb.workflows": "Flux de Travail",
+  "breadcrumb.search": "Recherche",
+  "breadcrumb.results": "Résultats",
+  "breadcrumb.capabilityStack": "Stack de Capacités"
 }

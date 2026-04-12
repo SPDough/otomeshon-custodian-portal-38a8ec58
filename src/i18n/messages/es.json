@@ -532,5 +532,19 @@
   "layer8.subtitle": "Endpoints API, destinos de exportación y monitoreo de salud de integración de sistemas downstream.",
   "layer8.statusHealthy": "Saludable",
   "layer8.statusDegraded": "Degradado",
-  "layer8.latency": "Latencia: {value}"
+  "layer8.latency": "Latencia: {value}",
+
+  "breadcrumb.dashboard": "Panel",
+  "breadcrumb.frontOffice": "Front Office",
+  "breadcrumb.portfolios": "Portafolios",
+  "breadcrumb.knowledgeGraph": "Grafo de Conocimiento",
+  "breadcrumb.knowledgeBase": "Base de Conocimiento",
+  "breadcrumb.middleOffice": "Middle Office",
+  "breadcrumb.workflowConfig": "Configuración de Flujos",
+  "breadcrumb.backOffice": "Back Office",
+  "breadcrumb.dataSandbox": "Sandbox de Datos",
+  "breadcrumb.workflows": "Flujos de Trabajo",
+  "breadcrumb.search": "Búsqueda",
+  "breadcrumb.results": "Resultados",
+  "breadcrumb.capabilityStack": "Stack de Capacidades"
 }
