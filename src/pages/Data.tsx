@@ -6,6 +6,7 @@ import { registerAllModules } from 'handsontable/registry';
 import { Box, Typography, Paper, Container } from '@mui/material';
 import 'handsontable/dist/handsontable.full.min.css';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 registerAllModules();
 
@@ -45,6 +46,7 @@ const Data = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="xl" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.backOffice", path: "/back-office" }, { labelId: "breadcrumb.dataSandbox" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
             <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("data.title")}</Typography>

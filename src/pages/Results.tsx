@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, CardHeader, Button, ButtonGroup, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, LinearProgress } from '@mui/material';
 import { TrendingUp, Assessment, Download, Share, Refresh, Analytics } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const Results = () => {
   const [viewMode, setViewMode] = useState('overview');
@@ -33,6 +34,7 @@ const Results = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.search", path: "/search" }, { labelId: "breadcrumb.results" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
             <Typography variant="h4" component="h1">{fm("results.title")}</Typography>

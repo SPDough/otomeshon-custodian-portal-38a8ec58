@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, CardHeader, TextField, Button, Switch, FormControlLabel, Select, MenuItem, FormControl, InputLabel, Paper, Accordion, AccordionSummary, AccordionDetails, Alert } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon, Save as SaveIcon, Settings as SettingsIcon, Memory as MemoryIcon, Speed as SpeedIcon } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const WorkflowConfiguration = () => {
   const intl = useIntl();
@@ -30,6 +31,7 @@ const WorkflowConfiguration = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.middleOffice", path: "/middle-office" }, { labelId: "breadcrumb.workflowConfig" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
             <Typography variant="h3" component="h1" gutterBottom>{fm("workflowConfig.title")}</Typography>

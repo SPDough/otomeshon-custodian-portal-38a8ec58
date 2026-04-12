@@ -532,5 +532,19 @@
   "layer8.subtitle": "APIエンドポイント、エクスポート先、ダウンストリームシステム統合のヘルスモニタリング。",
   "layer8.statusHealthy": "正常",
   "layer8.statusDegraded": "劣化",
-  "layer8.latency": "レイテンシ: {value}"
+  "layer8.latency": "レイテンシ: {value}",
+
+  "breadcrumb.dashboard": "ダッシュボード",
+  "breadcrumb.frontOffice": "フロントオフィス",
+  "breadcrumb.portfolios": "ポートフォリオ",
+  "breadcrumb.knowledgeGraph": "ナレッジグラフ",
+  "breadcrumb.knowledgeBase": "ナレッジベース",
+  "breadcrumb.middleOffice": "ミドルオフィス",
+  "breadcrumb.workflowConfig": "ワークフロー設定",
+  "breadcrumb.backOffice": "バックオフィス",
+  "breadcrumb.dataSandbox": "データサンドボックス",
+  "breadcrumb.workflows": "ワークフロー",
+  "breadcrumb.search": "検索",
+  "breadcrumb.results": "結果",
+  "breadcrumb.capabilityStack": "ケイパビリティスタック"
 }

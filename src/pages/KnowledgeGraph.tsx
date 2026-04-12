@@ -5,6 +5,7 @@ import { Box, Typography, Paper, Container, Tabs, Tab, Card, CardContent, Button
 import { AccountTree, Timeline, Search, FilterList, ZoomIn, ZoomOut, CenterFocusStrong, ExpandMore, Business, TrendingUp, Security, Category } from '@mui/icons-material';
 import KnowledgeGraphVisualization from '@/components/KnowledgeGraphVisualization';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
@@ -36,6 +37,7 @@ const KnowledgeGraph = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="xl" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.frontOffice", path: "/front-office" }, { labelId: "breadcrumb.knowledgeGraph" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
             <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("knowledgeGraph.title")}</Typography>

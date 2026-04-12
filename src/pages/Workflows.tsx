@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Box, Typography, Paper, Container, Tabs, Tab, Card, CardContent, CardActions, Button, TextField, Grid, Chip, Divider, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import { PlayArrow, Stop, Settings, Code, Timeline, SmartToy, AccountTree } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
@@ -32,6 +33,7 @@ const Workflows = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="xl" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.workflows" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
             <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 2 }}>{fm("workflows.title")}</Typography>

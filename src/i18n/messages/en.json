@@ -532,5 +532,19 @@
   "layer8.subtitle": "API endpoints, export targets, and downstream system integration health monitoring.",
   "layer8.statusHealthy": "Healthy",
   "layer8.statusDegraded": "Degraded",
-  "layer8.latency": "Latency: {value}"
+  "layer8.latency": "Latency: {value}",
+
+  "breadcrumb.dashboard": "Dashboard",
+  "breadcrumb.frontOffice": "Front Office",
+  "breadcrumb.portfolios": "Portfolios",
+  "breadcrumb.knowledgeGraph": "Knowledge Graph",
+  "breadcrumb.knowledgeBase": "Knowledge Base",
+  "breadcrumb.middleOffice": "Middle Office",
+  "breadcrumb.workflowConfig": "Workflow Config",
+  "breadcrumb.backOffice": "Back Office",
+  "breadcrumb.dataSandbox": "Data Sandbox",
+  "breadcrumb.workflows": "Workflows",
+  "breadcrumb.search": "Search",
+  "breadcrumb.results": "Results",
+  "breadcrumb.capabilityStack": "Capability Stack"
 }
