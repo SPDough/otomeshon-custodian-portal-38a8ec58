@@ -344,7 +344,78 @@ const AgentDetail = () => {
           </CardContent>
         </Card>
 
-        {/* Actions */}
+        {/* Calculation Policies */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.calcPoliciesTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {fm("agents.calcPoliciesDesc")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+              {AVAILABLE_CALC_POLICIES.map((p) => {
+                const selected = calcPolicies.includes(p);
+                return (
+                  <Chip key={p} label={p} onClick={() => toggleChip(p, calcPolicies, setCalcPolicies)}
+                    color={selected ? "primary" : "default"} variant={selected ? "filled" : "outlined"}
+                    sx={{ fontWeight: selected ? 600 : 400 }} />
+                );
+              })}
+              {calcPolicies.filter((p) => !AVAILABLE_CALC_POLICIES.includes(p)).map((p) => (
+                <Chip key={p} label={p} color="primary"
+                  onDelete={() => { setCalcPolicies(calcPolicies.filter((v) => v !== p)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }} />
+              ))}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField size="small" placeholder={fm("agents.addCustomCalc")} value={newCalc}
+                onChange={(e) => setNewCalc(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newCalc, calcPolicies, setCalcPolicies, setNewCalc); } }}
+                inputProps={{ maxLength: 60 }} sx={{ flex: 1 }} />
+              <Button variant="outlined" size="small" startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newCalc, calcPolicies, setCalcPolicies, setNewCalc)}
+                disabled={!newCalc.trim()}>{fm("agents.addButton")}</Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Rule Sets */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.ruleSetsTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {fm("agents.ruleSetsDetailDesc")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+              {AVAILABLE_RULE_SETS.map((r) => {
+                const selected = ruleSets.includes(r);
+                return (
+                  <Chip key={r} label={r} onClick={() => toggleChip(r, ruleSets, setRuleSets)}
+                    color={selected ? "secondary" : "default"} variant={selected ? "filled" : "outlined"}
+                    sx={{ fontWeight: selected ? 600 : 400 }} />
+                );
+              })}
+              {ruleSets.filter((r) => !AVAILABLE_RULE_SETS.includes(r)).map((r) => (
+                <Chip key={r} label={r} color="secondary"
+                  onDelete={() => { setRuleSets(ruleSets.filter((v) => v !== r)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }} />
+              ))}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField size="small" placeholder={fm("agents.addCustomRule")} value={newRule}
+                onChange={(e) => setNewRule(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newRule, ruleSets, setRuleSets, setNewRule); } }}
+                inputProps={{ maxLength: 60 }} sx={{ flex: 1 }} />
+              <Button variant="outlined" size="small" startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newRule, ruleSets, setRuleSets, setNewRule)}
+                disabled={!newRule.trim()}>{fm("agents.addButton")}</Button>
+            </Box>
+          </CardContent>
+        </Card>
+
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <Button variant="outlined" onClick={() => navigate("/agents")}>{fm("agents.editCancel")}</Button>
           <Button variant="contained" onClick={handleSave} disabled={!dirty || !name.trim()}>
