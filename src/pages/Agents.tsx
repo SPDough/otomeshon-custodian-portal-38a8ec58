@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useIntl } from "react-intl";
 import { motion } from "framer-motion";
 import {
@@ -15,7 +15,9 @@ import { toast } from "sonner";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import AgentModuleEditDialog from "@/components/AgentModuleEditDialog";
+import CreateAgentDialog from "@/components/CreateAgentDialog";
 import { useAgentModules, type AgentModuleStatus, type AgentModule } from "@/hooks/useAgentModules";
+import { useAgents } from "@/hooks/useAgents";
 import type { ReactNode } from "react";
 
 const statusConfig: Record<AgentModuleStatus, { colorKey: "success" | "info" | "warning"; labelId: string }> = {
@@ -44,12 +46,23 @@ const MODULE_META: ModuleMeta[] = [
 
 const Agents = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const theme = useTheme();
   const intl = useIntl();
   const fm = (id: string) => intl.formatMessage({ id });
   const { modules, isLoading, updateModule } = useAgentModules();
+  const { createAgent } = useAgents();
 
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingModule, setEditingModule] = useState<{ meta: ModuleMeta; mod: AgentModule } | null>(null);
+
+  // Open create dialog if ?new=true
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setShowCreateDialog(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const handleEditClick = (e: React.MouseEvent, meta: ModuleMeta, mod: AgentModule) => {
     e.stopPropagation();
@@ -257,6 +270,23 @@ const Agents = () => {
           color={editColor}
         />
       )}
+
+      {/* Create agent dialog */}
+      <CreateAgentDialog
+        open={showCreateDialog}
+        onClose={() => setShowCreateDialog(false)}
+        saving={createAgent.isPending}
+        onSave={(data) => {
+          createAgent.mutate(data, {
+            onSuccess: (agent) => {
+              toast.success(fm("agents.createSave"));
+              setShowCreateDialog(false);
+              navigate(`/agents/${agent.id}`);
+            },
+            onError: () => toast.error("Creation failed"),
+          });
+        }}
+      />
     </AnimatedPage>
   );
 };

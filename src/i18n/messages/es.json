@@ -593,5 +593,21 @@
   "agents.editAddItem": "Agregar nuevo elemento…",
   "agents.editCancel": "Cancelar",
   "agents.editSave": "Guardar Cambios",
-  "agents.editButton": "Editar"
+  "agents.editButton": "Editar",
+
+  "sidebar.newAgent": "+ Nuevo Agente",
+  "agents.createTitle": "Crear Nuevo Agente",
+  "agents.createName": "Nombre del Agente",
+  "agents.createDescription": "Descripción",
+  "agents.createPersona": "Persona",
+  "agents.createPersonaPlaceholder": "ej. Eres un analista de portafolios especializado en...",
+  "agents.createModel": "Modelo",
+  "agents.createSave": "Crear Agente",
+  "agents.statusEnabled": "Habilitado",
+  "agents.statusDisabled": "Deshabilitado",
+  "agents.deleteAgent": "Eliminar Agente",
+  "agents.deleteSuccess": "Agente eliminado",
+  "agents.loading": "Cargando...",
+  "agents.notFound": "Agente no encontrado",
+  "agents.backToAgents": "Volver a Agentes"
 }
