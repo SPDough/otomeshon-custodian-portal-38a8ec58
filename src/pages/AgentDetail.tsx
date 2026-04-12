@@ -44,6 +44,8 @@ const AgentDetail = () => {
   const [status, setStatus] = useState<"enabled" | "disabled">("enabled");
   const [tools, setTools] = useState<string[]>([]);
   const [dataBindings, setDataBindings] = useState<string[]>([]);
+  const [newTool, setNewTool] = useState("");
+  const [newBinding, setNewBinding] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -76,6 +78,19 @@ const AgentDetail = () => {
       onSuccess: () => { toast.success(fm("agents.deleteSuccess")); navigate("/agents"); },
       onError: () => toast.error("Delete failed"),
     });
+  };
+
+  const addCustomItem = (
+    value: string,
+    list: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    inputSetter: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
+    const trimmed = value.trim();
+    if (!trimmed || list.includes(trimmed)) return;
+    setter([...list, trimmed]);
+    inputSetter("");
+    setDirty(true);
   };
 
   const toggleChip = (
@@ -208,7 +223,7 @@ const AgentDetail = () => {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               {fm("agents.toolsDesc")}
             </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
               {AVAILABLE_TOOLS.map((tool) => {
                 const selected = tools.includes(tool);
                 return (
@@ -222,6 +237,36 @@ const AgentDetail = () => {
                   />
                 );
               })}
+              {/* Custom tools (not in predefined list) */}
+              {tools.filter((t) => !AVAILABLE_TOOLS.includes(t)).map((tool) => (
+                <Chip
+                  key={tool}
+                  label={tool}
+                  color="primary"
+                  onDelete={() => { setTools(tools.filter((t) => t !== tool)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }}
+                />
+              ))}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField
+                size="small"
+                placeholder={fm("agents.addCustomTool")}
+                value={newTool}
+                onChange={(e) => setNewTool(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newTool, tools, setTools, setNewTool); } }}
+                inputProps={{ maxLength: 60 }}
+                sx={{ flex: 1 }}
+              />
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newTool, tools, setTools, setNewTool)}
+                disabled={!newTool.trim()}
+              >
+                {fm("agents.addButton")}
+              </Button>
             </Box>
           </CardContent>
         </Card>
@@ -235,7 +280,7 @@ const AgentDetail = () => {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               {fm("agents.dataBindingsDetailDesc")}
             </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
               {AVAILABLE_DATA_BINDINGS.map((binding) => {
                 const selected = dataBindings.includes(binding);
                 return (
@@ -249,6 +294,36 @@ const AgentDetail = () => {
                   />
                 );
               })}
+              {/* Custom bindings */}
+              {dataBindings.filter((b) => !AVAILABLE_DATA_BINDINGS.includes(b)).map((binding) => (
+                <Chip
+                  key={binding}
+                  label={binding}
+                  color="secondary"
+                  onDelete={() => { setDataBindings(dataBindings.filter((b) => b !== binding)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }}
+                />
+              ))}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField
+                size="small"
+                placeholder={fm("agents.addCustomBinding")}
+                value={newBinding}
+                onChange={(e) => setNewBinding(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newBinding, dataBindings, setDataBindings, setNewBinding); } }}
+                inputProps={{ maxLength: 60 }}
+                sx={{ flex: 1 }}
+              />
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newBinding, dataBindings, setDataBindings, setNewBinding)}
+                disabled={!newBinding.trim()}
+              >
+                {fm("agents.addButton")}
+              </Button>
             </Box>
           </CardContent>
         </Card>

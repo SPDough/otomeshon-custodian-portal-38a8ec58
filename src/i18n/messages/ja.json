@@ -613,5 +613,8 @@
   "agents.toolsTitle": "ツール",
   "agents.toolsDesc": "このエージェントが実行中に使用できるツールを選択してください。",
   "agents.dataBindingsTitle": "データバインディング",
-  "agents.dataBindingsDetailDesc": "このエージェントをデータソースやライブフィードに接続します。"
+  "agents.dataBindingsDetailDesc": "このエージェントをデータソースやライブフィードに接続します。",
+  "agents.addCustomTool": "カスタムツールを追加…",
+  "agents.addCustomBinding": "カスタムデータバインディングを追加…",
+  "agents.addButton": "追加"
 }

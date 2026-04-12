@@ -613,5 +613,8 @@
   "agents.toolsTitle": "Herramientas",
   "agents.toolsDesc": "Seleccione las herramientas que este agente puede usar durante la ejecución.",
   "agents.dataBindingsTitle": "Vinculaciones de Datos",
-  "agents.dataBindingsDetailDesc": "Conecte este agente a fuentes de datos y feeds en vivo."
+  "agents.dataBindingsDetailDesc": "Conecte este agente a fuentes de datos y feeds en vivo.",
+  "agents.addCustomTool": "Agregar herramienta personalizada…",
+  "agents.addCustomBinding": "Agregar vinculación personalizada…",
+  "agents.addButton": "Agregar"
 }

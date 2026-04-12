@@ -613,5 +613,8 @@
   "agents.toolsTitle": "Tools",
   "agents.toolsDesc": "Select the tools this agent can use during execution.",
   "agents.dataBindingsTitle": "Data Bindings",
-  "agents.dataBindingsDetailDesc": "Connect this agent to data sources and live feeds."
+  "agents.dataBindingsDetailDesc": "Connect this agent to data sources and live feeds.",
+  "agents.addCustomTool": "Add custom tool…",
+  "agents.addCustomBinding": "Add custom data binding…",
+  "agents.addButton": "Add"
 }

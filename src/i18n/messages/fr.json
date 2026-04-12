@@ -613,5 +613,8 @@
   "agents.toolsTitle": "Outils",
   "agents.toolsDesc": "Sélectionnez les outils que cet agent peut utiliser lors de l'exécution.",
   "agents.dataBindingsTitle": "Liaisons de Données",
-  "agents.dataBindingsDetailDesc": "Connectez cet agent aux sources de données et flux en direct."
+  "agents.dataBindingsDetailDesc": "Connectez cet agent aux sources de données et flux en direct.",
+  "agents.addCustomTool": "Ajouter un outil personnalisé…",
+  "agents.addCustomBinding": "Ajouter une liaison personnalisée…",
+  "agents.addButton": "Ajouter"
 }
