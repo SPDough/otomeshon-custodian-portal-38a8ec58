@@ -55,6 +55,16 @@ const AgentDetail = () => {
   const { agents, isLoading, updateAgent, deleteAgent } = useAgents();
 
   const agent = agents.find((a) => a.id === id);
+  const { data: conversations = [] } = useAgentTestConversations(id ?? "");
+
+  const tokenStats = useMemo(() => {
+    const total = conversations.reduce((s, c) => s + (c.total_tokens ?? 0), 0);
+    const prompt = conversations.reduce((s, c) => s + (c.prompt_tokens ?? 0), 0);
+    const completion = conversations.reduce((s, c) => s + (c.completion_tokens ?? 0), 0);
+    const count = conversations.length;
+    const withTokens = conversations.filter((c) => (c.total_tokens ?? 0) > 0).length;
+    return { total, prompt, completion, count, withTokens };
+  }, [conversations]);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
