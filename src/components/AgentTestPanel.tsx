@@ -246,6 +246,16 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     return format(new Date(convo.created_at), "MMM d, h:mm a");
   };
 
+  const filteredConversations = conversations.filter((convo) => {
+    if (!historySearch.trim()) return true;
+    const q = historySearch.toLowerCase();
+    return (
+      convo.model_used.toLowerCase().includes(q) ||
+      getConvoPreview(convo).toLowerCase().includes(q) ||
+      String(convo.temperature_used).includes(q)
+    );
+  });
+
   return (
     <Card>
       <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
