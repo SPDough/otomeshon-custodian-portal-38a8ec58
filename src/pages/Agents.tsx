@@ -25,6 +25,7 @@ const Agents = () => {
       icon: <AgentIcon />,
       stats: fm("agents.agentBuilderStats"),
       color: theme.palette.primary.main,
+      path: "/platform-config/layer-4",
     },
     {
       title: fm("agents.dataBindings"),
@@ -32,6 +33,7 @@ const Agents = () => {
       icon: <DataIcon />,
       stats: fm("agents.dataBindingsStats"),
       color: theme.palette.info.main,
+      path: "/platform-config/layer-0",
     },
     {
       title: fm("agents.calculationPolicies"),
@@ -39,6 +41,7 @@ const Agents = () => {
       icon: <CalcIcon />,
       stats: fm("agents.calculationPoliciesStats"),
       color: theme.palette.success.main,
+      path: "/platform-config/layer-2",
     },
     {
       title: fm("agents.ruleSets"),
@@ -46,6 +49,7 @@ const Agents = () => {
       icon: <RulesIcon />,
       stats: fm("agents.ruleSetsStats"),
       color: theme.palette.warning.main,
+      path: "/platform-config/layer-3",
     },
     {
       title: fm("agents.workflowOrchestration"),
@@ -53,6 +57,7 @@ const Agents = () => {
       icon: <WorkflowIcon />,
       stats: fm("agents.workflowOrchestrationStats"),
       color: theme.palette.secondary.main,
+      path: "/platform-config/layer-6",
     },
     {
       title: fm("agents.agentConfig"),
@@ -60,6 +65,7 @@ const Agents = () => {
       icon: <ConfigIcon />,
       stats: fm("agents.agentConfigStats"),
       color: theme.palette.error.main,
+      path: "/workflow-config",
     },
   ];
 
