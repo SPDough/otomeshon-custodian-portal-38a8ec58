@@ -82,7 +82,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
           agentConfig: {
             persona: agent.persona,
             model: overrideModel || agent.model,
-            temperature: agent.temperature,
+            temperature: overrideTemp ?? agent.temperature,
             max_tokens: agent.max_tokens,
             guardrails: agent.guardrails,
           },
