@@ -39,7 +39,13 @@ const navSections: NavSection[] = [
     defaultOpen: true,
     items: [
       { id: "dashboard", nameId: "sidebar.dashboard", icon: <DashboardIcon fontSize="small" />, path: "/dashboard" },
-      { id: "agents", nameId: "sidebar.agents", icon: <AutomationIcon fontSize="small" />, path: "/agents" },
+    ],
+  },
+  {
+    titleId: "sidebar.agents",
+    defaultOpen: true,
+    items: [
+      { id: "agents", nameId: "sidebar.agentsOverview", icon: <AutomationIcon fontSize="small" />, path: "/agents" },
     ],
   },
   {
