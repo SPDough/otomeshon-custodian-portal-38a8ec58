@@ -71,6 +71,8 @@ const AgentDetail = () => {
       setStatus(agent.status);
       setTools(agent.tools ?? []);
       setDataBindings(agent.data_bindings ?? []);
+      setCalcPolicies(agent.calculation_policies ?? []);
+      setRuleSets(agent.rule_sets ?? []);
       setDirty(false);
     }
   }, [agent]);
@@ -78,7 +80,7 @@ const AgentDetail = () => {
   const handleSave = () => {
     if (!agent || !name.trim()) return;
     updateAgent.mutate(
-      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings },
+      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets },
       {
         onSuccess: () => { toast.success(fm("agents.editSave")); setDirty(false); },
         onError: () => toast.error("Save failed"),
