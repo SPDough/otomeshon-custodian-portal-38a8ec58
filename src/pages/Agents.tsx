@@ -46,12 +46,23 @@ const MODULE_META: ModuleMeta[] = [
 
 const Agents = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const theme = useTheme();
   const intl = useIntl();
   const fm = (id: string) => intl.formatMessage({ id });
   const { modules, isLoading, updateModule } = useAgentModules();
+  const { createAgent } = useAgents();
 
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingModule, setEditingModule] = useState<{ meta: ModuleMeta; mod: AgentModule } | null>(null);
+
+  // Open create dialog if ?new=true
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setShowCreateDialog(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const handleEditClick = (e: React.MouseEvent, meta: ModuleMeta, mod: AgentModule) => {
     e.stopPropagation();
