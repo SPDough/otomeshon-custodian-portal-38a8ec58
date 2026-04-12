@@ -106,6 +106,8 @@ const AgentDetail = () => {
     }
     return Array.from(map.values()).sort((a, b) => (b.prompt + b.completion) - (a.prompt + a.completion));
   }, [conversations]);
+
+  const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [persona, setPersona] = useState("");
   const [model, setModel] = useState("gemini-2.5-flash");
