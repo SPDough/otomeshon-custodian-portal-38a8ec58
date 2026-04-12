@@ -38,6 +38,7 @@ const PlatformConfig = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.capabilityStack" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label={fm("platform.chip")} size="small" icon={<LayersIcon sx={{ fontSize: 16 }} />} sx={{ mb: 2, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', fontWeight: 500 }} />
