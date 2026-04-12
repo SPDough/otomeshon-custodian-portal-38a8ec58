@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
-  Select, MenuItem, FormControl, InputLabel,
+  Select, MenuItem, FormControl, InputLabel, Slider, Tooltip,
 } from "@mui/material";
 import { Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
