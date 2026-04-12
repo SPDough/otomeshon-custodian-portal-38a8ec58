@@ -14,7 +14,8 @@ interface AppBreadcrumbProps {
 
 const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
   const intl = useIntl();
-  const fm = (id: string) => intl.formatMessage({ id });
+  const resolve = (id: string) =>
+    id.startsWith("__literal:") ? id.slice(10) : intl.formatMessage({ id });
 
   const allCrumbs: Crumb[] = [
     { labelId: "breadcrumb.dashboard", path: "/dashboard" },
@@ -35,7 +36,7 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
               color="text.primary"
               sx={{ fontSize: "0.875rem", fontWeight: 500 }}
             >
-              {fm(crumb.labelId)}
+              {resolve(crumb.labelId)}
             </Typography>
           );
         }
@@ -54,7 +55,7 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
             }}
           >
             {i === 0 && <HomeIcon sx={{ fontSize: 16 }} />}
-            {fm(crumb.labelId)}
+            {resolve(crumb.labelId)}
           </Link>
         );
       })}
