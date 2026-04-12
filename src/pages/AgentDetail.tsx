@@ -642,6 +642,48 @@ const AgentDetail = () => {
                   </Typography>
                 </Box>
               </Box>
+
+              {/* Bar Chart: Token Usage & Cost by Model */}
+              {modelBreakdown.length > 0 && (
+                <>
+                  <Divider sx={{ my: 3 }} />
+                  <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+                    Usage by Model
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+                    <Box sx={{ flex: 2, minWidth: 300, height: 260 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={modelBreakdown} margin={{ top: 8, right: 16, left: 0, bottom: 4 }}>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                          <XAxis dataKey="model" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={50} />
+                          <YAxis tick={{ fontSize: 11 }} />
+                          <RechartsTooltip
+                            formatter={(value: number, name: string) => [
+                              value.toLocaleString(),
+                              name === "prompt" ? "Prompt Tokens" : "Completion Tokens",
+                            ]}
+                            labelFormatter={(label) => `Model: ${label}`}
+                          />
+                          <Legend formatter={(value) => value === "prompt" ? "Prompt" : "Completion"} />
+                          <Bar dataKey="prompt" stackId="tokens" fill={theme.palette.info.main} radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="completion" stackId="tokens" fill={alpha(theme.palette.info.main, 0.45)} radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </Box>
+                    <Box sx={{ flex: 1, minWidth: 220, height: 260 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={modelBreakdown} margin={{ top: 8, right: 16, left: 0, bottom: 4 }}>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                          <XAxis dataKey="model" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={50} />
+                          <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${v < 0.01 ? v.toFixed(4) : v.toFixed(2)}`} />
+                          <RechartsTooltip formatter={(value: number) => [`$${value.toFixed(6)}`, "Est. Cost"]} labelFormatter={(label) => `Model: ${label}`} />
+                          <Bar dataKey="cost" fill={theme.palette.success.main} radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </>
+              )}
             </CardContent>
           </Card>
         )}
