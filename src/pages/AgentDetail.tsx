@@ -80,6 +80,19 @@ const AgentDetail = () => {
     });
   };
 
+  const addCustomItem = (
+    value: string,
+    list: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    inputSetter: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
+    const trimmed = value.trim();
+    if (!trimmed || list.includes(trimmed)) return;
+    setter([...list, trimmed]);
+    inputSetter("");
+    setDirty(true);
+  };
+
   const toggleChip = (
     value: string,
     list: string[],
