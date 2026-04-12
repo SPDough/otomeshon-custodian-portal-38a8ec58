@@ -2,12 +2,13 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
   Select, MenuItem, FormControl, InputLabel, Slider, Tooltip, List, ListItemButton,
-  ListItemText, ListItemIcon, Divider,
+  ListItemText, ListItemIcon, Divider, Menu,
 } from "@mui/material";
 import {
   Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon,
   History as HistoryIcon, Add as AddIcon, Delete as DeleteIcon,
   ChatBubbleOutline as ChatIcon, Search as SearchIcon,
+  Download as DownloadIcon,
 } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
@@ -242,6 +243,46 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     );
   };
 
+  const [exportAnchor, setExportAnchor] = useState<null | HTMLElement>(null);
+
+  const downloadFile = (content: string, filename: string, mime: string) => {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const activeConvo = conversations.find((c) => c.id === activeConvoId);
+
+  const exportAsJson = () => {
+    setExportAnchor(null);
+    const data = {
+      agent: { name: agent.name, model: activeConvo?.model_used ?? activeModel, temperature: activeConvo ? Number(activeConvo.temperature_used) : activeTemp },
+      exported_at: new Date().toISOString(),
+      messages: messages.map(({ role, content }) => ({ role, content })),
+    };
+    const ts = format(new Date(), "yyyyMMdd-HHmmss");
+    downloadFile(JSON.stringify(data, null, 2), `${agent.name.replace(/\s+/g, "-").toLowerCase()}-${ts}.json`, "application/json");
+    toast.success("Exported as JSON.");
+  };
+
+  const exportAsMarkdown = () => {
+    setExportAnchor(null);
+    const model = activeConvo?.model_used ?? activeModel;
+    const temp = activeConvo ? Number(activeConvo.temperature_used) : activeTemp;
+    let md = `# Agent Test: ${agent.name}\n\n`;
+    md += `- **Model:** ${model}\n- **Temperature:** ${temp}\n- **Exported:** ${format(new Date(), "PPpp")}\n\n---\n\n`;
+    for (const msg of messages) {
+      md += `### ${msg.role === "user" ? "🧑 User" : "🤖 Assistant"}\n\n${msg.content}\n\n`;
+    }
+    const ts = format(new Date(), "yyyyMMdd-HHmmss");
+    downloadFile(md, `${agent.name.replace(/\s+/g, "-").toLowerCase()}-${ts}.md`, "text/markdown");
+    toast.success("Exported as Markdown.");
+  };
+
   const getConvoPreview = (convo: typeof conversations[0]) => {
     return format(new Date(convo.created_at), "MMM d, h:mm a");
   };
@@ -301,6 +342,17 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             </Box>
           </Box>
           <Box sx={{ display: "flex", gap: 0.5 }}>
+            <Tooltip title="Export conversation">
+              <span>
+                <IconButton size="small" onClick={(e) => setExportAnchor(e.currentTarget)} disabled={messages.length === 0}>
+                  <DownloadIcon fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Menu anchorEl={exportAnchor} open={Boolean(exportAnchor)} onClose={() => setExportAnchor(null)}>
+              <MenuItem onClick={exportAsJson}>Export as JSON</MenuItem>
+              <MenuItem onClick={exportAsMarkdown}>Export as Markdown</MenuItem>
+            </Menu>
             <Tooltip title="Conversation history">
               <IconButton size="small" onClick={() => setShowHistory((s) => !s)}>
                 <HistoryIcon fontSize="small" color={showHistory ? "primary" : "inherit"} />
