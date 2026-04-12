@@ -65,6 +65,7 @@ export type Database = {
           tools: string[]
           updated_at: string
           user_id: string
+          workflows: string[]
         }
         Insert: {
           calculation_policies?: string[]
@@ -80,6 +81,7 @@ export type Database = {
           tools?: string[]
           updated_at?: string
           user_id: string
+          workflows?: string[]
         }
         Update: {
           calculation_policies?: string[]
@@ -95,6 +97,7 @@ export type Database = {
           tools?: string[]
           updated_at?: string
           user_id?: string
+          workflows?: string[]
         }
         Relationships: []
       }
