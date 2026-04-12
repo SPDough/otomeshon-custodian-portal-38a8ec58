@@ -19,6 +19,18 @@ import { useAgents, type Agent } from "@/hooks/useAgents";
 import { useAgentTestConversations } from "@/hooks/useAgentTestHistory";
 import AgentTestPanel from "@/components/AgentTestPanel";
 
+// Pricing per 1M tokens (USD) — approximate rates
+const MODEL_PRICING: Record<string, { prompt: number; completion: number }> = {
+  "gemini-2.5-flash":       { prompt: 0.15, completion: 0.60 },
+  "gemini-2.5-pro":         { prompt: 1.25, completion: 5.00 },
+  "gemini-3-flash-preview": { prompt: 0.15, completion: 0.60 },
+  "gemini-3.1-pro-preview": { prompt: 1.25, completion: 5.00 },
+  "gpt-5-mini":             { prompt: 1.50, completion: 6.00 },
+  "gpt-5":                  { prompt: 5.00, completion: 15.00 },
+  "gpt-5-nano":             { prompt: 0.50, completion: 2.00 },
+};
+const DEFAULT_PRICING = { prompt: 0.50, completion: 2.00 };
+
 const MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gpt-5-mini", "gpt-5"];
 
 const AVAILABLE_TOOLS = [
@@ -63,7 +75,17 @@ const AgentDetail = () => {
     const completion = conversations.reduce((s, c) => s + (c.completion_tokens ?? 0), 0);
     const count = conversations.length;
     const withTokens = conversations.filter((c) => (c.total_tokens ?? 0) > 0).length;
-    return { total, prompt, completion, count, withTokens };
+
+    // Compute cost per conversation based on its model
+    const estimatedCost = conversations.reduce((sum, c) => {
+      if ((c.total_tokens ?? 0) === 0) return sum;
+      const pricing = MODEL_PRICING[c.model_used] ?? DEFAULT_PRICING;
+      const pCost = ((c.prompt_tokens ?? 0) / 1_000_000) * pricing.prompt;
+      const cCost = ((c.completion_tokens ?? 0) / 1_000_000) * pricing.completion;
+      return sum + pCost + cCost;
+    }, 0);
+
+    return { total, prompt, completion, count, withTokens, estimatedCost };
   }, [conversations]);
 
   const [name, setName] = useState("");
@@ -591,6 +613,13 @@ const AgentDetail = () => {
                   <Typography variant="caption" color="text.secondary">Avg per Session</Typography>
                   <Typography variant="h6" fontWeight={600}>
                     {tokenStats.withTokens > 0 ? Math.round(tokenStats.total / tokenStats.withTokens).toLocaleString() : "—"}
+                  </Typography>
+                </Box>
+                <Divider orientation="vertical" flexItem />
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Est. Cost</Typography>
+                  <Typography variant="h5" fontWeight={700} color="success.main">
+                    ${tokenStats.estimatedCost < 0.01 && tokenStats.estimatedCost > 0 ? "<0.01" : tokenStats.estimatedCost.toFixed(4)}
                   </Typography>
                 </Box>
               </Box>
