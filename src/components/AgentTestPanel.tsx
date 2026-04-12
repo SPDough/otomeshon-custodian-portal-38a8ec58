@@ -1,11 +1,22 @@
 import { useState, useRef, useCallback } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
+  Select, MenuItem, FormControl, InputLabel,
 } from "@mui/material";
 import { Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import type { Agent } from "@/hooks/useAgents";
+
+const AVAILABLE_MODELS = [
+  { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+  { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro" },
+  { value: "gemini-3-flash-preview", label: "Gemini 3 Flash" },
+  { value: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro" },
+  { value: "gpt-5-mini", label: "GPT-5 Mini" },
+  { value: "gpt-5", label: "GPT-5" },
+  { value: "gpt-5-nano", label: "GPT-5 Nano" },
+];
 
 type Msg = { role: "user" | "assistant"; content: string };
 
