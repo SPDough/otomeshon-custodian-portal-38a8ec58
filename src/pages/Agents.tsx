@@ -111,6 +111,7 @@ const Agents = () => {
                     },
                     transition: "all 0.3s ease",
                   }}
+                  onClick={() => navigate(feature.path)}
                 >
                   <Box sx={{ position: "absolute", top: 0, left: 0, width: 4, height: "100%", bgcolor: feature.color }} />
                   <CardContent sx={{ p: 3, pl: 4 }}>
