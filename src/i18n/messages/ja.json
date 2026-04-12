@@ -593,5 +593,21 @@
   "agents.editAddItem": "新しい項目を追加…",
   "agents.editCancel": "キャンセル",
   "agents.editSave": "変更を保存",
-  "agents.editButton": "編集"
+  "agents.editButton": "編集",
+
+  "sidebar.newAgent": "+ 新規エージェント",
+  "agents.createTitle": "新規エージェント作成",
+  "agents.createName": "エージェント名",
+  "agents.createDescription": "説明",
+  "agents.createPersona": "ペルソナ",
+  "agents.createPersonaPlaceholder": "例: あなたはポートフォリオ分析に特化した...",
+  "agents.createModel": "モデル",
+  "agents.createSave": "エージェント作成",
+  "agents.statusEnabled": "有効",
+  "agents.statusDisabled": "無効",
+  "agents.deleteAgent": "エージェント削除",
+  "agents.deleteSuccess": "エージェントを削除しました",
+  "agents.loading": "読み込み中...",
+  "agents.notFound": "エージェントが見つかりません",
+  "agents.backToAgents": "エージェントに戻る"
 }
