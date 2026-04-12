@@ -1,18 +1,21 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIntl } from "react-intl";
 import { motion } from "framer-motion";
 import {
   Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme,
-  LinearProgress, Divider, Skeleton,
+  LinearProgress, Divider, Skeleton, IconButton, Tooltip,
 } from "@mui/material";
 import {
   SmartToy as AgentIcon, Storage as DataIcon, Calculate as CalcIcon,
   Gavel as RulesIcon, AccountTree as WorkflowIcon, ArrowForward,
-  Settings as ConfigIcon, CheckCircle, Circle,
+  Settings as ConfigIcon, CheckCircle, Circle, Edit as EditIcon,
 } from "@mui/icons-material";
+import { toast } from "sonner";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
-import { useAgentModules, type AgentModuleStatus } from "@/hooks/useAgentModules";
+import AgentModuleEditDialog from "@/components/AgentModuleEditDialog";
+import { useAgentModules, type AgentModuleStatus, type AgentModule } from "@/hooks/useAgentModules";
 import type { ReactNode } from "react";
 
 const statusConfig: Record<AgentModuleStatus, { colorKey: "success" | "info" | "warning"; labelId: string }> = {
@@ -44,7 +47,30 @@ const Agents = () => {
   const theme = useTheme();
   const intl = useIntl();
   const fm = (id: string) => intl.formatMessage({ id });
-  const { modules, isLoading } = useAgentModules();
+  const { modules, isLoading, updateModule } = useAgentModules();
+
+  const [editingModule, setEditingModule] = useState<{ meta: ModuleMeta; mod: AgentModule } | null>(null);
+
+  const handleEditClick = (e: React.MouseEvent, meta: ModuleMeta, mod: AgentModule) => {
+    e.stopPropagation();
+    setEditingModule({ meta, mod });
+  };
+
+  const handleSave = (data: { status: AgentModuleStatus; progress: number; configured_items: string[]; stats_label: string }) => {
+    if (!editingModule) return;
+    updateModule.mutate(
+      { module_key: editingModule.meta.key, ...data },
+      {
+        onSuccess: () => {
+          toast.success(fm("agents.editSave"));
+          setEditingModule(null);
+        },
+        onError: () => toast.error("Update failed"),
+      },
+    );
+  };
+
+  const editColor = editingModule ? theme.palette[editingModule.meta.colorKey].main : "";
 
   return (
     <AnimatedPage>
@@ -111,6 +137,7 @@ const Agents = () => {
                         boxShadow: `0 8px 30px ${alpha(color, 0.15)}`,
                         transform: "translateY(-4px)",
                         "& .arrow-icon": { transform: "translateX(4px)", opacity: 1 },
+                        "& .edit-btn": { opacity: 1 },
                       },
                       transition: "all 0.3s ease",
                     }}
@@ -124,6 +151,18 @@ const Agents = () => {
                           {meta.icon}
                         </Box>
                         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                          {mod && (
+                            <Tooltip title={fm("agents.editButton")}>
+                              <IconButton
+                                className="edit-btn"
+                                size="small"
+                                sx={{ opacity: 0, transition: "opacity 0.2s" }}
+                                onClick={(e) => handleEditClick(e, meta, mod)}
+                              >
+                                <EditIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                           <Chip
                             icon={<CheckCircle sx={{ fontSize: 14 }} />}
                             label={fm(sc.labelId)}
@@ -201,6 +240,23 @@ const Agents = () => {
           </Box>
         </motion.div>
       </Container>
+
+      {/* Edit dialog */}
+      {editingModule && (
+        <AgentModuleEditDialog
+          open
+          onClose={() => setEditingModule(null)}
+          onSave={handleSave}
+          initialData={{
+            status: editingModule.mod.status,
+            progress: editingModule.mod.progress,
+            configured_items: editingModule.mod.configured_items,
+            stats_label: editingModule.mod.stats_label,
+          }}
+          title={fm(editingModule.meta.titleId)}
+          color={editColor}
+        />
+      )}
     </AnimatedPage>
   );
 };

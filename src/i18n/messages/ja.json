@@ -581,5 +581,15 @@
   "agents.agentConfig": "ランタイム設定",
   "agents.agentConfigDesc": "LLMプロバイダー選択、温度、トークン制限、ロギング、ガードレール設定",
   "agents.agentConfigStats": "詳細設定",
-  "agents.agentConfigItems": "モデル選択, トークン予算, ガードレール, 監査ログ"
+  "agents.agentConfigItems": "モデル選択, トークン予算, ガードレール, 監査ログ",
+
+  "agents.editTitle": "モジュール編集",
+  "agents.editStatus": "ステータス",
+  "agents.editStatsLabel": "統計ラベル",
+  "agents.editProgress": "構成の進捗",
+  "agents.editItems": "構成済み項目",
+  "agents.editAddItem": "新しい項目を追加…",
+  "agents.editCancel": "キャンセル",
+  "agents.editSave": "変更を保存",
+  "agents.editButton": "編集"
 }
