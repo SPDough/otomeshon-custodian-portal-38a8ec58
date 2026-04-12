@@ -10,6 +10,7 @@ export interface Agent {
   status: "enabled" | "disabled";
   persona: string;
   tools: string[];
+  data_bindings: string[];
   model: string;
   created_at: string;
   updated_at: string;
