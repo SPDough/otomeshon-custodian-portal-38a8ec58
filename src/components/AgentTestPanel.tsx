@@ -163,11 +163,22 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     <Card>
       <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
         {/* Header */}
-        <Box sx={{ px: 3, py: 2, borderBottom: 1, borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Box>
+        <Box sx={{ px: 3, py: 2, borderBottom: 1, borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
             <Typography variant="h6" fontWeight={600}>Test Agent</Typography>
-            <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
-              <Chip label={agent.model || "gemini-2.5-flash"} size="small" variant="outlined" />
+            <FormControl size="small" sx={{ minWidth: 180 }}>
+              <InputLabel>Model</InputLabel>
+              <Select
+                value={overrideModel || agent.model || "gemini-2.5-flash"}
+                label="Model"
+                onChange={(e) => setOverrideModel(e.target.value)}
+              >
+                {AVAILABLE_MODELS.map((m) => (
+                  <MenuItem key={m.value} value={m.value}>{m.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box sx={{ display: "flex", gap: 1 }}>
               <Chip label={`temp ${agent.temperature?.toFixed(2) ?? "0.70"}`} size="small" variant="outlined" />
               <Chip label={`${agent.max_tokens ?? 4096} tokens`} size="small" variant="outlined" />
               {agent.guardrails?.length > 0 && (
