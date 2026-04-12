@@ -8,6 +8,9 @@ export interface TestConversation {
   user_id: string;
   model_used: string;
   temperature_used: number;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
   created_at: string;
   updated_at: string;
 }

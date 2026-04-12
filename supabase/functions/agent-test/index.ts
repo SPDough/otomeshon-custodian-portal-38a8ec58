@@ -89,7 +89,37 @@ serve(async (req) => {
       );
     }
 
-    return new Response(response.body, {
+    // Read the stream, forward it, and extract usage from the final chunk
+    const reader = response.body!.getReader();
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    let usageData: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null = null;
+
+    const stream = new ReadableStream({
+      async pull(controller) {
+        const { done, value } = await reader.read();
+        if (done) {
+          // Send usage as a custom SSE event after [DONE]
+          if (usageData) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ usage: usageData })}\n\n`));
+          }
+          controller.close();
+          return;
+        }
+        // Parse chunks to extract usage info
+        const text = decoder.decode(value, { stream: true });
+        for (const line of text.split("\n")) {
+          if (!line.startsWith("data: ") || line.includes("[DONE]")) continue;
+          try {
+            const parsed = JSON.parse(line.slice(6));
+            if (parsed.usage) usageData = parsed.usage;
+          } catch { /* ignore */ }
+        }
+        controller.enqueue(value);
+      },
+    });
+
+    return new Response(stream, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (e) {
