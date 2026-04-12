@@ -36,7 +36,7 @@ const Index = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
-        <motion.div variants={fadeInUp}>
+        <div>
           <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 }, mt: { xs: 4, md: 8 } }}>
             <Typography variant="h1" component="h1" sx={{ mb: 2, fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 600 }}>
               {intl.formatMessage({ id: "index.title" })}
@@ -56,7 +56,7 @@ const Index = () => {
               ))}
             </Box>
           </Box>
-        </motion.div>
+        </div>
 
         <motion.div variants={fadeInUp}>
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 2, md: 6 }, mb: { xs: 6, md: 10 }, flexWrap: 'wrap' }}>
