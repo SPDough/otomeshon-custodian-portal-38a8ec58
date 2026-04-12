@@ -470,6 +470,82 @@ const AgentDetail = () => {
           </CardContent>
         </Card>
 
+        {/* Runtime Settings */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.runtimeTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              {fm("agents.runtimeDesc")}
+            </Typography>
+
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                {fm("agents.temperature")} — {temperature.toFixed(2)}
+              </Typography>
+              <Slider
+                value={temperature}
+                onChange={(_, v) => { setTemperature(v as number); setDirty(true); }}
+                min={0} max={2} step={0.05}
+                valueLabelDisplay="auto"
+                sx={{ maxWidth: 400 }}
+              />
+            </Box>
+
+            <TextField
+              label={fm("agents.maxTokens")}
+              type="number"
+              value={maxTokens}
+              onChange={(e) => { setMaxTokens(Math.max(1, Math.min(128000, Number(e.target.value) || 1))); setDirty(true); }}
+              inputProps={{ min: 1, max: 128000 }}
+              sx={{ mb: 3, width: 200 }}
+              size="small"
+            />
+
+            <Box sx={{ mb: 3 }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={loggingEnabled}
+                    onChange={(e) => { setLoggingEnabled(e.target.checked); setDirty(true); }}
+                  />
+                }
+                label={fm("agents.auditLogging")}
+              />
+            </Box>
+
+            <Divider sx={{ mb: 2 }} />
+
+            <Typography variant="subtitle2" gutterBottom>
+              {fm("agents.guardrailsLabel")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+              {guardrails.map((g) => (
+                <Chip
+                  key={g}
+                  label={g}
+                  color="warning"
+                  onDelete={() => { setGuardrails(guardrails.filter((v) => v !== g)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }}
+                />
+              ))}
+              {guardrails.length === 0 && (
+                <Typography variant="body2" color="text.secondary">{fm("agents.noGuardrails")}</Typography>
+              )}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField size="small" placeholder={fm("agents.addGuardrail")} value={newGuardrail}
+                onChange={(e) => setNewGuardrail(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newGuardrail, guardrails, setGuardrails, setNewGuardrail); } }}
+                inputProps={{ maxLength: 80 }} sx={{ flex: 1 }} />
+              <Button variant="outlined" size="small" startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newGuardrail, guardrails, setGuardrails, setNewGuardrail)}
+                disabled={!newGuardrail.trim()}>{fm("agents.addButton")}</Button>
+            </Box>
+          </CardContent>
+        </Card>
+
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
           <Button variant="outlined" onClick={() => navigate("/agents")}>{fm("agents.editCancel")}</Button>
           <Button variant="contained" onClick={handleSave} disabled={!dirty || !name.trim()}>
