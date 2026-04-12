@@ -13,6 +13,10 @@ import {
 } from "@mui/icons-material";
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
+  ResponsiveContainer, Legend, Cell,
+} from "recharts";
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
