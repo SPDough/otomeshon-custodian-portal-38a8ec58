@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Paper, Chip, useTheme, TextField, InputAdornment } from "@mui/material";
 import { Storage as StorageIcon, MenuBook as MenuBookIcon, Functions as FunctionsIcon, Gavel as GavelIcon, Psychology as PsychologyIcon, AutoStories as AutoStoriesIcon, AccountTree as AccountTreeIcon, Assessment as AssessmentIcon, CloudUpload as CloudUploadIcon, ArrowForward, Layers as LayersIcon, Search as SearchIcon, CheckCircle, HourglassEmpty } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const PlatformConfig = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const PlatformConfig = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.capabilityStack" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label={fm("platform.chip")} size="small" icon={<LayersIcon sx={{ fontSize: 16 }} />} sx={{ mb: 2, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', fontWeight: 500 }} />
