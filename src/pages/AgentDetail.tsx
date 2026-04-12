@@ -13,6 +13,10 @@ import {
 } from "@mui/icons-material";
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
+  ResponsiveContainer, Legend, Cell,
+} from "recharts";
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
@@ -86,6 +90,21 @@ const AgentDetail = () => {
     }, 0);
 
     return { total, prompt, completion, count, withTokens, estimatedCost };
+  }, [conversations]);
+
+  const modelBreakdown = useMemo(() => {
+    const map = new Map<string, { model: string; prompt: number; completion: number; sessions: number; cost: number }>();
+    for (const c of conversations) {
+      if ((c.total_tokens ?? 0) === 0) continue;
+      const existing = map.get(c.model_used) ?? { model: c.model_used, prompt: 0, completion: 0, sessions: 0, cost: 0 };
+      const pricing = MODEL_PRICING[c.model_used] ?? DEFAULT_PRICING;
+      existing.prompt += c.prompt_tokens ?? 0;
+      existing.completion += c.completion_tokens ?? 0;
+      existing.sessions += 1;
+      existing.cost += ((c.prompt_tokens ?? 0) / 1_000_000) * pricing.prompt + ((c.completion_tokens ?? 0) / 1_000_000) * pricing.completion;
+      map.set(c.model_used, existing);
+    }
+    return Array.from(map.values()).sort((a, b) => (b.prompt + b.completion) - (a.prompt + a.completion));
   }, [conversations]);
 
   const [name, setName] = useState("");
@@ -623,6 +642,48 @@ const AgentDetail = () => {
                   </Typography>
                 </Box>
               </Box>
+
+              {/* Bar Chart: Token Usage & Cost by Model */}
+              {modelBreakdown.length > 0 && (
+                <>
+                  <Divider sx={{ my: 3 }} />
+                  <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+                    Usage by Model
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+                    <Box sx={{ flex: 2, minWidth: 300, height: 260 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={modelBreakdown} margin={{ top: 8, right: 16, left: 0, bottom: 4 }}>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                          <XAxis dataKey="model" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={50} />
+                          <YAxis tick={{ fontSize: 11 }} />
+                          <RechartsTooltip
+                            formatter={(value: number, name: string) => [
+                              value.toLocaleString(),
+                              name === "prompt" ? "Prompt Tokens" : "Completion Tokens",
+                            ]}
+                            labelFormatter={(label) => `Model: ${label}`}
+                          />
+                          <Legend formatter={(value) => value === "prompt" ? "Prompt" : "Completion"} />
+                          <Bar dataKey="prompt" stackId="tokens" fill={theme.palette.info.main} radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="completion" stackId="tokens" fill={alpha(theme.palette.info.main, 0.45)} radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </Box>
+                    <Box sx={{ flex: 1, minWidth: 220, height: 260 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={modelBreakdown} margin={{ top: 8, right: 16, left: 0, bottom: 4 }}>
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                          <XAxis dataKey="model" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={50} />
+                          <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `$${v < 0.01 ? v.toFixed(4) : v.toFixed(2)}`} />
+                          <RechartsTooltip formatter={(value: number) => [`$${value.toFixed(6)}`, "Est. Cost"]} labelFormatter={(label) => `Model: ${label}`} />
+                          <Bar dataKey="cost" fill={theme.palette.success.main} radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </>
+              )}
             </CardContent>
           </Card>
         )}
