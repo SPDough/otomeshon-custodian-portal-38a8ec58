@@ -214,9 +214,26 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
         }
       }
 
-      // Save assistant message after streaming completes
+      // Save assistant message and token usage after streaming completes
       if (convoId && assistantSoFar) {
         saveMessage.mutate({ conversationId: convoId, role: "assistant", content: assistantSoFar });
+      }
+      if (streamUsage) {
+        const usage = {
+          prompt_tokens: streamUsage.prompt_tokens ?? 0,
+          completion_tokens: streamUsage.completion_tokens ?? 0,
+          total_tokens: streamUsage.total_tokens ?? 0,
+        };
+        setTokenUsage(usage);
+        if (convoId) {
+          updateTokenUsage.mutate({
+            conversationId: convoId,
+            agentId: agent.id,
+            promptTokens: usage.prompt_tokens,
+            completionTokens: usage.completion_tokens,
+            totalTokens: usage.total_tokens,
+          });
+        }
       }
     } catch (e: any) {
       if (e.name !== "AbortError") {
