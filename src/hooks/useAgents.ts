@@ -11,6 +11,8 @@ export interface Agent {
   persona: string;
   tools: string[];
   data_bindings: string[];
+  calculation_policies: string[];
+  rule_sets: string[];
   model: string;
   created_at: string;
   updated_at: string;

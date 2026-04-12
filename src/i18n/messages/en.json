@@ -616,5 +616,11 @@
   "agents.dataBindingsDetailDesc": "Connect this agent to data sources and live feeds.",
   "agents.addCustomTool": "Add custom tool…",
   "agents.addCustomBinding": "Add custom data binding…",
-  "agents.addButton": "Add"
+  "agents.addButton": "Add",
+  "agents.calcPoliciesTitle": "Calculation Policies",
+  "agents.calcPoliciesDesc": "Assign calculation libraries and formula sets this agent can invoke.",
+  "agents.addCustomCalc": "Add custom policy…",
+  "agents.ruleSetsTitle": "Rule Sets",
+  "agents.ruleSetsDetailDesc": "Bind business rules and validation logic to this agent's decision pipeline.",
+  "agents.addCustomRule": "Add custom rule set…"
 }

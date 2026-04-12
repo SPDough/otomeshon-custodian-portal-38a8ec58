@@ -616,5 +616,11 @@
   "agents.dataBindingsDetailDesc": "このエージェントをデータソースやライブフィードに接続します。",
   "agents.addCustomTool": "カスタムツールを追加…",
   "agents.addCustomBinding": "カスタムデータバインディングを追加…",
-  "agents.addButton": "追加"
+  "agents.addButton": "追加",
+  "agents.calcPoliciesTitle": "計算ポリシー",
+  "agents.calcPoliciesDesc": "このエージェントが呼び出せる計算ライブラリと数式セットを割り当てます。",
+  "agents.addCustomCalc": "カスタムポリシーを追加…",
+  "agents.ruleSetsTitle": "ルールセット",
+  "agents.ruleSetsDetailDesc": "ビジネスルールと検証ロジックをこのエージェントの意思決定パイプラインにバインドします。",
+  "agents.addCustomRule": "カスタムルールセットを追加…"
 }
