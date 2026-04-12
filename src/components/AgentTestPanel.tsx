@@ -188,6 +188,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             const parsed = JSON.parse(json);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) upsert(content);
+            if (parsed.usage) streamUsage = parsed.usage;
           } catch {
             buffer = line + "\n" + buffer;
             break;
@@ -207,6 +208,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             const parsed = JSON.parse(json);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) upsert(content);
+            if (parsed.usage) streamUsage = parsed.usage;
           } catch { /* ignore */ }
         }
       }
