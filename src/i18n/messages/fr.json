@@ -609,5 +609,9 @@
   "agents.deleteSuccess": "Agent supprimé",
   "agents.loading": "Chargement...",
   "agents.notFound": "Agent introuvable",
-  "agents.backToAgents": "Retour aux Agents"
+  "agents.backToAgents": "Retour aux Agents",
+  "agents.toolsTitle": "Outils",
+  "agents.toolsDesc": "Sélectionnez les outils que cet agent peut utiliser lors de l'exécution.",
+  "agents.dataBindingsTitle": "Liaisons de Données",
+  "agents.dataBindingsDetailDesc": "Connectez cet agent aux sources de données et flux en direct."
 }

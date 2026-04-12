@@ -1,0 +1,1 @@
+ALTER TABLE public.agents ADD COLUMN data_bindings text[] NOT NULL DEFAULT '{}'::text[];

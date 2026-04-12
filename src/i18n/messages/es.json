@@ -609,5 +609,9 @@
   "agents.deleteSuccess": "Agente eliminado",
   "agents.loading": "Cargando...",
   "agents.notFound": "Agente no encontrado",
-  "agents.backToAgents": "Volver a Agentes"
+  "agents.backToAgents": "Volver a Agentes",
+  "agents.toolsTitle": "Herramientas",
+  "agents.toolsDesc": "Seleccione las herramientas que este agente puede usar durante la ejecución.",
+  "agents.dataBindingsTitle": "Vinculaciones de Datos",
+  "agents.dataBindingsDetailDesc": "Conecte este agente a fuentes de datos y feeds en vivo."
 }
