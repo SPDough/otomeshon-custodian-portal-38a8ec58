@@ -39,6 +39,7 @@ const FrontOffice = lazy(() => import("./pages/FrontOffice"));
 const MiddleOffice = lazy(() => import("./pages/MiddleOffice"));
 const BackOffice = lazy(() => import("./pages/BackOffice"));
 const Agents = lazy(() => import("./pages/Agents"));
+const AgentDetail = lazy(() => import("./pages/AgentDetail"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const PlatformConfig = lazy(() => import("./pages/PlatformConfig"));
 const LayerDataCollection = lazy(() => import("./pages/platform/LayerDataCollection"));
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
           <Route path="/knowledge-graph" element={withProtection(KnowledgeGraph)} />
           <Route path="/knowledge-base" element={withProtection(KnowledgeBase)} />
           <Route path="/agents" element={withProtection(Agents)} />
+          <Route path="/agents/:id" element={withProtection(AgentDetail)} />
           <Route path="/front-office" element={withProtection(FrontOffice)} />
           <Route path="/middle-office" element={withProtection(MiddleOffice)} />
           <Route path="/back-office" element={withProtection(BackOffice)} />
