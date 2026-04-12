@@ -465,6 +465,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                         secondary={
                           <Typography variant="caption" color="text.secondary" noWrap sx={{ fontSize: "0.7rem" }}>
                             {convo.model_used} · {Number(convo.temperature_used).toFixed(1)}
+                            {convo.total_tokens > 0 && ` · ${convo.total_tokens.toLocaleString()} tok`}
                           </Typography>
                         }
                       />
