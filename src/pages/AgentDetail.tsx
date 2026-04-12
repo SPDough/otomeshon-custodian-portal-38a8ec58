@@ -559,6 +559,45 @@ const AgentDetail = () => {
           </CardContent>
         </Card>
 
+        {/* Token Usage Summary */}
+        {tokenStats.total > 0 && (
+          <Card sx={{ mb: 3 }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
+                <UsageIcon sx={{ color: theme.palette.info.main }} />
+                <Typography variant="h6" fontWeight={600}>Token Usage Summary</Typography>
+                <Chip label={`${tokenStats.count} sessions`} size="small" variant="outlined" />
+              </Box>
+              <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Total Tokens</Typography>
+                  <Typography variant="h5" fontWeight={700} color="info.main">
+                    {tokenStats.total.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Prompt Tokens</Typography>
+                  <Typography variant="h6" fontWeight={600}>
+                    {tokenStats.prompt.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Completion Tokens</Typography>
+                  <Typography variant="h6" fontWeight={600}>
+                    {tokenStats.completion.toLocaleString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Avg per Session</Typography>
+                  <Typography variant="h6" fontWeight={600}>
+                    {tokenStats.withTokens > 0 ? Math.round(tokenStats.total / tokenStats.withTokens).toLocaleString() : "—"}
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Test Panel */}
         <AgentTestPanel agent={agent} />
 
