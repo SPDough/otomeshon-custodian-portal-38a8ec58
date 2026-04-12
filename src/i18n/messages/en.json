@@ -593,5 +593,21 @@
   "agents.editAddItem": "Add new item…",
   "agents.editCancel": "Cancel",
   "agents.editSave": "Save Changes",
-  "agents.editButton": "Edit"
+  "agents.editButton": "Edit",
+
+  "sidebar.newAgent": "+ New Agent",
+  "agents.createTitle": "Create New Agent",
+  "agents.createName": "Agent Name",
+  "agents.createDescription": "Description",
+  "agents.createPersona": "Persona",
+  "agents.createPersonaPlaceholder": "e.g. You are a portfolio analyst specializing in...",
+  "agents.createModel": "Model",
+  "agents.createSave": "Create Agent",
+  "agents.statusEnabled": "Enabled",
+  "agents.statusDisabled": "Disabled",
+  "agents.deleteAgent": "Delete Agent",
+  "agents.deleteSuccess": "Agent deleted",
+  "agents.loading": "Loading...",
+  "agents.notFound": "Agent not found",
+  "agents.backToAgents": "Back to Agents"
 }
