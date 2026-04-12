@@ -19,6 +19,18 @@ import { useAgents, type Agent } from "@/hooks/useAgents";
 import { useAgentTestConversations } from "@/hooks/useAgentTestHistory";
 import AgentTestPanel from "@/components/AgentTestPanel";
 
+// Pricing per 1M tokens (USD) — approximate rates
+const MODEL_PRICING: Record<string, { prompt: number; completion: number }> = {
+  "gemini-2.5-flash":       { prompt: 0.15, completion: 0.60 },
+  "gemini-2.5-pro":         { prompt: 1.25, completion: 5.00 },
+  "gemini-3-flash-preview": { prompt: 0.15, completion: 0.60 },
+  "gemini-3.1-pro-preview": { prompt: 1.25, completion: 5.00 },
+  "gpt-5-mini":             { prompt: 1.50, completion: 6.00 },
+  "gpt-5":                  { prompt: 5.00, completion: 15.00 },
+  "gpt-5-nano":             { prompt: 0.50, completion: 2.00 },
+};
+const DEFAULT_PRICING = { prompt: 0.50, completion: 2.00 };
+
 const MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gpt-5-mini", "gpt-5"];
 
 const AVAILABLE_TOOLS = [
