@@ -727,6 +727,103 @@ const AgentDetail = () => {
           </Card>
         )}
 
+        {/* Budget Alert Banner */}
+        {budgetExceeded && (
+          <Box
+            sx={{
+              mb: 3, p: 2, borderRadius: 2, display: "flex", alignItems: "center", gap: 1.5,
+              bgcolor: alpha(theme.palette.warning.main, 0.1),
+              border: `1px solid ${alpha(theme.palette.warning.main, 0.4)}`,
+            }}
+          >
+            <WarningIcon sx={{ color: theme.palette.warning.main }} />
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle2" fontWeight={600} color="warning.main">
+                Token Budget Exceeded
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {budgetPeriod === "daily" ? "Today's" : "This week's"} usage is{" "}
+                <strong>{periodUsage.toLocaleString()}</strong> tokens — {budgetPercent}% of your{" "}
+                {budgetThreshold.toLocaleString()} token {budgetPeriod} budget.
+              </Typography>
+            </Box>
+          </Box>
+        )}
+
+        {/* Token Budget Config */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 3 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
+              <AlertIcon sx={{ color: theme.palette.warning.main }} />
+              <Typography variant="h6" fontWeight={600}>Token Budget Alert</Typography>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={budgetEnabled}
+                    onChange={(e) => { setBudgetEnabled(e.target.checked); setBudgetDirty(true); }}
+                    size="small"
+                  />
+                }
+                label={budgetEnabled ? "Active" : "Disabled"}
+                sx={{ ml: "auto" }}
+              />
+            </Box>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-end", flexWrap: "wrap" }}>
+              <TextField
+                select
+                size="small"
+                label="Period"
+                value={budgetPeriod}
+                onChange={(e) => { setBudgetPeriod(e.target.value as "daily" | "weekly"); setBudgetDirty(true); }}
+                sx={{ minWidth: 130 }}
+              >
+                <MenuItem value="daily">Daily</MenuItem>
+                <MenuItem value="weekly">Weekly</MenuItem>
+              </TextField>
+              <TextField
+                size="small"
+                label="Token Threshold"
+                type="number"
+                value={budgetThreshold}
+                onChange={(e) => { setBudgetThreshold(Math.max(1, Number(e.target.value) || 1)); setBudgetDirty(true); }}
+                inputProps={{ min: 1 }}
+                sx={{ width: 160 }}
+              />
+              <Box sx={{ flex: 1, minWidth: 200 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Current {budgetPeriod} usage: <strong>{periodUsage.toLocaleString()}</strong> / {budgetThreshold.toLocaleString()} tokens ({budgetPercent}%)
+                </Typography>
+                <Box
+                  sx={{
+                    mt: 0.5, height: 8, borderRadius: 4, bgcolor: alpha(theme.palette.text.primary, 0.08),
+                    overflow: "hidden",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      height: "100%", borderRadius: 4, transition: "width 0.3s",
+                      width: `${budgetPercent}%`,
+                      bgcolor: budgetPercent >= 100
+                        ? theme.palette.error.main
+                        : budgetPercent >= 75
+                          ? theme.palette.warning.main
+                          : theme.palette.success.main,
+                    }}
+                  />
+                </Box>
+              </Box>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={saveBudget}
+                disabled={!budgetDirty}
+              >
+                Save
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+
         {/* Test Panel */}
         <AgentTestPanel agent={agent} />
 
