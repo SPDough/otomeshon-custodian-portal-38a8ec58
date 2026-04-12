@@ -15,7 +15,9 @@ import { toast } from "sonner";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import AgentModuleEditDialog from "@/components/AgentModuleEditDialog";
+import CreateAgentDialog from "@/components/CreateAgentDialog";
 import { useAgentModules, type AgentModuleStatus, type AgentModule } from "@/hooks/useAgentModules";
+import { useAgents } from "@/hooks/useAgents";
 import type { ReactNode } from "react";
 
 const statusConfig: Record<AgentModuleStatus, { colorKey: "success" | "info" | "warning"; labelId: string }> = {
