@@ -3,7 +3,8 @@ import { useIntl } from "react-intl";
 import { motion } from "framer-motion";
 import {
   Container, Typography, Box, Card, CardContent, Chip, alpha, useTheme,
-  TextField, MenuItem, Button, IconButton, Tooltip, Divider,
+  TextField, MenuItem, Button, IconButton, Tooltip, Divider, Slider,
+  FormControlLabel, Switch,
 } from "@mui/material";
 import {
   ArrowBack, Delete as DeleteIcon, SmartToy as AgentIcon,
@@ -62,11 +63,16 @@ const AgentDetail = () => {
   const [calcPolicies, setCalcPolicies] = useState<string[]>([]);
   const [ruleSets, setRuleSets] = useState<string[]>([]);
   const [workflows, setWorkflows] = useState<string[]>([]);
+  const [temperature, setTemperature] = useState(0.7);
+  const [maxTokens, setMaxTokens] = useState(4096);
+  const [guardrails, setGuardrails] = useState<string[]>([]);
+  const [loggingEnabled, setLoggingEnabled] = useState(true);
   const [newTool, setNewTool] = useState("");
   const [newBinding, setNewBinding] = useState("");
   const [newCalc, setNewCalc] = useState("");
   const [newRule, setNewRule] = useState("");
   const [newWorkflow, setNewWorkflow] = useState("");
+  const [newGuardrail, setNewGuardrail] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -81,6 +87,10 @@ const AgentDetail = () => {
       setCalcPolicies(agent.calculation_policies ?? []);
       setRuleSets(agent.rule_sets ?? []);
       setWorkflows(agent.workflows ?? []);
+      setTemperature(agent.temperature ?? 0.7);
+      setMaxTokens(agent.max_tokens ?? 4096);
+      setGuardrails(agent.guardrails ?? []);
+      setLoggingEnabled(agent.logging_enabled ?? true);
       setDirty(false);
     }
   }, [agent]);
@@ -88,7 +98,7 @@ const AgentDetail = () => {
   const handleSave = () => {
     if (!agent || !name.trim()) return;
     updateAgent.mutate(
-      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets, workflows },
+      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets, workflows, temperature, max_tokens: maxTokens, guardrails, logging_enabled: loggingEnabled },
       {
         onSuccess: () => { toast.success(fm("agents.editSave")); setDirty(false); },
         onError: () => toast.error("Save failed"),
