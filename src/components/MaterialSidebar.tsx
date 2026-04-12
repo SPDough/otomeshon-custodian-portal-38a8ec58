@@ -35,10 +35,10 @@ interface NavSection {
 
 const navSections: NavSection[] = [
   {
-    titleId: "sidebar.overview",
+    titleId: "sidebar.dashboard",
     defaultOpen: true,
     items: [
-      { id: "dashboard", nameId: "sidebar.dashboard", icon: <DashboardIcon fontSize="small" />, path: "/dashboard" },
+      { id: "dashboard", nameId: "sidebar.dashboardOverview", icon: <DashboardIcon fontSize="small" />, path: "/dashboard" },
     ],
   },
   {
