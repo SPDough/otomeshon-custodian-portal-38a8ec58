@@ -92,7 +92,20 @@ const AgentDetail = () => {
     return { total, prompt, completion, count, withTokens, estimatedCost };
   }, [conversations]);
 
-  const [name, setName] = useState("");
+  const modelBreakdown = useMemo(() => {
+    const map = new Map<string, { model: string; prompt: number; completion: number; sessions: number; cost: number }>();
+    for (const c of conversations) {
+      if ((c.total_tokens ?? 0) === 0) continue;
+      const existing = map.get(c.model_used) ?? { model: c.model_used, prompt: 0, completion: 0, sessions: 0, cost: 0 };
+      const pricing = MODEL_PRICING[c.model_used] ?? DEFAULT_PRICING;
+      existing.prompt += c.prompt_tokens ?? 0;
+      existing.completion += c.completion_tokens ?? 0;
+      existing.sessions += 1;
+      existing.cost += ((c.prompt_tokens ?? 0) / 1_000_000) * pricing.prompt + ((c.completion_tokens ?? 0) / 1_000_000) * pricing.completion;
+      map.set(c.model_used, existing);
+    }
+    return Array.from(map.values()).sort((a, b) => (b.prompt + b.completion) - (a.prompt + a.completion));
+  }, [conversations]);
   const [description, setDescription] = useState("");
   const [persona, setPersona] = useState("");
   const [model, setModel] = useState("gemini-2.5-flash");
