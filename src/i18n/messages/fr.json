@@ -550,6 +550,7 @@
   "breadcrumb.agents": "Agents",
 
   "sidebar.agents": "Agents",
+  "sidebar.agentsOverview": "Aperçu",
 
   "agents.chip": "IA Agentique",
   "agents.title": "Configuration des Agents",
