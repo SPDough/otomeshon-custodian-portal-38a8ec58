@@ -1,11 +1,22 @@
 import { useState, useRef, useCallback } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
+  Select, MenuItem, FormControl, InputLabel,
 } from "@mui/material";
 import { Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import type { Agent } from "@/hooks/useAgents";
+
+const AVAILABLE_MODELS = [
+  { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+  { value: "gemini-2.5-pro", label: "Gemini 2.5 Pro" },
+  { value: "gemini-3-flash-preview", label: "Gemini 3 Flash" },
+  { value: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro" },
+  { value: "gpt-5-mini", label: "GPT-5 Mini" },
+  { value: "gpt-5", label: "GPT-5" },
+  { value: "gpt-5-nano", label: "GPT-5 Nano" },
+];
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -20,6 +31,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [overrideModel, setOverrideModel] = useState<string>("");
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -68,7 +80,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
           messages: allMessages.map(({ role, content }) => ({ role, content })),
           agentConfig: {
             persona: agent.persona,
-            model: agent.model,
+            model: overrideModel || agent.model,
             temperature: agent.temperature,
             max_tokens: agent.max_tokens,
             guardrails: agent.guardrails,
@@ -151,11 +163,22 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     <Card>
       <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
         {/* Header */}
-        <Box sx={{ px: 3, py: 2, borderBottom: 1, borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Box>
+        <Box sx={{ px: 3, py: 2, borderBottom: 1, borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
             <Typography variant="h6" fontWeight={600}>Test Agent</Typography>
-            <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
-              <Chip label={agent.model || "gemini-2.5-flash"} size="small" variant="outlined" />
+            <FormControl size="small" sx={{ minWidth: 180 }}>
+              <InputLabel>Model</InputLabel>
+              <Select
+                value={overrideModel || agent.model || "gemini-2.5-flash"}
+                label="Model"
+                onChange={(e) => setOverrideModel(e.target.value)}
+              >
+                {AVAILABLE_MODELS.map((m) => (
+                  <MenuItem key={m.value} value={m.value}>{m.label}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box sx={{ display: "flex", gap: 1 }}>
               <Chip label={`temp ${agent.temperature?.toFixed(2) ?? "0.70"}`} size="small" variant="outlined" />
               <Chip label={`${agent.max_tokens ?? 4096} tokens`} size="small" variant="outlined" />
               {agent.guardrails?.length > 0 && (
