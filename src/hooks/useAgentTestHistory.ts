@@ -120,6 +120,40 @@ export function useSaveTestMessage() {
   });
 }
 
+export function useUpdateTokenUsage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      conversationId,
+      agentId,
+      promptTokens,
+      completionTokens,
+      totalTokens,
+    }: {
+      conversationId: string;
+      agentId: string;
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+    }) => {
+      const { error } = await supabase
+        .from("agent_test_conversations")
+        .update({
+          prompt_tokens: promptTokens,
+          completion_tokens: completionTokens,
+          total_tokens: totalTokens,
+        })
+        .eq("id", conversationId);
+      if (error) throw error;
+      return { conversationId, agentId };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["agent-test-conversations", data.agentId] });
+    },
+  });
+}
+
 export function useDeleteTestConversation() {
   const queryClient = useQueryClient();
 
