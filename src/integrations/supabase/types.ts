@@ -56,12 +56,16 @@ export type Database = {
           created_at: string
           data_bindings: string[]
           description: string | null
+          guardrails: string[]
           id: string
+          logging_enabled: boolean
+          max_tokens: number
           model: string | null
           name: string
           persona: string | null
           rule_sets: string[]
           status: string
+          temperature: number
           tools: string[]
           updated_at: string
           user_id: string
@@ -72,12 +76,16 @@ export type Database = {
           created_at?: string
           data_bindings?: string[]
           description?: string | null
+          guardrails?: string[]
           id?: string
+          logging_enabled?: boolean
+          max_tokens?: number
           model?: string | null
           name: string
           persona?: string | null
           rule_sets?: string[]
           status?: string
+          temperature?: number
           tools?: string[]
           updated_at?: string
           user_id: string
@@ -88,12 +96,16 @@ export type Database = {
           created_at?: string
           data_bindings?: string[]
           description?: string | null
+          guardrails?: string[]
           id?: string
+          logging_enabled?: boolean
+          max_tokens?: number
           model?: string | null
           name?: string
           persona?: string | null
           rule_sets?: string[]
           status?: string
+          temperature?: number
           tools?: string[]
           updated_at?: string
           user_id?: string
