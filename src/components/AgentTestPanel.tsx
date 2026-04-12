@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
   Select, MenuItem, FormControl, InputLabel, Slider, Tooltip, List, ListItemButton,
-  ListItemText, ListItemIcon, Divider,
+  ListItemText, ListItemIcon, Divider, Menu,
 } from "@mui/material";
 import {
   Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon,
