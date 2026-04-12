@@ -110,6 +110,42 @@ const AgentDetail = () => {
     return Array.from(map.values()).sort((a, b) => (b.prompt + b.completion) - (a.prompt + a.completion));
   }, [conversations]);
 
+  // Token budget
+  const { data: budget } = useTokenBudget(id ?? "");
+  const upsertBudget = useUpsertTokenBudget();
+  const [budgetPeriod, setBudgetPeriod] = useState<"daily" | "weekly">("daily");
+  const [budgetThreshold, setBudgetThreshold] = useState(10000);
+  const [budgetEnabled, setBudgetEnabled] = useState(true);
+  const [budgetDirty, setBudgetDirty] = useState(false);
+
+  useEffect(() => {
+    if (budget) {
+      setBudgetPeriod(budget.period);
+      setBudgetThreshold(budget.threshold);
+      setBudgetEnabled(budget.enabled);
+      setBudgetDirty(false);
+    }
+  }, [budget]);
+
+  const periodUsage = useMemo(() => {
+    const now = new Date();
+    const periodStart = budgetPeriod === "daily" ? startOfDay(now) : startOfWeek(now, { weekStartsOn: 1 });
+    return conversations
+      .filter((c) => (c.total_tokens ?? 0) > 0 && isAfter(new Date(c.created_at), periodStart))
+      .reduce((s, c) => s + (c.total_tokens ?? 0), 0);
+  }, [conversations, budgetPeriod]);
+
+  const budgetExceeded = budgetEnabled && budget && periodUsage > budgetThreshold;
+  const budgetPercent = budgetThreshold > 0 ? Math.min(100, Math.round((periodUsage / budgetThreshold) * 100)) : 0;
+
+  const saveBudget = () => {
+    if (!id) return;
+    upsertBudget.mutate(
+      { agentId: id, period: budgetPeriod, threshold: budgetThreshold, enabled: budgetEnabled },
+      { onSuccess: () => { toast.success("Budget alert saved."); setBudgetDirty(false); } },
+    );
+  };
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [persona, setPersona] = useState("");
