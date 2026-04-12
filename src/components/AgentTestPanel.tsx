@@ -7,7 +7,7 @@ import {
 import {
   Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon,
   History as HistoryIcon, Add as AddIcon, Delete as DeleteIcon,
-  ChatBubbleOutline as ChatIcon,
+  ChatBubbleOutline as ChatIcon, Search as SearchIcon,
 } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
@@ -48,6 +48,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const [overrideTemp, setOverrideTemp] = useState<number | null>(null);
   const [activeConvoId, setActiveConvoId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [historySearch, setHistorySearch] = useState("");
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -245,6 +246,16 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     return format(new Date(convo.created_at), "MMM d, h:mm a");
   };
 
+  const filteredConversations = conversations.filter((convo) => {
+    if (!historySearch.trim()) return true;
+    const q = historySearch.toLowerCase();
+    return (
+      convo.model_used.toLowerCase().includes(q) ||
+      getConvoPreview(convo).toLowerCase().includes(q) ||
+      String(convo.temperature_used).includes(q)
+    );
+  });
+
   return (
     <Card>
       <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
@@ -321,15 +332,28 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 flexShrink: 0,
               }}
             >
-              {conversations.length === 0 ? (
+              <Box sx={{ p: 1, borderBottom: 1, borderColor: "divider" }}>
+                <TextField
+                  size="small"
+                  fullWidth
+                  placeholder="Search history..."
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                  InputProps={{
+                    startAdornment: <SearchIcon sx={{ fontSize: 16, mr: 0.5, color: "text.disabled" }} />,
+                  }}
+                  sx={{ "& .MuiInputBase-root": { fontSize: "0.75rem", py: 0.25 } }}
+                />
+              </Box>
+              {filteredConversations.length === 0 ? (
                 <Box sx={{ p: 2, textAlign: "center" }}>
                   <Typography variant="caption" color="text.secondary">
-                    No saved conversations yet.
+                    {conversations.length === 0 ? "No saved conversations yet." : "No matching conversations."}
                   </Typography>
                 </Box>
               ) : (
                 <List dense disablePadding>
-                  {conversations.map((convo) => (
+                  {filteredConversations.map((convo) => (
                     <ListItemButton
                       key={convo.id}
                       selected={activeConvoId === convo.id}
