@@ -342,6 +342,17 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
             </Box>
           </Box>
           <Box sx={{ display: "flex", gap: 0.5 }}>
+            <Tooltip title="Export conversation">
+              <span>
+                <IconButton size="small" onClick={(e) => setExportAnchor(e.currentTarget)} disabled={messages.length === 0}>
+                  <DownloadIcon fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Menu anchorEl={exportAnchor} open={Boolean(exportAnchor)} onClose={() => setExportAnchor(null)}>
+              <MenuItem onClick={exportAsJson}>Export as JSON</MenuItem>
+              <MenuItem onClick={exportAsMarkdown}>Export as Markdown</MenuItem>
+            </Menu>
             <Tooltip title="Conversation history">
               <IconButton size="small" onClick={() => setShowHistory((s) => !s)}>
                 <HistoryIcon fontSize="small" color={showHistory ? "primary" : "inherit"} />
