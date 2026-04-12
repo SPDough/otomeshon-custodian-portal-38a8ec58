@@ -80,7 +80,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
           messages: allMessages.map(({ role, content }) => ({ role, content })),
           agentConfig: {
             persona: agent.persona,
-            model: agent.model,
+            model: overrideModel || agent.model,
             temperature: agent.temperature,
             max_tokens: agent.max_tokens,
             guardrails: agent.guardrails,
