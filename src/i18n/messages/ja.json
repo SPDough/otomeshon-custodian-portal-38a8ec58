@@ -550,6 +550,7 @@
   "breadcrumb.agents": "エージェント",
 
   "sidebar.agents": "エージェント",
+  "sidebar.agentsOverview": "概要",
 
   "agents.chip": "エージェントAI",
   "agents.title": "エージェント設定",
