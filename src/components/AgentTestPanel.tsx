@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import {
   Box, Card, CardContent, Typography, TextField, IconButton, alpha, useTheme, Chip,
-  Select, MenuItem, FormControl, InputLabel,
+  Select, MenuItem, FormControl, InputLabel, Slider, Tooltip,
 } from "@mui/material";
 import { Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
@@ -32,6 +32,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [overrideModel, setOverrideModel] = useState<string>("");
+  const [overrideTemp, setOverrideTemp] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -81,7 +82,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
           agentConfig: {
             persona: agent.persona,
             model: overrideModel || agent.model,
-            temperature: agent.temperature,
+            temperature: overrideTemp ?? agent.temperature,
             max_tokens: agent.max_tokens,
             guardrails: agent.guardrails,
           },
@@ -178,8 +179,25 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 ))}
               </Select>
             </FormControl>
+            <Tooltip title="Temperature override" placement="top">
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 160 }}>
+                <Typography variant="caption" color="text.secondary" noWrap>Temp</Typography>
+                <Slider
+                  size="small"
+                  value={overrideTemp ?? agent.temperature ?? 0.7}
+                  onChange={(_, v) => setOverrideTemp(v as number)}
+                  min={0}
+                  max={2}
+                  step={0.05}
+                  valueLabelDisplay="auto"
+                  sx={{ flex: 1 }}
+                />
+                <Typography variant="caption" fontWeight={600} sx={{ minWidth: 28, textAlign: "right" }}>
+                  {(overrideTemp ?? agent.temperature ?? 0.7).toFixed(2)}
+                </Typography>
+              </Box>
+            </Tooltip>
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Chip label={`temp ${agent.temperature?.toFixed(2) ?? "0.70"}`} size="small" variant="outlined" />
               <Chip label={`${agent.max_tokens ?? 4096} tokens`} size="small" variant="outlined" />
               {agent.guardrails?.length > 0 && (
                 <Chip label={`${agent.guardrails.length} guardrail${agent.guardrails.length > 1 ? "s" : ""}`} size="small" color="warning" variant="outlined" />
