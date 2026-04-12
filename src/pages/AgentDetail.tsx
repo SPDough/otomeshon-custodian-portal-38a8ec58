@@ -37,6 +37,11 @@ const AVAILABLE_RULE_SETS = [
   "Compliance Screening", "Margin Requirements", "Counterparty Exposure",
 ];
 
+const AVAILABLE_WORKFLOWS = [
+  "Trade Settlement", "Corporate Actions", "Reconciliation", "Client Onboarding",
+  "NAV Calculation Pipeline", "Regulatory Filing", "Rebalancing",
+];
+
 const AgentDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -56,10 +61,12 @@ const AgentDetail = () => {
   const [dataBindings, setDataBindings] = useState<string[]>([]);
   const [calcPolicies, setCalcPolicies] = useState<string[]>([]);
   const [ruleSets, setRuleSets] = useState<string[]>([]);
+  const [workflows, setWorkflows] = useState<string[]>([]);
   const [newTool, setNewTool] = useState("");
   const [newBinding, setNewBinding] = useState("");
   const [newCalc, setNewCalc] = useState("");
   const [newRule, setNewRule] = useState("");
+  const [newWorkflow, setNewWorkflow] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -73,6 +80,7 @@ const AgentDetail = () => {
       setDataBindings(agent.data_bindings ?? []);
       setCalcPolicies(agent.calculation_policies ?? []);
       setRuleSets(agent.rule_sets ?? []);
+      setWorkflows(agent.workflows ?? []);
       setDirty(false);
     }
   }, [agent]);
@@ -80,7 +88,7 @@ const AgentDetail = () => {
   const handleSave = () => {
     if (!agent || !name.trim()) return;
     updateAgent.mutate(
-      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets },
+      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets, workflows },
       {
         onSuccess: () => { toast.success(fm("agents.editSave")); setDirty(false); },
         onError: () => toast.error("Save failed"),
@@ -412,6 +420,42 @@ const AgentDetail = () => {
               <Button variant="outlined" size="small" startIcon={<AddIcon />}
                 onClick={() => addCustomItem(newRule, ruleSets, setRuleSets, setNewRule)}
                 disabled={!newRule.trim()}>{fm("agents.addButton")}</Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Workflow Orchestration */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.workflowsTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {fm("agents.workflowsDetailDesc")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+              {AVAILABLE_WORKFLOWS.map((w) => {
+                const selected = workflows.includes(w);
+                return (
+                  <Chip key={w} label={w} onClick={() => toggleChip(w, workflows, setWorkflows)}
+                    color={selected ? "primary" : "default"} variant={selected ? "filled" : "outlined"}
+                    sx={{ fontWeight: selected ? 600 : 400 }} />
+                );
+              })}
+              {workflows.filter((w) => !AVAILABLE_WORKFLOWS.includes(w)).map((w) => (
+                <Chip key={w} label={w} color="primary"
+                  onDelete={() => { setWorkflows(workflows.filter((v) => v !== w)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }} />
+              ))}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField size="small" placeholder={fm("agents.addCustomWorkflow")} value={newWorkflow}
+                onChange={(e) => setNewWorkflow(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newWorkflow, workflows, setWorkflows, setNewWorkflow); } }}
+                inputProps={{ maxLength: 60 }} sx={{ flex: 1 }} />
+              <Button variant="outlined" size="small" startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newWorkflow, workflows, setWorkflows, setNewWorkflow)}
+                disabled={!newWorkflow.trim()}>{fm("agents.addButton")}</Button>
             </Box>
           </CardContent>
         </Card>
