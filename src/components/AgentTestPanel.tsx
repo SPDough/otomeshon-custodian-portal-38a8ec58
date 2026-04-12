@@ -7,7 +7,7 @@ import {
 import {
   Send as SendIcon, Stop as StopIcon, DeleteSweep as ClearIcon,
   History as HistoryIcon, Add as AddIcon, Delete as DeleteIcon,
-  ChatBubbleOutline as ChatIcon,
+  ChatBubbleOutline as ChatIcon, Search as SearchIcon,
 } from "@mui/icons-material";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
