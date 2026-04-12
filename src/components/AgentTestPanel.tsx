@@ -244,7 +244,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [input, isLoading, messages, agent, activeConvoId, activeModel, activeTemp, createConvo, saveMessage]);
+  }, [input, isLoading, messages, agent, activeConvoId, activeModel, activeTemp, createConvo, saveMessage, updateTokenUsage]);
 
   const stop = () => abortRef.current?.abort();
 
@@ -252,6 +252,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     setMessages([]);
     setInput("");
     setActiveConvoId(null);
+    setTokenUsage(null);
   };
 
   const loadConversation = (id: string) => {
