@@ -3,7 +3,7 @@ import { useIntl } from "react-intl";
 import { motion } from "framer-motion";
 import {
   Container, Typography, Box, Card, CardContent, alpha, Chip, useTheme,
-  LinearProgress, Divider,
+  LinearProgress, Divider, Skeleton,
 } from "@mui/material";
 import {
   SmartToy as AgentIcon, Storage as DataIcon, Calculate as CalcIcon,
@@ -12,89 +12,39 @@ import {
 } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
+import { useAgentModules, type AgentModuleStatus } from "@/hooks/useAgentModules";
+import type { ReactNode } from "react";
 
-type FeatureStatus = "active" | "configured" | "needsSetup";
-
-const statusConfig: Record<FeatureStatus, { colorKey: "success" | "info" | "warning"; labelId: string }> = {
-  active:     { colorKey: "success", labelId: "agents.statusActive" },
-  configured: { colorKey: "info",    labelId: "agents.statusConfigured" },
-  needsSetup: { colorKey: "warning", labelId: "agents.statusNeedsSetup" },
+const statusConfig: Record<AgentModuleStatus, { colorKey: "success" | "info" | "warning"; labelId: string }> = {
+  active:      { colorKey: "success", labelId: "agents.statusActive" },
+  configured:  { colorKey: "info",    labelId: "agents.statusConfigured" },
+  needs_setup: { colorKey: "warning", labelId: "agents.statusNeedsSetup" },
 };
+
+interface ModuleMeta {
+  key: string;
+  titleId: string;
+  descId: string;
+  icon: ReactNode;
+  colorKey: "primary" | "info" | "success" | "warning" | "secondary" | "error";
+  path: string;
+}
+
+const MODULE_META: ModuleMeta[] = [
+  { key: "agentBuilder",         titleId: "agents.agentBuilder",         descId: "agents.agentBuilderDesc",         icon: <AgentIcon />,    colorKey: "primary",   path: "/platform-config/layer-4" },
+  { key: "dataBindings",         titleId: "agents.dataBindings",         descId: "agents.dataBindingsDesc",         icon: <DataIcon />,     colorKey: "info",      path: "/platform-config/layer-0" },
+  { key: "calculationPolicies",  titleId: "agents.calculationPolicies",  descId: "agents.calculationPoliciesDesc",  icon: <CalcIcon />,     colorKey: "success",   path: "/platform-config/layer-2" },
+  { key: "ruleSets",             titleId: "agents.ruleSets",             descId: "agents.ruleSetsDesc",             icon: <RulesIcon />,    colorKey: "warning",   path: "/platform-config/layer-3" },
+  { key: "workflowOrchestration",titleId: "agents.workflowOrchestration",descId: "agents.workflowOrchestrationDesc",icon: <WorkflowIcon />, colorKey: "secondary", path: "/platform-config/layer-6" },
+  { key: "agentConfig",          titleId: "agents.agentConfig",          descId: "agents.agentConfigDesc",          icon: <ConfigIcon />,   colorKey: "error",     path: "/workflow-config" },
+];
 
 const Agents = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const intl = useIntl();
   const fm = (id: string) => intl.formatMessage({ id });
-
-  const features = [
-    {
-      title: fm("agents.agentBuilder"),
-      description: fm("agents.agentBuilderDesc"),
-      icon: <AgentIcon />,
-      stats: fm("agents.agentBuilderStats"),
-      color: theme.palette.primary.main,
-      path: "/platform-config/layer-4",
-      status: "active" as FeatureStatus,
-      progress: 80,
-      itemsId: "agents.agentBuilderItems",
-    },
-    {
-      title: fm("agents.dataBindings"),
-      description: fm("agents.dataBindingsDesc"),
-      icon: <DataIcon />,
-      stats: fm("agents.dataBindingsStats"),
-      color: theme.palette.info.main,
-      path: "/platform-config/layer-0",
-      status: "configured" as FeatureStatus,
-      progress: 100,
-      itemsId: "agents.dataBindingsItems",
-    },
-    {
-      title: fm("agents.calculationPolicies"),
-      description: fm("agents.calculationPoliciesDesc"),
-      icon: <CalcIcon />,
-      stats: fm("agents.calculationPoliciesStats"),
-      color: theme.palette.success.main,
-      path: "/platform-config/layer-2",
-      status: "configured" as FeatureStatus,
-      progress: 100,
-      itemsId: "agents.calculationPoliciesItems",
-    },
-    {
-      title: fm("agents.ruleSets"),
-      description: fm("agents.ruleSetsDesc"),
-      icon: <RulesIcon />,
-      stats: fm("agents.ruleSetsStats"),
-      color: theme.palette.warning.main,
-      path: "/platform-config/layer-3",
-      status: "active" as FeatureStatus,
-      progress: 65,
-      itemsId: "agents.ruleSetsItems",
-    },
-    {
-      title: fm("agents.workflowOrchestration"),
-      description: fm("agents.workflowOrchestrationDesc"),
-      icon: <WorkflowIcon />,
-      stats: fm("agents.workflowOrchestrationStats"),
-      color: theme.palette.secondary.main,
-      path: "/platform-config/layer-6",
-      status: "active" as FeatureStatus,
-      progress: 50,
-      itemsId: "agents.workflowOrchestrationItems",
-    },
-    {
-      title: fm("agents.agentConfig"),
-      description: fm("agents.agentConfigDesc"),
-      icon: <ConfigIcon />,
-      stats: fm("agents.agentConfigStats"),
-      color: theme.palette.error.main,
-      path: "/workflow-config",
-      status: "needsSetup" as FeatureStatus,
-      progress: 25,
-      itemsId: "agents.agentConfigItems",
-    },
-  ];
+  const { modules, isLoading } = useAgentModules();
 
   return (
     <AnimatedPage>
@@ -123,13 +73,34 @@ const Agents = () => {
 
         <motion.div variants={staggerContainer} initial="initial" animate="animate">
           <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 3 }}>
-            {features.map((feature) => {
-              const sc = statusConfig[feature.status];
+            {MODULE_META.map((meta) => {
+              const mod = modules.find((m) => m.module_key === meta.key);
+              const color = theme.palette[meta.colorKey].main;
+
+              if (isLoading) {
+                return (
+                  <motion.div key={meta.key} variants={fadeInUp}>
+                    <Card sx={{ height: 280, p: 3 }}>
+                      <Skeleton variant="rounded" width={48} height={48} sx={{ mb: 2 }} />
+                      <Skeleton width="60%" height={28} sx={{ mb: 1 }} />
+                      <Skeleton width="100%" height={16} />
+                      <Skeleton width="80%" height={16} sx={{ mb: 2 }} />
+                      <Skeleton variant="rounded" width="100%" height={4} sx={{ mb: 2 }} />
+                      <Skeleton width="100%" height={60} />
+                    </Card>
+                  </motion.div>
+                );
+              }
+
+              const status: AgentModuleStatus = mod?.status ?? "needs_setup";
+              const progress = mod?.progress ?? 0;
+              const items = mod?.configured_items ?? [];
+              const statsLabel = mod?.stats_label ?? "";
+              const sc = statusConfig[status];
               const statusColor = theme.palette[sc.colorKey].main;
-              const items = fm(feature.itemsId).split(", ");
 
               return (
-                <motion.div key={feature.title} variants={fadeInUp}>
+                <motion.div key={meta.key} variants={fadeInUp}>
                   <Card
                     sx={{
                       height: "100%",
@@ -137,20 +108,20 @@ const Agents = () => {
                       position: "relative",
                       overflow: "hidden",
                       "&:hover": {
-                        boxShadow: `0 8px 30px ${alpha(feature.color, 0.15)}`,
+                        boxShadow: `0 8px 30px ${alpha(color, 0.15)}`,
                         transform: "translateY(-4px)",
                         "& .arrow-icon": { transform: "translateX(4px)", opacity: 1 },
                       },
                       transition: "all 0.3s ease",
                     }}
-                    onClick={() => navigate(feature.path)}
+                    onClick={() => navigate(meta.path)}
                   >
-                    <Box sx={{ position: "absolute", top: 0, left: 0, width: 4, height: "100%", bgcolor: feature.color }} />
+                    <Box sx={{ position: "absolute", top: 0, left: 0, width: 4, height: "100%", bgcolor: color }} />
                     <CardContent sx={{ p: 3, pl: 4 }}>
-                      {/* Header row */}
+                      {/* Header */}
                       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
-                        <Box sx={{ display: "inline-flex", p: 1.5, borderRadius: 2, bgcolor: alpha(feature.color, 0.1), color: feature.color }}>
-                          {feature.icon}
+                        <Box sx={{ display: "inline-flex", p: 1.5, borderRadius: 2, bgcolor: alpha(color, 0.1), color }}>
+                          {meta.icon}
                         </Box>
                         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                           <Chip
@@ -165,58 +136,59 @@ const Agents = () => {
                               "& .MuiChip-icon": { color: statusColor },
                             }}
                           />
-                          <Chip label={feature.stats} size="small" variant="outlined" sx={{ borderColor: "divider" }} />
+                          {statsLabel && (
+                            <Chip label={statsLabel} size="small" variant="outlined" sx={{ borderColor: "divider" }} />
+                          )}
                         </Box>
                       </Box>
 
                       {/* Title & description */}
-                      <Typography variant="h6" sx={{ fontWeight: 500, mb: 1 }}>{feature.title}</Typography>
+                      <Typography variant="h6" sx={{ fontWeight: 500, mb: 1 }}>{fm(meta.titleId)}</Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.6 }}>
-                        {feature.description}
+                        {fm(meta.descId)}
                       </Typography>
 
-                      {/* Progress bar */}
+                      {/* Progress */}
                       <Box sx={{ mb: 2 }}>
                         <LinearProgress
                           variant="determinate"
-                          value={feature.progress}
+                          value={progress}
                           sx={{
                             height: 4,
                             borderRadius: 2,
-                            bgcolor: alpha(feature.color, 0.1),
-                            "& .MuiLinearProgress-bar": {
-                              borderRadius: 2,
-                              bgcolor: feature.color,
-                            },
+                            bgcolor: alpha(color, 0.1),
+                            "& .MuiLinearProgress-bar": { borderRadius: 2, bgcolor: color },
                           }}
                         />
                       </Box>
 
                       {/* Configured items */}
-                      <Divider sx={{ mb: 1.5 }} />
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 2 }}>
-                        {items.map((item) => (
-                          <Box
-                            key={item}
-                            sx={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: 0.5,
-                              px: 1,
-                              py: 0.25,
-                              borderRadius: 1,
-                              bgcolor: alpha(feature.color, 0.05),
-                            }}
-                          >
-                            <Circle sx={{ fontSize: 6, color: feature.color }} />
-                            <Typography variant="caption" color="text.secondary">
-                              {item}
-                            </Typography>
+                      {items.length > 0 && (
+                        <>
+                          <Divider sx={{ mb: 1.5 }} />
+                          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 2 }}>
+                            {items.map((item) => (
+                              <Box
+                                key={item}
+                                sx={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 0.5,
+                                  px: 1,
+                                  py: 0.25,
+                                  borderRadius: 1,
+                                  bgcolor: alpha(color, 0.05),
+                                }}
+                              >
+                                <Circle sx={{ fontSize: 6, color }} />
+                                <Typography variant="caption" color="text.secondary">{item}</Typography>
+                              </Box>
+                            ))}
                           </Box>
-                        ))}
-                      </Box>
+                        </>
+                      )}
 
-                      {/* Action link */}
+                      {/* Action */}
                       <Box sx={{ display: "flex", alignItems: "center", color: "primary.main" }}>
                         <Typography variant="body2" fontWeight={500}>{fm("agents.configure")}</Typography>
                         <ArrowForward className="arrow-icon" sx={{ ml: 0.5, fontSize: 16, opacity: 0, transition: "all 0.2s ease" }} />

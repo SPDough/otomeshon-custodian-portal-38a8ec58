@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_modules: {
+        Row: {
+          configured_items: string[]
+          created_at: string
+          id: string
+          module_key: string
+          progress: number
+          stats_label: string
+          status: Database["public"]["Enums"]["agent_module_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          configured_items?: string[]
+          created_at?: string
+          id?: string
+          module_key: string
+          progress?: number
+          stats_label?: string
+          status?: Database["public"]["Enums"]["agent_module_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          configured_items?: string[]
+          created_at?: string
+          id?: string
+          module_key?: string
+          progress?: number
+          stats_label?: string
+          status?: Database["public"]["Enums"]["agent_module_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_conversations: {
         Row: {
           created_at: string
@@ -138,7 +174,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      agent_module_status: "active" | "configured" | "needs_setup"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -265,6 +301,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      agent_module_status: ["active", "configured", "needs_setup"],
+    },
   },
 } as const
