@@ -50,6 +50,68 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_test_conversations: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          model_used: string
+          temperature_used: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          model_used?: string
+          temperature_used?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          model_used?: string
+          temperature_used?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      agent_test_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_test_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "agent_test_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agents: {
         Row: {
           calculation_policies: string[]
