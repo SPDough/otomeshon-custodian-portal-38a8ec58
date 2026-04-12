@@ -9,7 +9,8 @@ import {
 import {
   ArrowBack, Delete as DeleteIcon, SmartToy as AgentIcon,
   Add as AddIcon, Close as CloseIcon,
-  DataUsage as UsageIcon,
+  DataUsage as UsageIcon, Warning as WarningIcon,
+  NotificationsActive as AlertIcon,
 } from "@mui/icons-material";
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
