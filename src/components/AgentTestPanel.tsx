@@ -62,12 +62,18 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const updateTokenUsage = useUpdateTokenUsage();
   const [tokenUsage, setTokenUsage] = useState<{ prompt_tokens: number; completion_tokens: number; total_tokens: number } | null>(null);
 
-  // Load messages when switching conversations
+  // Load messages and token usage when switching conversations
   useEffect(() => {
     if (loadedMessages && activeConvoId) {
       setMessages(loadedMessages.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })));
+      const convo = conversations.find((c) => c.id === activeConvoId);
+      if (convo && convo.total_tokens > 0) {
+        setTokenUsage({ prompt_tokens: convo.prompt_tokens, completion_tokens: convo.completion_tokens, total_tokens: convo.total_tokens });
+      } else {
+        setTokenUsage(null);
+      }
     }
-  }, [loadedMessages, activeConvoId]);
+  }, [loadedMessages, activeConvoId, conversations]);
 
   const scrollToBottom = () => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
