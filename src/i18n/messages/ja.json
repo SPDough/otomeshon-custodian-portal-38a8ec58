@@ -609,5 +609,9 @@
   "agents.deleteSuccess": "エージェントを削除しました",
   "agents.loading": "読み込み中...",
   "agents.notFound": "エージェントが見つかりません",
-  "agents.backToAgents": "エージェントに戻る"
+  "agents.backToAgents": "エージェントに戻る",
+  "agents.toolsTitle": "ツール",
+  "agents.toolsDesc": "このエージェントが実行中に使用できるツールを選択してください。",
+  "agents.dataBindingsTitle": "データバインディング",
+  "agents.dataBindingsDetailDesc": "このエージェントをデータソースやライブフィードに接続します。"
 }
