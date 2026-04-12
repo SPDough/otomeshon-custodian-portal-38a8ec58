@@ -364,10 +364,21 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
                 </Typography>
               </Box>
             </Tooltip>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
               <Chip label={`${agent.max_tokens ?? 4096} tokens`} size="small" variant="outlined" />
               {agent.guardrails?.length > 0 && (
                 <Chip label={`${agent.guardrails.length} guardrail${agent.guardrails.length > 1 ? "s" : ""}`} size="small" color="warning" variant="outlined" />
+              )}
+              {tokenUsage && (
+                <Tooltip title={`Prompt: ${tokenUsage.prompt_tokens} · Completion: ${tokenUsage.completion_tokens}`}>
+                  <Chip
+                    label={`${tokenUsage.total_tokens.toLocaleString()} tokens used`}
+                    size="small"
+                    color="info"
+                    variant="outlined"
+                    sx={{ fontWeight: 600 }}
+                  />
+                </Tooltip>
               )}
             </Box>
           </Box>
