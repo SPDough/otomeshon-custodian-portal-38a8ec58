@@ -22,6 +22,9 @@ import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
 import { useAgentTestConversations } from "@/hooks/useAgentTestHistory";
+import { useTokenBudget, useUpsertTokenBudget } from "@/hooks/useTokenBudget";
+import AgentTestPanel from "@/components/AgentTestPanel";
+import { startOfDay, startOfWeek, isAfter } from "date-fns";
 import AgentTestPanel from "@/components/AgentTestPanel";
 
 // Pricing per 1M tokens (USD) — approximate rates
