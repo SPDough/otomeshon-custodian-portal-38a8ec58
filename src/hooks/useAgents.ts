@@ -13,6 +13,7 @@ export interface Agent {
   data_bindings: string[];
   calculation_policies: string[];
   rule_sets: string[];
+  workflows: string[];
   model: string;
   created_at: string;
   updated_at: string;

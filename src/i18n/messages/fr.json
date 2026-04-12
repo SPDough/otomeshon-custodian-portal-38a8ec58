@@ -622,5 +622,8 @@
   "agents.addCustomCalc": "Ajouter une politique personnalisée…",
   "agents.ruleSetsTitle": "Jeux de Règles",
   "agents.ruleSetsDetailDesc": "Liez des règles métier et une logique de validation au pipeline de décision de cet agent.",
-  "agents.addCustomRule": "Ajouter un jeu de règles personnalisé…"
+  "agents.addCustomRule": "Ajouter un jeu de règles personnalisé…",
+  "agents.workflowsTitle": "Orchestration des Flux",
+  "agents.workflowsDetailDesc": "Associez cet agent à des flux de travail multi-étapes avec branchement, relance et contrôle humain.",
+  "agents.addCustomWorkflow": "Ajouter un flux personnalisé…"
 }

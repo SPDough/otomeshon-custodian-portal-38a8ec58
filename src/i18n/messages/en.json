@@ -622,5 +622,8 @@
   "agents.addCustomCalc": "Add custom policy…",
   "agents.ruleSetsTitle": "Rule Sets",
   "agents.ruleSetsDetailDesc": "Bind business rules and validation logic to this agent's decision pipeline.",
-  "agents.addCustomRule": "Add custom rule set…"
+  "agents.addCustomRule": "Add custom rule set…",
+  "agents.workflowsTitle": "Workflow Orchestration",
+  "agents.workflowsDetailDesc": "Map this agent to multi-step workflows with branching, retry, and human-in-the-loop controls.",
+  "agents.addCustomWorkflow": "Add custom workflow…"
 }

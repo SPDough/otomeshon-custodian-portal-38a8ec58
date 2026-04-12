@@ -622,5 +622,8 @@
   "agents.addCustomCalc": "Agregar política personalizada…",
   "agents.ruleSetsTitle": "Conjuntos de Reglas",
   "agents.ruleSetsDetailDesc": "Vincule reglas de negocio y lógica de validación al pipeline de decisión de este agente.",
-  "agents.addCustomRule": "Agregar conjunto de reglas personalizado…"
+  "agents.addCustomRule": "Agregar conjunto de reglas personalizado…",
+  "agents.workflowsTitle": "Orquestación de Flujos",
+  "agents.workflowsDetailDesc": "Asigne este agente a flujos de trabajo de múltiples pasos con ramificación, reintentos y controles humanos.",
+  "agents.addCustomWorkflow": "Agregar flujo personalizado…"
 }

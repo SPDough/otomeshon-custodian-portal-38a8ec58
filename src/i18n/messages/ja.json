@@ -622,5 +622,8 @@
   "agents.addCustomCalc": "カスタムポリシーを追加…",
   "agents.ruleSetsTitle": "ルールセット",
   "agents.ruleSetsDetailDesc": "ビジネスルールと検証ロジックをこのエージェントの意思決定パイプラインにバインドします。",
-  "agents.addCustomRule": "カスタムルールセットを追加…"
+  "agents.addCustomRule": "カスタムルールセットを追加…",
+  "agents.workflowsTitle": "ワークフローオーケストレーション",
+  "agents.workflowsDetailDesc": "分岐、リトライ、ヒューマンインザループ制御を持つマルチステップワークフローにこのエージェントをマッピングします。",
+  "agents.addCustomWorkflow": "カスタムワークフローを追加…"
 }
