@@ -1,56 +1,38 @@
 
 
-# i18n Translations for Remaining Pages
+## Plan: Add Breadcrumbs Across Protected Pages
 
-## Scope
-Add FormatJS message keys and translations to **15 untranslated pages** across 4 JSON resource files and update each component to use `useIntl()`.
+### Summary
+Create a reusable `AppBreadcrumb` component and add it to 11 pages that currently lack navigation context.
 
-## Pages to translate
+### Approach
+1. **Create `src/components/AppBreadcrumb.tsx`** — a generic breadcrumb component accepting an array of `{ label, path? }` crumb items. Uses MUI `Breadcrumbs` with the same styling as the existing `PlatformBreadcrumb`. Dashboard is always the first crumb.
 
-| Page | Estimated new keys |
-|------|-------------------|
-| FrontOffice | ~12 |
-| MiddleOffice | ~15 |
-| BackOffice | ~20 |
-| Workflows | ~18 |
-| WorkflowConfiguration | ~30 |
-| KnowledgeGraph | ~18 |
-| KnowledgeBase | ~15 |
-| Data | ~6 |
-| Search | ~14 |
-| Results | ~25 |
-| PlatformConfig | ~10 |
-| LayerDataCollection | ~8 |
-| LayerOntology | ~6 |
-| LayerCalculations | ~6 |
-| LayerRulesValidation | ~6 |
-| LayerIntelligence | ~8 |
-| LayerRAG | ~6 |
-| LayerReporting | ~6 |
-| LayerOutbound | ~6 |
-| LayerWorkflowOrchestration | ~6 |
+2. **Add breadcrumbs to these pages:**
 
-**Total: ~240 new message keys** across all 4 locale files.
+```text
+Page                  Trail
+─────────────────────────────────────────────
+Front Office          Dashboard › Front Office
+Portfolios            Dashboard › Front Office › Portfolios
+Knowledge Graph       Dashboard › Front Office › Knowledge Graph
+Knowledge Base        Dashboard › Front Office › Knowledge Base
+Middle Office         Dashboard › Middle Office
+Workflow Config       Dashboard › Middle Office › Workflow Config
+Back Office           Dashboard › Back Office
+Data Sandbox          Dashboard › Back Office › Data Sandbox
+Workflows             Dashboard › Workflows
+Search                Dashboard › Search
+Results               Dashboard › Search › Results
+```
 
-## Implementation steps
+3. **Refactor `PlatformBreadcrumb`** to use `AppBreadcrumb` internally (Dashboard › Capability Stack › L*N*: Name), keeping backward compatibility.
 
-1. **Add ~240 keys to `en.json`** — grouped by page prefix (e.g., `frontOffice.*`, `middleOffice.*`, `workflows.*`, `platform.*`, `layer0.*` through `layer8.*`)
+4. **Add i18n keys** for breadcrumb labels in all 4 locale files (en, es, fr, ja).
 
-2. **Add matching translations to `ja.json`, `es.json`, `fr.json`** — all keys translated to Japanese, Spanish, and French respectively
-
-3. **Update all 20 page components** to import `useIntl` from `react-intl` and replace every hardcoded string with `intl.formatMessage({ id: "key" })` or `<FormattedMessage>`. This includes:
-   - Page titles and subtitles
-   - Card titles, descriptions, stats labels
-   - Table headers (BackOffice, Results)
-   - Tab labels (Workflows, KnowledgeGraph, Search)
-   - Form labels and placeholders (WorkflowConfiguration)
-   - Button text
-   - Status chips (Active, Draft, Pending, etc.)
-   - Helper text and descriptions
-
-## Technical approach
-- Follow exact same pattern as existing translated pages (Dashboard, Portfolios, Auth)
-- Use `intl.formatMessage()` for string props and data arrays
-- Use ICU interpolation where needed (e.g., `{count} documents`)
-- No database changes, no new dependencies
+### Technical details
+- Each page gets a single `<AppBreadcrumb crumbs={[...]} />` inserted at the top of its content area, before the title.
+- The component renders MUI `<Breadcrumbs>` with `NavigateNext` separator, matching existing platform breadcrumb styling.
+- Last crumb is plain `<Typography>` (current page); all others are `<Link component={RouterLink}>`.
+- No changes to routing, sidebar, or layout.
 
