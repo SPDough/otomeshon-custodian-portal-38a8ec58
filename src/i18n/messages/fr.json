@@ -625,5 +625,13 @@
   "agents.addCustomRule": "Ajouter un jeu de règles personnalisé…",
   "agents.workflowsTitle": "Orchestration des Flux",
   "agents.workflowsDetailDesc": "Associez cet agent à des flux de travail multi-étapes avec branchement, relance et contrôle humain.",
-  "agents.addCustomWorkflow": "Ajouter un flux personnalisé…"
+  "agents.addCustomWorkflow": "Ajouter un flux personnalisé…",
+  "agents.runtimeTitle": "Paramètres d'Exécution",
+  "agents.runtimeDesc": "Configuration du fournisseur LLM, limites de tokens, journalisation et garde-fous.",
+  "agents.temperature": "Température",
+  "agents.maxTokens": "Tokens Maximum",
+  "agents.auditLogging": "Activer la Journalisation d'Audit",
+  "agents.guardrailsLabel": "Garde-fous",
+  "agents.noGuardrails": "Aucun garde-fou configuré.",
+  "agents.addGuardrail": "Ajouter un garde-fou (ex. Pas de PII en sortie)…"
 }
