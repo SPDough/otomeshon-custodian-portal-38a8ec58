@@ -30,9 +30,18 @@ export default defineConfig(({ mode }) => ({
   // Build configuration for production
   build: {
     outDir: 'dist',
-    // Django will serve these files from its static directory
     assetsDir: 'assets',
-    // Generate manifest for Django to know which files to include
     manifest: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-mui': ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
+          'vendor-charts': ['recharts', 'd3'],
+          'vendor-grid': ['handsontable', '@handsontable/react'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-intl': ['react-intl'],
+        },
+      },
+    },
   }
 }));
