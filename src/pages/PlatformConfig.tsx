@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Paper, Chip, useTheme, TextField, InputAdornment } from "@mui/material";
 import { Storage as StorageIcon, MenuBook as MenuBookIcon, Functions as FunctionsIcon, Gavel as GavelIcon, Psychology as PsychologyIcon, AutoStories as AutoStoriesIcon, AccountTree as AccountTreeIcon, Assessment as AssessmentIcon, CloudUpload as CloudUploadIcon, ArrowForward, Layers as LayersIcon, Search as SearchIcon, CheckCircle, HourglassEmpty } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const PlatformConfig = () => {
   const navigate = useNavigate();
