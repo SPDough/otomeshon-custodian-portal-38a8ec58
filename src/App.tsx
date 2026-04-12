@@ -23,7 +23,7 @@ const withProtection = (Component: React.LazyExoticComponent<React.ComponentType
 );
 
 // Lazy-loaded pages
-const Index = lazy(() => import("./pages/Index"));
+import Index from "./pages/Index";
 const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Search = lazy(() => import("./pages/Search"));
@@ -58,7 +58,7 @@ const AnimatedRoutes = () => {
     <Suspense fallback={<DashboardSkeleton />}>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={withErrorBoundary(Index)} />
+          <Route path="/" element={<RouteErrorBoundary><Index /></RouteErrorBoundary>} />
           <Route path="/auth" element={withErrorBoundary(Auth)} />
           <Route path="/dashboard" element={withProtection(Dashboard)} />
           <Route path="/search" element={withProtection(Search)} />
