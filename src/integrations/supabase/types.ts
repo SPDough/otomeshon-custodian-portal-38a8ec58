@@ -121,6 +121,39 @@ export type Database = {
           },
         ]
       }
+      agent_token_budgets: {
+        Row: {
+          agent_id: string
+          created_at: string
+          enabled: boolean
+          id: string
+          period: string
+          threshold: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          period?: string
+          threshold?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          period?: string
+          threshold?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       agents: {
         Row: {
           calculation_policies: string[]
