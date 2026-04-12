@@ -14,6 +14,10 @@ export interface Agent {
   calculation_policies: string[];
   rule_sets: string[];
   workflows: string[];
+  temperature: number;
+  max_tokens: number;
+  guardrails: string[];
+  logging_enabled: boolean;
   model: string;
   created_at: string;
   updated_at: string;

@@ -625,5 +625,13 @@
   "agents.addCustomRule": "Add custom rule set…",
   "agents.workflowsTitle": "Workflow Orchestration",
   "agents.workflowsDetailDesc": "Map this agent to multi-step workflows with branching, retry, and human-in-the-loop controls.",
-  "agents.addCustomWorkflow": "Add custom workflow…"
+  "agents.addCustomWorkflow": "Add custom workflow…",
+  "agents.runtimeTitle": "Runtime Settings",
+  "agents.runtimeDesc": "LLM provider configuration, token limits, logging, and guardrail settings.",
+  "agents.temperature": "Temperature",
+  "agents.maxTokens": "Max Tokens",
+  "agents.auditLogging": "Enable Audit Logging",
+  "agents.guardrailsLabel": "Guardrails",
+  "agents.noGuardrails": "No guardrails configured.",
+  "agents.addGuardrail": "Add guardrail (e.g. No PII in output)…"
 }

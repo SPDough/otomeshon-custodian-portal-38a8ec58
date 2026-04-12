@@ -625,5 +625,13 @@
   "agents.addCustomRule": "カスタムルールセットを追加…",
   "agents.workflowsTitle": "ワークフローオーケストレーション",
   "agents.workflowsDetailDesc": "分岐、リトライ、ヒューマンインザループ制御を持つマルチステップワークフローにこのエージェントをマッピングします。",
-  "agents.addCustomWorkflow": "カスタムワークフローを追加…"
+  "agents.addCustomWorkflow": "カスタムワークフローを追加…",
+  "agents.runtimeTitle": "ランタイム設定",
+  "agents.runtimeDesc": "LLMプロバイダー設定、トークン制限、ログ、ガードレール設定。",
+  "agents.temperature": "温度",
+  "agents.maxTokens": "最大トークン数",
+  "agents.auditLogging": "監査ログを有効にする",
+  "agents.guardrailsLabel": "ガードレール",
+  "agents.noGuardrails": "ガードレールが設定されていません。",
+  "agents.addGuardrail": "ガードレールを追加（例: 出力にPIIを含めない）…"
 }

@@ -3,7 +3,8 @@ import { useIntl } from "react-intl";
 import { motion } from "framer-motion";
 import {
   Container, Typography, Box, Card, CardContent, Chip, alpha, useTheme,
-  TextField, MenuItem, Button, IconButton, Tooltip, Divider,
+  TextField, MenuItem, Button, IconButton, Tooltip, Divider, Slider,
+  FormControlLabel, Switch,
 } from "@mui/material";
 import {
   ArrowBack, Delete as DeleteIcon, SmartToy as AgentIcon,
@@ -62,11 +63,16 @@ const AgentDetail = () => {
   const [calcPolicies, setCalcPolicies] = useState<string[]>([]);
   const [ruleSets, setRuleSets] = useState<string[]>([]);
   const [workflows, setWorkflows] = useState<string[]>([]);
+  const [temperature, setTemperature] = useState(0.7);
+  const [maxTokens, setMaxTokens] = useState(4096);
+  const [guardrails, setGuardrails] = useState<string[]>([]);
+  const [loggingEnabled, setLoggingEnabled] = useState(true);
   const [newTool, setNewTool] = useState("");
   const [newBinding, setNewBinding] = useState("");
   const [newCalc, setNewCalc] = useState("");
   const [newRule, setNewRule] = useState("");
   const [newWorkflow, setNewWorkflow] = useState("");
+  const [newGuardrail, setNewGuardrail] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -81,6 +87,10 @@ const AgentDetail = () => {
       setCalcPolicies(agent.calculation_policies ?? []);
       setRuleSets(agent.rule_sets ?? []);
       setWorkflows(agent.workflows ?? []);
+      setTemperature(agent.temperature ?? 0.7);
+      setMaxTokens(agent.max_tokens ?? 4096);
+      setGuardrails(agent.guardrails ?? []);
+      setLoggingEnabled(agent.logging_enabled ?? true);
       setDirty(false);
     }
   }, [agent]);
@@ -88,7 +98,7 @@ const AgentDetail = () => {
   const handleSave = () => {
     if (!agent || !name.trim()) return;
     updateAgent.mutate(
-      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets, workflows },
+      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings, calculation_policies: calcPolicies, rule_sets: ruleSets, workflows, temperature, max_tokens: maxTokens, guardrails, logging_enabled: loggingEnabled },
       {
         onSuccess: () => { toast.success(fm("agents.editSave")); setDirty(false); },
         onError: () => toast.error("Save failed"),
@@ -456,6 +466,82 @@ const AgentDetail = () => {
               <Button variant="outlined" size="small" startIcon={<AddIcon />}
                 onClick={() => addCustomItem(newWorkflow, workflows, setWorkflows, setNewWorkflow)}
                 disabled={!newWorkflow.trim()}>{fm("agents.addButton")}</Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Runtime Settings */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.runtimeTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              {fm("agents.runtimeDesc")}
+            </Typography>
+
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                {fm("agents.temperature")} — {temperature.toFixed(2)}
+              </Typography>
+              <Slider
+                value={temperature}
+                onChange={(_, v) => { setTemperature(v as number); setDirty(true); }}
+                min={0} max={2} step={0.05}
+                valueLabelDisplay="auto"
+                sx={{ maxWidth: 400 }}
+              />
+            </Box>
+
+            <TextField
+              label={fm("agents.maxTokens")}
+              type="number"
+              value={maxTokens}
+              onChange={(e) => { setMaxTokens(Math.max(1, Math.min(128000, Number(e.target.value) || 1))); setDirty(true); }}
+              inputProps={{ min: 1, max: 128000 }}
+              sx={{ mb: 3, width: 200 }}
+              size="small"
+            />
+
+            <Box sx={{ mb: 3 }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={loggingEnabled}
+                    onChange={(e) => { setLoggingEnabled(e.target.checked); setDirty(true); }}
+                  />
+                }
+                label={fm("agents.auditLogging")}
+              />
+            </Box>
+
+            <Divider sx={{ mb: 2 }} />
+
+            <Typography variant="subtitle2" gutterBottom>
+              {fm("agents.guardrailsLabel")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+              {guardrails.map((g) => (
+                <Chip
+                  key={g}
+                  label={g}
+                  color="warning"
+                  onDelete={() => { setGuardrails(guardrails.filter((v) => v !== g)); setDirty(true); }}
+                  sx={{ fontWeight: 600 }}
+                />
+              ))}
+              {guardrails.length === 0 && (
+                <Typography variant="body2" color="text.secondary">{fm("agents.noGuardrails")}</Typography>
+              )}
+            </Box>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField size="small" placeholder={fm("agents.addGuardrail")} value={newGuardrail}
+                onChange={(e) => setNewGuardrail(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCustomItem(newGuardrail, guardrails, setGuardrails, setNewGuardrail); } }}
+                inputProps={{ maxLength: 80 }} sx={{ flex: 1 }} />
+              <Button variant="outlined" size="small" startIcon={<AddIcon />}
+                onClick={() => addCustomItem(newGuardrail, guardrails, setGuardrails, setNewGuardrail)}
+                disabled={!newGuardrail.trim()}>{fm("agents.addButton")}</Button>
             </Box>
           </CardContent>
         </Card>

@@ -625,5 +625,13 @@
   "agents.addCustomRule": "Agregar conjunto de reglas personalizado…",
   "agents.workflowsTitle": "Orquestación de Flujos",
   "agents.workflowsDetailDesc": "Asigne este agente a flujos de trabajo de múltiples pasos con ramificación, reintentos y controles humanos.",
-  "agents.addCustomWorkflow": "Agregar flujo personalizado…"
+  "agents.addCustomWorkflow": "Agregar flujo personalizado…",
+  "agents.runtimeTitle": "Configuración de Ejecución",
+  "agents.runtimeDesc": "Configuración del proveedor LLM, límites de tokens, registro y barreras de seguridad.",
+  "agents.temperature": "Temperatura",
+  "agents.maxTokens": "Tokens Máximos",
+  "agents.auditLogging": "Habilitar Registro de Auditoría",
+  "agents.guardrailsLabel": "Barreras de Seguridad",
+  "agents.noGuardrails": "No hay barreras configuradas.",
+  "agents.addGuardrail": "Agregar barrera (ej. Sin PII en la salida)…"
 }
