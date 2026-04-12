@@ -118,6 +118,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
     abortRef.current = controller;
 
     let assistantSoFar = "";
+    let streamUsage: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null = null;
 
     const upsert = (chunk: string) => {
       assistantSoFar += chunk;
