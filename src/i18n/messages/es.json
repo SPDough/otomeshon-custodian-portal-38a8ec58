@@ -616,5 +616,11 @@
   "agents.dataBindingsDetailDesc": "Conecte este agente a fuentes de datos y feeds en vivo.",
   "agents.addCustomTool": "Agregar herramienta personalizada…",
   "agents.addCustomBinding": "Agregar vinculación personalizada…",
-  "agents.addButton": "Agregar"
+  "agents.addButton": "Agregar",
+  "agents.calcPoliciesTitle": "Políticas de Cálculo",
+  "agents.calcPoliciesDesc": "Asigne bibliotecas de cálculo y conjuntos de fórmulas que este agente puede invocar.",
+  "agents.addCustomCalc": "Agregar política personalizada…",
+  "agents.ruleSetsTitle": "Conjuntos de Reglas",
+  "agents.ruleSetsDetailDesc": "Vincule reglas de negocio y lógica de validación al pipeline de decisión de este agente.",
+  "agents.addCustomRule": "Agregar conjunto de reglas personalizado…"
 }
