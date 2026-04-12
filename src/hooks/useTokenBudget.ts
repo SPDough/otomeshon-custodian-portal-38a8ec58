@@ -25,7 +25,7 @@ export function useTokenBudget(agentId: string) {
         .eq("agent_id", agentId)
         .maybeSingle();
       if (error) throw error;
-      return data as TokenBudget | null;
+      return data as unknown as TokenBudget | null;
     },
     enabled: !!user && !!agentId,
   });
