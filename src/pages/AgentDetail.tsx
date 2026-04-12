@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import {
   ArrowBack, Delete as DeleteIcon, SmartToy as AgentIcon,
+  Add as AddIcon, Close as CloseIcon,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -15,6 +16,16 @@ import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gpt-5-mini", "gpt-5"];
+
+const AVAILABLE_TOOLS = [
+  "web_search", "code_interpreter", "file_reader", "api_caller",
+  "calculator", "email_sender", "pdf_parser", "data_visualizer",
+];
+
+const AVAILABLE_DATA_BINDINGS = [
+  "Market Data API", "Fund Holdings", "Benchmark Indices", "Counterparty DB",
+  "NAV Feed", "FX Rates", "Corporate Actions Feed", "Regulatory Reports",
+];
 
 const AgentDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,6 +42,8 @@ const AgentDetail = () => {
   const [persona, setPersona] = useState("");
   const [model, setModel] = useState("gemini-2.5-flash");
   const [status, setStatus] = useState<"enabled" | "disabled">("enabled");
+  const [tools, setTools] = useState<string[]>([]);
+  const [dataBindings, setDataBindings] = useState<string[]>([]);
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -40,6 +53,8 @@ const AgentDetail = () => {
       setPersona(agent.persona ?? "");
       setModel(agent.model ?? "gemini-2.5-flash");
       setStatus(agent.status);
+      setTools(agent.tools ?? []);
+      setDataBindings(agent.data_bindings ?? []);
       setDirty(false);
     }
   }, [agent]);
@@ -47,7 +62,7 @@ const AgentDetail = () => {
   const handleSave = () => {
     if (!agent || !name.trim()) return;
     updateAgent.mutate(
-      { id: agent.id, name: name.trim(), description, persona, model, status },
+      { id: agent.id, name: name.trim(), description, persona, model, status, tools, data_bindings: dataBindings },
       {
         onSuccess: () => { toast.success(fm("agents.editSave")); setDirty(false); },
         onError: () => toast.error("Save failed"),
@@ -61,6 +76,15 @@ const AgentDetail = () => {
       onSuccess: () => { toast.success(fm("agents.deleteSuccess")); navigate("/agents"); },
       onError: () => toast.error("Delete failed"),
     });
+  };
+
+  const toggleChip = (
+    value: string,
+    list: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+  ) => {
+    setter(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+    setDirty(true);
   };
 
   if (isLoading) {
@@ -124,7 +148,7 @@ const AgentDetail = () => {
           </Box>
         </motion.div>
 
-        <Card>
+        <Card sx={{ mb: 3 }}>
           <CardContent sx={{ display: "flex", flexDirection: "column", gap: 3, p: 4 }}>
             <TextField
               label={fm("agents.createName")}
@@ -172,17 +196,70 @@ const AgentDetail = () => {
                 <MenuItem value="disabled">{fm("agents.statusDisabled")}</MenuItem>
               </TextField>
             </Box>
+          </CardContent>
+        </Card>
 
-            <Divider />
-
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button variant="outlined" onClick={() => navigate("/agents")}>{fm("agents.editCancel")}</Button>
-              <Button variant="contained" onClick={handleSave} disabled={!dirty || !name.trim()}>
-                {fm("agents.editSave")}
-              </Button>
+        {/* Tools */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.toolsTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {fm("agents.toolsDesc")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+              {AVAILABLE_TOOLS.map((tool) => {
+                const selected = tools.includes(tool);
+                return (
+                  <Chip
+                    key={tool}
+                    label={tool}
+                    onClick={() => toggleChip(tool, tools, setTools)}
+                    color={selected ? "primary" : "default"}
+                    variant={selected ? "filled" : "outlined"}
+                    sx={{ fontWeight: selected ? 600 : 400 }}
+                  />
+                );
+              })}
             </Box>
           </CardContent>
         </Card>
+
+        {/* Data Bindings */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              {fm("agents.dataBindingsTitle")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {fm("agents.dataBindingsDetailDesc")}
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+              {AVAILABLE_DATA_BINDINGS.map((binding) => {
+                const selected = dataBindings.includes(binding);
+                return (
+                  <Chip
+                    key={binding}
+                    label={binding}
+                    onClick={() => toggleChip(binding, dataBindings, setDataBindings)}
+                    color={selected ? "secondary" : "default"}
+                    variant={selected ? "filled" : "outlined"}
+                    sx={{ fontWeight: selected ? 600 : 400 }}
+                  />
+                );
+              })}
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Actions */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+          <Button variant="outlined" onClick={() => navigate("/agents")}>{fm("agents.editCancel")}</Button>
+          <Button variant="contained" onClick={handleSave} disabled={!dirty || !name.trim()}>
+            {fm("agents.editSave")}
+          </Button>
+        </Box>
       </Container>
     </AnimatedPage>
   );
