@@ -48,6 +48,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const [overrideTemp, setOverrideTemp] = useState<number | null>(null);
   const [activeConvoId, setActiveConvoId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [historySearch, setHistorySearch] = useState("");
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
