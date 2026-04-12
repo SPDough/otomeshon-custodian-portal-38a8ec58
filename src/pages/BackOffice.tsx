@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, Card, CardContent, alpha, Chip, Table, TableBody, TableCell, TableHead, TableRow, useTheme } from "@mui/material";
 import { CheckCircle as CheckIcon, Description as FileTextIcon, Assessment as ReportIcon, Storage as DatabaseIcon, CloudUpload as ImportIcon, TableChart as TableIcon, ArrowForward } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const BackOffice = () => {
   const navigate = useNavigate();

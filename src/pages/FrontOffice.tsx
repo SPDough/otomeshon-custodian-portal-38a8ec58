@@ -9,6 +9,7 @@ import {
   Search as SearchIcon, BusinessCenter as BriefcaseIcon, ArrowForward,
 } from "@mui/icons-material";
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const FrontOffice = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const FrontOffice = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.frontOffice" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 6 }}>
             <Chip label={fm("frontOffice.chip")} size="small" sx={{ mb: 2, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', fontWeight: 500 }} />

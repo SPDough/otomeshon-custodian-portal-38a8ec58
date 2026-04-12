@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Container, Typography, Box, TextField, Button, Card, CardContent, Chip, List, ListItem, ListItemText, ListItemIcon, Tabs, Tab, InputAdornment } from '@mui/material';
 import { Search as SearchIcon, TableChart, AccountTree, Analytics, FilterList } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 interface TabPanelProps { children?: React.ReactNode; index: number; value: number; }
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
@@ -35,6 +36,7 @@ const Search = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.search" }]} />
         <motion.div variants={fadeInUp}>
           <Typography variant="h4" component="h1" gutterBottom>{fm("search.title")}</Typography>
           <Card sx={{ mb: 4 }}>

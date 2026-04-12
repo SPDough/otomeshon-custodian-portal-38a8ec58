@@ -15,6 +15,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { toast } from 'sonner';
 import { useIntl } from 'react-intl';
 
@@ -117,6 +118,7 @@ const Portfolios = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.frontOffice", path: "/front-office" }, { labelId: "breadcrumb.portfolios" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
             <Typography variant="h4" component="h1">{intl.formatMessage({ id: 'portfolio.title' })}</Typography>

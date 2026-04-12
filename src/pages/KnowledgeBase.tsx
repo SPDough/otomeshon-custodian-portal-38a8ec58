@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Box, Typography, TextField, Button, Card, CardContent, Chip, InputAdornment, FormControl, InputLabel, Select, MenuItem, Paper, List, ListItemText, ListItemIcon, ListItemButton, Divider, IconButton, Container } from '@mui/material';
 import { Search as SearchIcon, FilterList as FilterIcon, Description as DocumentIcon, Assessment as ReportIcon, Policy as PolicyIcon, Help as HelpIcon, History as HistoryIcon, FileDownload as DownloadIcon, Bookmark as BookmarkIcon } from '@mui/icons-material';
 import AnimatedPage, { fadeInUp, staggerContainer } from "@/components/AnimatedPage";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 
 const KnowledgeBase = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,6 +39,7 @@ const KnowledgeBase = () => {
   return (
     <AnimatedPage>
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        <AppBreadcrumb crumbs={[{ labelId: "breadcrumb.frontOffice", path: "/front-office" }, { labelId: "breadcrumb.knowledgeBase" }]} />
         <motion.div variants={fadeInUp}>
           <Box sx={{ mb: 4 }}>
             <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>{fm("knowledgeBase.title")}</Typography>
