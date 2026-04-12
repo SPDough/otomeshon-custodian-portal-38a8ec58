@@ -24,6 +24,13 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
     ...crumbs,
   ];
 
+  const truncationSx = {
+    maxWidth: { xs: 150, sm: "none" },
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  };
+
   return (
     <Breadcrumbs
       separator={
@@ -43,7 +50,7 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
           ? alpha(theme.palette.background.paper, 0.5)
           : alpha(theme.palette.divider, 0.15),
         border: `1px solid ${isDark ? alpha(theme.palette.divider, 0.4) : "transparent"}`,
-        width: "fit-content",
+        width: { xs: "100%", sm: "fit-content" },
       }}
     >
       {allCrumbs.map((crumb, i) => {
@@ -53,7 +60,7 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
             <Typography
               key={crumb.labelId}
               color="text.primary"
-              sx={{ fontSize: "0.8125rem", fontWeight: 500 }}
+              sx={{ fontSize: "0.8125rem", fontWeight: 500, ...truncationSx }}
             >
               {resolve(crumb.labelId)}
             </Typography>
@@ -66,7 +73,7 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
             to={crumb.path!}
             underline="none"
             sx={{
-              display: "flex",
+              display: "inline-flex",
               alignItems: "center",
               gap: 0.5,
               fontSize: "0.8125rem",
@@ -75,6 +82,7 @@ const AppBreadcrumb = ({ crumbs }: AppBreadcrumbProps) => {
               "&:hover": {
                 color: isDark ? "primary.light" : "text.primary",
               },
+              ...truncationSx,
             }}
           >
             {i === 0 && <HomeIcon sx={{ fontSize: 15 }} />}
