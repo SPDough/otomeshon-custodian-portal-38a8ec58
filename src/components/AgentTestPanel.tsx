@@ -32,6 +32,7 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [overrideModel, setOverrideModel] = useState<string>("");
+  const [overrideTemp, setOverrideTemp] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
