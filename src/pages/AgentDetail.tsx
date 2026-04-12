@@ -615,6 +615,13 @@ const AgentDetail = () => {
                     {tokenStats.withTokens > 0 ? Math.round(tokenStats.total / tokenStats.withTokens).toLocaleString() : "—"}
                   </Typography>
                 </Box>
+                <Divider orientation="vertical" flexItem />
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Est. Cost</Typography>
+                  <Typography variant="h5" fontWeight={700} color="success.main">
+                    ${tokenStats.estimatedCost < 0.01 && tokenStats.estimatedCost > 0 ? "<0.01" : tokenStats.estimatedCost.toFixed(4)}
+                  </Typography>
+                </Box>
               </Box>
             </CardContent>
           </Card>
