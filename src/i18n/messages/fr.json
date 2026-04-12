@@ -546,5 +546,31 @@
   "breadcrumb.workflows": "Flux de Travail",
   "breadcrumb.search": "Recherche",
   "breadcrumb.results": "Résultats",
-  "breadcrumb.capabilityStack": "Stack de Capacités"
+  "breadcrumb.capabilityStack": "Stack de Capacités",
+  "breadcrumb.agents": "Agents",
+
+  "sidebar.agents": "Agents",
+
+  "agents.chip": "IA Agentique",
+  "agents.title": "Configuration des Agents",
+  "agents.subtitle": "Concevez et configurez des agents intelligents qui exploitent les Données, Calculs, Règles et Workflows de votre plateforme pour automatiser des tâches opérationnelles complexes.",
+  "agents.configure": "Configurer",
+  "agents.agentBuilder": "Constructeur d'Agents",
+  "agents.agentBuilderDesc": "Créez et personnalisez des agents IA avec des objectifs spécifiques, des personas et des permissions d'accès aux outils",
+  "agents.agentBuilderStats": "5 Actifs",
+  "agents.dataBindings": "Liaisons de Données",
+  "agents.dataBindingsDesc": "Connectez les agents aux sources de données configurées, ontologies et flux de données en direct",
+  "agents.dataBindingsStats": "18 Sources",
+  "agents.calculationPolicies": "Politiques de Calcul",
+  "agents.calculationPoliciesDesc": "Attribuez des bibliothèques de calcul et des ensembles de formules que les agents peuvent invoquer pendant l'exécution",
+  "agents.calculationPoliciesStats": "42 Formules",
+  "agents.ruleSets": "Ensembles de Règles",
+  "agents.ruleSetsDesc": "Liez des règles métier déterministes et une logique de validation aux pipelines de décision des agents",
+  "agents.ruleSetsStats": "31 Règles",
+  "agents.workflowOrchestration": "Orchestration des Workflows",
+  "agents.workflowOrchestrationDesc": "Mappez les agents à des workflows multi-étapes avec branchement, réessais et contrôles humains dans la boucle",
+  "agents.workflowOrchestrationStats": "8 Workflows",
+  "agents.agentConfig": "Paramètres d'Exécution",
+  "agents.agentConfigDesc": "Sélection du fournisseur LLM, température, limites de tokens, journalisation et configuration des garde-fous",
+  "agents.agentConfigStats": "Avancé"
 }
