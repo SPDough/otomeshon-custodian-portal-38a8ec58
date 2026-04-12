@@ -59,6 +59,8 @@ export default function AgentTestPanel({ agent }: AgentTestPanelProps) {
   const createConvo = useCreateTestConversation();
   const saveMessage = useSaveTestMessage();
   const deleteConvo = useDeleteTestConversation();
+  const updateTokenUsage = useUpdateTokenUsage();
+  const [tokenUsage, setTokenUsage] = useState<{ prompt_tokens: number; completion_tokens: number; total_tokens: number } | null>(null);
 
   // Load messages when switching conversations
   useEffect(() => {
