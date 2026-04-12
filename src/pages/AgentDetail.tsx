@@ -75,7 +75,17 @@ const AgentDetail = () => {
     const completion = conversations.reduce((s, c) => s + (c.completion_tokens ?? 0), 0);
     const count = conversations.length;
     const withTokens = conversations.filter((c) => (c.total_tokens ?? 0) > 0).length;
-    return { total, prompt, completion, count, withTokens };
+
+    // Compute cost per conversation based on its model
+    const estimatedCost = conversations.reduce((sum, c) => {
+      if ((c.total_tokens ?? 0) === 0) return sum;
+      const pricing = MODEL_PRICING[c.model_used] ?? DEFAULT_PRICING;
+      const pCost = ((c.prompt_tokens ?? 0) / 1_000_000) * pricing.prompt;
+      const cCost = ((c.completion_tokens ?? 0) / 1_000_000) * pricing.completion;
+      return sum + pCost + cCost;
+    }, 0);
+
+    return { total, prompt, completion, count, withTokens, estimatedCost };
   }, [conversations]);
 
   const [name, setName] = useState("");
