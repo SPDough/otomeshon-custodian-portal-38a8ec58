@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
+import AgentTestPanel from "@/components/AgentTestPanel";
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gpt-5-mini", "gpt-5"];
 
@@ -546,7 +547,10 @@ const AgentDetail = () => {
           </CardContent>
         </Card>
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+        {/* Test Panel */}
+        <AgentTestPanel agent={agent} />
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 3 }}>
           <Button variant="outlined" onClick={() => navigate("/agents")}>{fm("agents.editCancel")}</Button>
           <Button variant="contained" onClick={handleSave} disabled={!dirty || !name.trim()}>
             {fm("agents.editSave")}
