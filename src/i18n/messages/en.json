@@ -546,5 +546,31 @@
   "breadcrumb.workflows": "Workflows",
   "breadcrumb.search": "Search",
   "breadcrumb.results": "Results",
-  "breadcrumb.capabilityStack": "Capability Stack"
+  "breadcrumb.capabilityStack": "Capability Stack",
+  "breadcrumb.agents": "Agents",
+
+  "sidebar.agents": "Agents",
+
+  "agents.chip": "Agentic AI",
+  "agents.title": "Agent Configuration",
+  "agents.subtitle": "Design and configure intelligent agents that leverage your platform's Data, Calculations, Rules, and Workflows to automate complex operational tasks.",
+  "agents.configure": "Configure",
+  "agents.agentBuilder": "Agent Builder",
+  "agents.agentBuilderDesc": "Create and customise AI agents with specific goals, personas, and tool access permissions",
+  "agents.agentBuilderStats": "5 Active",
+  "agents.dataBindings": "Data Bindings",
+  "agents.dataBindingsDesc": "Connect agents to configured data sources, ontologies, and live data feeds",
+  "agents.dataBindingsStats": "18 Sources",
+  "agents.calculationPolicies": "Calculation Policies",
+  "agents.calculationPoliciesDesc": "Assign calculation libraries and formula sets that agents can invoke during execution",
+  "agents.calculationPoliciesStats": "42 Formulas",
+  "agents.ruleSets": "Rule Sets",
+  "agents.ruleSetsDesc": "Bind deterministic business rules and validation logic to agent decision pipelines",
+  "agents.ruleSetsStats": "31 Rules",
+  "agents.workflowOrchestration": "Workflow Orchestration",
+  "agents.workflowOrchestrationDesc": "Map agents to multi-step workflows with branching, retry, and human-in-the-loop controls",
+  "agents.workflowOrchestrationStats": "8 Workflows",
+  "agents.agentConfig": "Runtime Settings",
+  "agents.agentConfigDesc": "LLM provider selection, temperature, token limits, logging, and guardrail configuration",
+  "agents.agentConfigStats": "Advanced"
 }
