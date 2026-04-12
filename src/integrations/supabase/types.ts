@@ -52,6 +52,7 @@ export type Database = {
       }
       agents: {
         Row: {
+          calculation_policies: string[]
           created_at: string
           data_bindings: string[]
           description: string | null
@@ -59,12 +60,14 @@ export type Database = {
           model: string | null
           name: string
           persona: string | null
+          rule_sets: string[]
           status: string
           tools: string[]
           updated_at: string
           user_id: string
         }
         Insert: {
+          calculation_policies?: string[]
           created_at?: string
           data_bindings?: string[]
           description?: string | null
@@ -72,12 +75,14 @@ export type Database = {
           model?: string | null
           name: string
           persona?: string | null
+          rule_sets?: string[]
           status?: string
           tools?: string[]
           updated_at?: string
           user_id: string
         }
         Update: {
+          calculation_policies?: string[]
           created_at?: string
           data_bindings?: string[]
           description?: string | null
@@ -85,6 +90,7 @@ export type Database = {
           model?: string | null
           name?: string
           persona?: string | null
+          rule_sets?: string[]
           status?: string
           tools?: string[]
           updated_at?: string
