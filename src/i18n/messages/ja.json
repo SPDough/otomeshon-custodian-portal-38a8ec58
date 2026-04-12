@@ -546,5 +546,31 @@
   "breadcrumb.workflows": "ワークフロー",
   "breadcrumb.search": "検索",
   "breadcrumb.results": "結果",
-  "breadcrumb.capabilityStack": "ケイパビリティスタック"
+  "breadcrumb.capabilityStack": "ケイパビリティスタック",
+  "breadcrumb.agents": "エージェント",
+
+  "sidebar.agents": "エージェント",
+
+  "agents.chip": "エージェントAI",
+  "agents.title": "エージェント設定",
+  "agents.subtitle": "プラットフォームのデータ、計算、ルール、ワークフローを活用して複雑な業務タスクを自動化するインテリジェントエージェントを設計・構成します。",
+  "agents.configure": "設定",
+  "agents.agentBuilder": "エージェントビルダー",
+  "agents.agentBuilderDesc": "特定の目標、ペルソナ、ツールアクセス権限を持つAIエージェントを作成・カスタマイズ",
+  "agents.agentBuilderStats": "5 アクティブ",
+  "agents.dataBindings": "データバインディング",
+  "agents.dataBindingsDesc": "構成済みデータソース、オントロジー、ライブデータフィードにエージェントを接続",
+  "agents.dataBindingsStats": "18 ソース",
+  "agents.calculationPolicies": "計算ポリシー",
+  "agents.calculationPoliciesDesc": "エージェントが実行中に呼び出せる計算ライブラリと数式セットを割り当て",
+  "agents.calculationPoliciesStats": "42 数式",
+  "agents.ruleSets": "ルールセット",
+  "agents.ruleSetsDesc": "確定的なビジネスルールとバリデーションロジックをエージェントの意思決定パイプラインにバインド",
+  "agents.ruleSetsStats": "31 ルール",
+  "agents.workflowOrchestration": "ワークフローオーケストレーション",
+  "agents.workflowOrchestrationDesc": "分岐、リトライ、ヒューマンインザループ制御を持つマルチステップワークフローにエージェントをマッピング",
+  "agents.workflowOrchestrationStats": "8 ワークフロー",
+  "agents.agentConfig": "ランタイム設定",
+  "agents.agentConfigDesc": "LLMプロバイダー選択、温度、トークン制限、ロギング、ガードレール設定",
+  "agents.agentConfigStats": "詳細設定"
 }

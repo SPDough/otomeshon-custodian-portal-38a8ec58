@@ -546,5 +546,31 @@
   "breadcrumb.workflows": "Flujos de Trabajo",
   "breadcrumb.search": "Búsqueda",
   "breadcrumb.results": "Resultados",
-  "breadcrumb.capabilityStack": "Stack de Capacidades"
+  "breadcrumb.capabilityStack": "Stack de Capacidades",
+  "breadcrumb.agents": "Agentes",
+
+  "sidebar.agents": "Agentes",
+
+  "agents.chip": "IA Agéntica",
+  "agents.title": "Configuración de Agentes",
+  "agents.subtitle": "Diseñe y configure agentes inteligentes que aprovechan los Datos, Cálculos, Reglas y Flujos de trabajo de su plataforma para automatizar tareas operativas complejas.",
+  "agents.configure": "Configurar",
+  "agents.agentBuilder": "Constructor de Agentes",
+  "agents.agentBuilderDesc": "Cree y personalice agentes de IA con objetivos específicos, personas y permisos de acceso a herramientas",
+  "agents.agentBuilderStats": "5 Activos",
+  "agents.dataBindings": "Vínculos de Datos",
+  "agents.dataBindingsDesc": "Conecte agentes a fuentes de datos configuradas, ontologías y feeds de datos en vivo",
+  "agents.dataBindingsStats": "18 Fuentes",
+  "agents.calculationPolicies": "Políticas de Cálculo",
+  "agents.calculationPoliciesDesc": "Asigne bibliotecas de cálculo y conjuntos de fórmulas que los agentes pueden invocar durante la ejecución",
+  "agents.calculationPoliciesStats": "42 Fórmulas",
+  "agents.ruleSets": "Conjuntos de Reglas",
+  "agents.ruleSetsDesc": "Vincule reglas de negocio deterministas y lógica de validación a los pipelines de decisión de agentes",
+  "agents.ruleSetsStats": "31 Reglas",
+  "agents.workflowOrchestration": "Orquestación de Flujos",
+  "agents.workflowOrchestrationDesc": "Mapee agentes a flujos de trabajo multi-paso con ramificación, reintentos y controles con intervención humana",
+  "agents.workflowOrchestrationStats": "8 Flujos",
+  "agents.agentConfig": "Config. de Ejecución",
+  "agents.agentConfigDesc": "Selección de proveedor LLM, temperatura, límites de tokens, registro y configuración de barreras de seguridad",
+  "agents.agentConfigStats": "Avanzado"
 }
