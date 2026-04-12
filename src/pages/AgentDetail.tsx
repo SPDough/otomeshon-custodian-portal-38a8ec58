@@ -54,8 +54,12 @@ const AgentDetail = () => {
   const [status, setStatus] = useState<"enabled" | "disabled">("enabled");
   const [tools, setTools] = useState<string[]>([]);
   const [dataBindings, setDataBindings] = useState<string[]>([]);
+  const [calcPolicies, setCalcPolicies] = useState<string[]>([]);
+  const [ruleSets, setRuleSets] = useState<string[]>([]);
   const [newTool, setNewTool] = useState("");
   const [newBinding, setNewBinding] = useState("");
+  const [newCalc, setNewCalc] = useState("");
+  const [newRule, setNewRule] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
