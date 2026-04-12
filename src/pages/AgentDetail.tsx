@@ -9,12 +9,14 @@ import {
 import {
   ArrowBack, Delete as DeleteIcon, SmartToy as AgentIcon,
   Add as AddIcon, Close as CloseIcon,
+  DataUsage as UsageIcon,
 } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import AnimatedPage, { fadeInUp } from "@/components/AnimatedPage";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import { useAgents, type Agent } from "@/hooks/useAgents";
+import { useAgentTestConversations } from "@/hooks/useAgentTestHistory";
 import AgentTestPanel from "@/components/AgentTestPanel";
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.5-pro", "gpt-5-mini", "gpt-5"];
