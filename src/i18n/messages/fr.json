@@ -581,5 +581,15 @@
   "agents.agentConfig": "Paramètres d'Exécution",
   "agents.agentConfigDesc": "Sélection du fournisseur LLM, température, limites de tokens, journalisation et configuration des garde-fous",
   "agents.agentConfigStats": "Avancé",
-  "agents.agentConfigItems": "Sélection du Modèle, Budget Tokens, Garde-fous, Journal d'Audit"
+  "agents.agentConfigItems": "Sélection du Modèle, Budget Tokens, Garde-fous, Journal d'Audit",
+
+  "agents.editTitle": "Modifier le Module",
+  "agents.editStatus": "Statut",
+  "agents.editStatsLabel": "Libellé Statistiques",
+  "agents.editProgress": "Progression de Configuration",
+  "agents.editItems": "Éléments Configurés",
+  "agents.editAddItem": "Ajouter un élément…",
+  "agents.editCancel": "Annuler",
+  "agents.editSave": "Enregistrer",
+  "agents.editButton": "Modifier"
 }

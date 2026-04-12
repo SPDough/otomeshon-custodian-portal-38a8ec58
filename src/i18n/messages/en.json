@@ -581,5 +581,15 @@
   "agents.agentConfig": "Runtime Settings",
   "agents.agentConfigDesc": "LLM provider selection, temperature, token limits, logging, and guardrail configuration",
   "agents.agentConfigStats": "Advanced",
-  "agents.agentConfigItems": "Model Selection, Token Budget, Guardrails, Audit Logging"
+  "agents.agentConfigItems": "Model Selection, Token Budget, Guardrails, Audit Logging",
+
+  "agents.editTitle": "Edit Module",
+  "agents.editStatus": "Status",
+  "agents.editStatsLabel": "Stats Label",
+  "agents.editProgress": "Configuration Progress",
+  "agents.editItems": "Configured Items",
+  "agents.editAddItem": "Add new item…",
+  "agents.editCancel": "Cancel",
+  "agents.editSave": "Save Changes",
+  "agents.editButton": "Edit"
 }

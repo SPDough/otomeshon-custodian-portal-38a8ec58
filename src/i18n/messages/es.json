@@ -581,5 +581,15 @@
   "agents.agentConfig": "Config. de Ejecución",
   "agents.agentConfigDesc": "Selección de proveedor LLM, temperatura, límites de tokens, registro y configuración de barreras de seguridad",
   "agents.agentConfigStats": "Avanzado",
-  "agents.agentConfigItems": "Selección de Modelo, Presupuesto de Tokens, Barreras, Registro de Auditoría"
+  "agents.agentConfigItems": "Selección de Modelo, Presupuesto de Tokens, Barreras, Registro de Auditoría",
+
+  "agents.editTitle": "Editar Módulo",
+  "agents.editStatus": "Estado",
+  "agents.editStatsLabel": "Etiqueta de Estadísticas",
+  "agents.editProgress": "Progreso de Configuración",
+  "agents.editItems": "Elementos Configurados",
+  "agents.editAddItem": "Agregar nuevo elemento…",
+  "agents.editCancel": "Cancelar",
+  "agents.editSave": "Guardar Cambios",
+  "agents.editButton": "Editar"
 }
