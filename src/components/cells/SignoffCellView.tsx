@@ -91,7 +91,7 @@ export function SignoffCellView({
   const mutation = useMutation({
     mutationFn: () =>
       // `signed_by` is ignored by the API; identity comes from the session.
-      signOffCell(cell.cell_id, { signed_by: SESSION_USER_LABEL }),
+      signOffCell(documentId, cell.cell_id, { signed_by: SESSION_USER_LABEL }),
     onSuccess: () => {
       toast.success("Document signed off");
       queryClient.invalidateQueries({ queryKey: ["document", documentId] });
