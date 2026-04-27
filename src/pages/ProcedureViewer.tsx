@@ -104,6 +104,7 @@ function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
           blocked={opts.signoffBlocked}
           blockedReason={opts.blockedReason}
           openExceptions={opts.openExceptions}
+          openExceptionSubjects={opts.openExceptionSubjects}
         />
       );
     case "validation":
