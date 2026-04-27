@@ -1,32 +1,30 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import type { ReasoningCell } from "@/types/vellum";
 
 export function ReasoningCellView({ cell }: { cell: ReasoningCell }) {
   const [open, setOpen] = useState(!cell.collapsed_by_default);
   return (
-    <Card className="bg-muted/40">
-      <CardHeader className="pb-3">
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-2 text-left"
-        >
-          {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-          <CardTitle className="text-sm text-muted-foreground">
-            {cell.label ?? "Agent reasoning"}
-          </CardTitle>
-        </button>
-      </CardHeader>
+    <div className="bg-muted/40 px-3 py-2">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-1.5 text-left"
+      >
+        {open ? (
+          <ChevronDown className="h-3.5 w-3.5" />
+        ) : (
+          <ChevronRight className="h-3.5 w-3.5" />
+        )}
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {cell.label ?? "Agent reasoning"}
+        </span>
+      </button>
       {open && (
-        <CardContent>
-          <p className="text-xs leading-relaxed text-muted-foreground whitespace-pre-wrap font-mono">
-            {cell.body}
-          </p>
-        </CardContent>
+        <p className="mt-1 whitespace-pre-wrap font-mono text-[12px] leading-snug text-muted-foreground">
+          {cell.body}
+        </p>
       )}
-    </Card>
+    </div>
   );
 }
