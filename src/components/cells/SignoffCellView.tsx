@@ -72,7 +72,10 @@ function OpenExceptionsBadge({
   );
 }
 
-const DEFAULT_SIGNER = "current.user@vellum.ops";
+// Identity for signoff is derived from the authenticated session inside the
+// API layer (see `src/lib/api.ts`). The UI no longer accepts a free-text
+// signer — that prevented client-side spoofing of the signoff identity.
+const SESSION_USER_LABEL = "current.user@vellum.ops";
 
 export function SignoffCellView({
   cell,
@@ -83,11 +86,12 @@ export function SignoffCellView({
   openExceptionSubjects = [],
 }: Props) {
   const queryClient = useQueryClient();
-  const [signer, setSigner] = useState<string>(DEFAULT_SIGNER);
   const signed = Boolean(cell.signed_by && cell.signed_at);
 
   const mutation = useMutation({
-    mutationFn: () => signOffCell(cell.cell_id, { signed_by: signer.trim() }),
+    mutationFn: () =>
+      // `signed_by` is ignored by the API; identity comes from the session.
+      signOffCell(cell.cell_id, { signed_by: SESSION_USER_LABEL }),
     onSuccess: () => {
       toast.success("Document signed off");
       queryClient.invalidateQueries({ queryKey: ["document", documentId] });
@@ -130,7 +134,7 @@ export function SignoffCellView({
     );
   }
 
-  const canSubmit = !blocked && signer.trim().length > 0 && !mutation.isPending;
+  const canSubmit = !blocked && !mutation.isPending;
 
   return (
     <div
@@ -173,22 +177,17 @@ export function SignoffCellView({
             : `Confirm review and sign off as ${cell.required_role}. This action will be recorded in the audit log.`}
         </p>
 
-        <div className="flex items-end gap-2">
-          <div className="flex-1 space-y-1">
-            <Label
-              htmlFor={`signer-${cell.cell_id}`}
-              className="text-[10px] uppercase tracking-wide opacity-70"
-            >
+        <div className="flex items-end justify-between gap-2">
+          <div className="flex-1 space-y-0.5">
+            <div className="text-[10px] uppercase tracking-wide opacity-70">
               Signing as
-            </Label>
-            <Input
-              id={`signer-${cell.cell_id}`}
-              value={signer}
-              onChange={(e) => setSigner(e.target.value)}
-              disabled={blocked || mutation.isPending}
-              className="bg-white/80 text-foreground rounded-none h-8 text-[13px]"
-              placeholder="name@example.com"
-            />
+            </div>
+            <div className="font-mono text-[12px] font-semibold text-foreground/90">
+              {SESSION_USER_LABEL}
+            </div>
+            <div className="text-[10px] opacity-70">
+              Identity is taken from your authenticated session.
+            </div>
           </div>
           <Button
             type="button"
