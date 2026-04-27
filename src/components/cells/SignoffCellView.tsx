@@ -17,7 +17,37 @@ interface Props {
   /** Disable the form when there are unresolved blockers (e.g. open exceptions). */
   blocked?: boolean;
   blockedReason?: string;
+  /** Number of unresolved exceptions in the document. */
+  openExceptions?: number;
 }
+
+function OpenExceptionsBadge({ count }: { count: number }) {
+  const none = count === 0;
+  return (
+    <span
+      title={
+        none
+          ? "No unresolved exceptions"
+          : `${count} unresolved exception${count === 1 ? "" : "s"}`
+      }
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold tabular-nums",
+        none
+          ? "bg-green-50 text-green-800 border-green-200"
+          : "bg-red-50 text-red-800 border-red-200",
+      )}
+    >
+      <span
+        className={cn(
+          "h-1.5 w-1.5 rounded-full",
+          none ? "bg-green-500" : "bg-red-500",
+        )}
+      />
+      {count} open
+    </span>
+  );
+}
+
 
 const DEFAULT_SIGNER = "current.user@vellum.ops";
 
