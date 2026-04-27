@@ -17,11 +17,47 @@ interface Props {
   /** Disable the form when there are unresolved blockers (e.g. open exceptions). */
   blocked?: boolean;
   blockedReason?: string;
+  /** Number of unresolved exceptions in the document. */
+  openExceptions?: number;
 }
+
+function OpenExceptionsBadge({ count }: { count: number }) {
+  const none = count === 0;
+  return (
+    <span
+      title={
+        none
+          ? "No unresolved exceptions"
+          : `${count} unresolved exception${count === 1 ? "" : "s"}`
+      }
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold tabular-nums",
+        none
+          ? "bg-green-50 text-green-800 border-green-200"
+          : "bg-red-50 text-red-800 border-red-200",
+      )}
+    >
+      <span
+        className={cn(
+          "h-1.5 w-1.5 rounded-full",
+          none ? "bg-green-500" : "bg-red-500",
+        )}
+      />
+      {count} open
+    </span>
+  );
+}
+
 
 const DEFAULT_SIGNER = "current.user@vellum.ops";
 
-export function SignoffCellView({ cell, documentId, blocked, blockedReason }: Props) {
+export function SignoffCellView({
+  cell,
+  documentId,
+  blocked,
+  blockedReason,
+  openExceptions = 0,
+}: Props) {
   const queryClient = useQueryClient();
   const [signer, setSigner] = useState<string>(DEFAULT_SIGNER);
   const signed = Boolean(cell.signed_by && cell.signed_at);
@@ -48,9 +84,12 @@ export function SignoffCellView({ cell, documentId, blocked, blockedReason }: Pr
                 {cell.label ?? "Signoff"} — Signed
               </CardTitle>
             </div>
-            <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
-              SIGNED
-            </span>
+            <div className="flex items-center gap-2">
+              <OpenExceptionsBadge count={openExceptions} />
+              <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
+                SIGNED
+              </span>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
@@ -88,16 +127,19 @@ export function SignoffCellView({ cell, documentId, blocked, blockedReason }: Pr
               {cell.label ?? "Signoff"} — {cell.required_role}
             </CardTitle>
           </div>
-          <span
-            className={cn(
-              "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wider",
-              blocked
-                ? "border-gray-200 bg-gray-100"
-                : "border-amber-200 bg-amber-50",
-            )}
-          >
-            {blocked ? "BLOCKED" : "AWAITING SIGNOFF"}
-          </span>
+          <div className="flex items-center gap-2">
+            <OpenExceptionsBadge count={openExceptions} />
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wider",
+                blocked
+                  ? "border-gray-200 bg-gray-100"
+                  : "border-amber-200 bg-amber-50",
+              )}
+            >
+              {blocked ? "BLOCKED" : "AWAITING SIGNOFF"}
+            </span>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">

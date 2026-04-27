@@ -57,7 +57,11 @@ export default function ProcedureViewer() {
                     id={`cell-${cell.cell_id}`}
                     className="scroll-mt-6"
                   >
-                    {renderCell(cell, doc.id, { signoffBlocked, blockedReason })}
+                    {renderCell(cell, doc.id, {
+                      signoffBlocked,
+                      blockedReason,
+                      openExceptions: unresolvedExceptions,
+                    })}
                   </div>
                 ));
             })()}
@@ -71,6 +75,7 @@ export default function ProcedureViewer() {
 interface RenderOpts {
   signoffBlocked: boolean;
   blockedReason?: string;
+  openExceptions: number;
 }
 
 function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
@@ -90,6 +95,7 @@ function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
           documentId={documentId}
           blocked={opts.signoffBlocked}
           blockedReason={opts.blockedReason}
+          openExceptions={opts.openExceptions}
         />
       );
     case "validation":
