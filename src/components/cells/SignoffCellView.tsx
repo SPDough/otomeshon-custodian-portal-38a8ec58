@@ -84,9 +84,12 @@ export function SignoffCellView({
                 {cell.label ?? "Signoff"} — Signed
               </CardTitle>
             </div>
-            <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
-              SIGNED
-            </span>
+            <div className="flex items-center gap-2">
+              <OpenExceptionsBadge count={openExceptions} />
+              <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
+                SIGNED
+              </span>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
