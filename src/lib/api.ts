@@ -4,6 +4,9 @@ import type {
   ExceptionDecisionRequest,
   ExceptionDecisionResponse,
   ProcedureDocument,
+  SignoffCell,
+  SignoffRequest,
+  SignoffResponse,
 } from "@/types/vellum";
 
 // In-memory mutable copy so the mock mutation is reflected on refetch.

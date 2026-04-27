@@ -112,3 +112,13 @@ export interface ExceptionDecisionResponse {
   cell_id: string;
   resolution: ExceptionResolution;
 }
+
+export interface SignoffRequest {
+  signed_by: string;
+}
+
+export interface SignoffResponse {
+  cell_id: string;
+  signed_by: string;
+  signed_at: string;
+}
