@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CheckCircle2, AlertTriangle } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -50,64 +49,61 @@ export function ExceptionCellView({ cell, documentId }: Props) {
       (o) => o.id === cell.resolution!.option_id,
     );
     return (
-      <Card className="border bg-green-50 text-green-800 border-green-200">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              <CardTitle className="text-sm">
-                {cell.label ?? "Exception"} — Resolved
-              </CardTitle>
-            </div>
-            <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
-              RESOLVED
+      <div className="flex flex-col bg-green-50 text-green-800 border-green-200">
+        <div className="flex items-center justify-between gap-3 border-b border-green-200 px-3 py-1.5">
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            <span className="text-[11px] font-semibold uppercase tracking-wider">
+              {cell.label ?? "Exception"} — Resolved
             </span>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm">
+          <span className="inline-flex items-center rounded-sm border border-green-300 bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider">
+            RESOLVED
+          </span>
+        </div>
+        <div className="space-y-2 px-3 py-2 text-[13px] leading-snug">
           <div>
-            <div className="text-[11px] uppercase tracking-wide opacity-70">Decision</div>
+            <div className="text-[10px] uppercase tracking-wide opacity-70">Decision</div>
             <div className="font-semibold">{chosen?.label ?? cell.resolution.option_id}</div>
           </div>
           <div>
-            <div className="text-[11px] uppercase tracking-wide opacity-70">Rationale</div>
+            <div className="text-[10px] uppercase tracking-wide opacity-70">Rationale</div>
             <div className="whitespace-pre-wrap">{cell.resolution.rationale}</div>
           </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs opacity-80">
+          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] opacity-80">
             <span>By {cell.resolution.decided_by}</span>
             <span>{new Date(cell.resolution.decided_at).toLocaleString()}</span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   // Unresolved state
-  const canSubmit = optionId !== "" && rationale.trim().length > 0 && !mutation.isPending;
+  const canSubmit =
+    optionId !== "" && rationale.trim().length > 0 && !mutation.isPending;
 
   return (
-    <Card className="border bg-red-50 text-red-800 border-red-200">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4" />
-            <CardTitle className="text-sm">
-              {cell.label ?? "Exception"} — Action required
-            </CardTitle>
-          </div>
-          <span className="inline-flex items-center rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
-            {SEVERITY_LABEL[cell.severity]}
+    <div className="flex flex-col bg-red-50 text-red-800 border-red-200">
+      <div className="flex items-center justify-between gap-3 border-b border-red-200 px-3 py-1.5">
+        <div className="flex items-center gap-1.5">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span className="text-[11px] font-semibold uppercase tracking-wider">
+            {cell.label ?? "Exception"} — Action required
           </span>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-5">
-        <p className="text-sm">{cell.description}</p>
+        <span className="inline-flex items-center rounded-sm border border-red-300 bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider">
+          {SEVERITY_LABEL[cell.severity]}
+        </span>
+      </div>
+      <div className="space-y-3 px-3 py-2">
+        <p className="text-[13px] leading-snug">{cell.description}</p>
 
-        <div className="space-y-2">
-          <Label className="text-xs uppercase tracking-wide opacity-70">
+        <div className="space-y-1.5">
+          <Label className="text-[10px] uppercase tracking-wide opacity-70">
             Choose remediation
           </Label>
-          <RadioGroup value={optionId} onValueChange={setOptionId} className="gap-2">
+          <RadioGroup value={optionId} onValueChange={setOptionId} className="gap-1">
             {cell.remediation_options.map((opt) => {
               const id = `opt-${cell.cell_id}-${opt.id}`;
               const selected = optionId === opt.id;
@@ -116,8 +112,10 @@ export function ExceptionCellView({ cell, documentId }: Props) {
                   key={opt.id}
                   htmlFor={id}
                   className={cn(
-                    "flex cursor-pointer items-start gap-3 rounded-md border bg-white/60 p-3 transition-colors",
-                    selected ? "border-red-400 ring-1 ring-red-300" : "border-red-200 hover:bg-white",
+                    "flex cursor-pointer items-start gap-2 border bg-white/60 px-2 py-1.5 transition-colors",
+                    selected
+                      ? "border-red-400 ring-1 ring-red-300"
+                      : "border-red-200 hover:bg-white",
                   )}
                 >
                   <RadioGroupItem
@@ -126,8 +124,12 @@ export function ExceptionCellView({ cell, documentId }: Props) {
                     className="mt-0.5 border-red-400 text-red-700"
                   />
                   <div className="space-y-0.5">
-                    <div className="text-sm font-semibold">{opt.label}</div>
-                    <div className="text-xs opacity-80">{opt.description}</div>
+                    <div className="text-[13px] font-semibold leading-snug">
+                      {opt.label}
+                    </div>
+                    <div className="text-[11px] leading-snug opacity-80">
+                      {opt.description}
+                    </div>
                   </div>
                 </label>
               );
@@ -135,10 +137,10 @@ export function ExceptionCellView({ cell, documentId }: Props) {
           </RadioGroup>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label
             htmlFor={`rationale-${cell.cell_id}`}
-            className="text-xs uppercase tracking-wide opacity-70"
+            className="text-[10px] uppercase tracking-wide opacity-70"
           >
             Rationale (required)
           </Label>
@@ -147,22 +149,23 @@ export function ExceptionCellView({ cell, documentId }: Props) {
             value={rationale}
             onChange={(e) => setRationale(e.target.value)}
             placeholder="Explain the basis for this decision. This will be attached to the audit record."
-            className="bg-white/80 border-red-200 text-foreground placeholder:text-muted-foreground"
-            rows={4}
+            className="bg-white/80 border-red-200 text-foreground placeholder:text-muted-foreground rounded-none text-[13px] min-h-0"
+            rows={3}
           />
         </div>
 
         <div className="flex items-center justify-end gap-2">
           <Button
             type="button"
+            size="sm"
             disabled={!canSubmit}
             onClick={() => mutation.mutate()}
-            className="bg-red-600 text-white hover:bg-red-700"
+            className="bg-red-600 text-white hover:bg-red-700 rounded-none h-8"
           >
             {mutation.isPending ? "Recording…" : "Confirm decision"}
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

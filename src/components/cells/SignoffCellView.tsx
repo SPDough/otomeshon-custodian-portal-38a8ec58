@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CheckCircle2, FileSignature } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +34,7 @@ function OpenExceptionsBadge({
   const badge = (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold tabular-nums cursor-default",
+        "inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[10px] font-semibold tabular-nums cursor-default",
         none
           ? "bg-green-50 text-green-800 border-green-200"
           : "bg-red-50 text-red-800 border-red-200",
@@ -76,8 +75,6 @@ function OpenExceptionsBadge({
   );
 }
 
-
-
 const DEFAULT_SIGNER = "current.user@vellum.ops";
 
 export function SignoffCellView({
@@ -105,113 +102,111 @@ export function SignoffCellView({
 
   if (signed) {
     return (
-      <Card className="border bg-green-50 text-green-800 border-green-200">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              <CardTitle className="text-sm">
-                {cell.label ?? "Signoff"} — Signed
-              </CardTitle>
-            </div>
-            <div className="flex items-center gap-2">
-              <OpenExceptionsBadge count={openExceptions} subjects={openExceptionSubjects} />
-              <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
-                SIGNED
-              </span>
-            </div>
+      <div className="flex flex-col bg-green-50 text-green-800 border-green-200">
+        <div className="flex items-center justify-between gap-3 border-b border-green-200 px-3 py-1.5">
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            <span className="text-[11px] font-semibold uppercase tracking-wider">
+              {cell.label ?? "Signoff"} — Signed
+            </span>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm">
+          <div className="flex items-center gap-2">
+            <OpenExceptionsBadge count={openExceptions} subjects={openExceptionSubjects} />
+            <span className="inline-flex items-center rounded-sm border border-green-300 bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider">
+              SIGNED
+            </span>
+          </div>
+        </div>
+        <div className="space-y-1 px-3 py-2 text-[13px] leading-snug">
           <div>
-            <div className="text-[11px] uppercase tracking-wide opacity-70">
+            <div className="text-[10px] uppercase tracking-wide opacity-70">
               Required role
             </div>
             <div className="font-semibold">{cell.required_role}</div>
           </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs opacity-80">
+          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] opacity-80">
             <span>By {cell.signed_by}</span>
             <span>{new Date(cell.signed_at!).toLocaleString()}</span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   const canSubmit = !blocked && signer.trim().length > 0 && !mutation.isPending;
 
   return (
-    <Card
+    <div
       className={cn(
-        "border",
+        "flex flex-col",
         blocked
           ? "bg-gray-100 text-gray-600 border-gray-200"
           : "bg-amber-50 text-amber-800 border-amber-200",
       )}
     >
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <FileSignature className="h-4 w-4" />
-            <CardTitle className="text-sm">
-              {cell.label ?? "Signoff"} — {cell.required_role}
-            </CardTitle>
-          </div>
-          <div className="flex items-center gap-2">
-            <OpenExceptionsBadge count={openExceptions} subjects={openExceptionSubjects} />
-            <span
-              className={cn(
-                "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wider",
-                blocked
-                  ? "border-gray-200 bg-gray-100"
-                  : "border-amber-200 bg-amber-50",
-              )}
-            >
-              {blocked ? "BLOCKED" : "AWAITING SIGNOFF"}
-            </span>
-          </div>
+      <div
+        className={cn(
+          "flex items-center justify-between gap-3 border-b px-3 py-1.5",
+          blocked ? "border-gray-200" : "border-amber-200",
+        )}
+      >
+        <div className="flex items-center gap-1.5">
+          <FileSignature className="h-3.5 w-3.5" />
+          <span className="text-[11px] font-semibold uppercase tracking-wider">
+            {cell.label ?? "Signoff"} — {cell.required_role}
+          </span>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm">
+        <div className="flex items-center gap-2">
+          <OpenExceptionsBadge count={openExceptions} subjects={openExceptionSubjects} />
+          <span
+            className={cn(
+              "inline-flex items-center rounded-sm border bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider",
+              blocked ? "border-gray-300" : "border-amber-300",
+            )}
+          >
+            {blocked ? "BLOCKED" : "AWAITING SIGNOFF"}
+          </span>
+        </div>
+      </div>
+      <div className="space-y-2 px-3 py-2">
+        <p className="text-[13px] leading-snug">
           {blocked
             ? blockedReason ??
               "Signoff is blocked. Resolve all open exceptions before signing."
             : `Confirm review and sign off as ${cell.required_role}. This action will be recorded in the audit log.`}
         </p>
 
-        <div className="space-y-2">
-          <Label
-            htmlFor={`signer-${cell.cell_id}`}
-            className="text-xs uppercase tracking-wide opacity-70"
-          >
-            Signing as
-          </Label>
-          <Input
-            id={`signer-${cell.cell_id}`}
-            value={signer}
-            onChange={(e) => setSigner(e.target.value)}
-            disabled={blocked || mutation.isPending}
-            className="bg-white/80 text-foreground"
-            placeholder="name@example.com"
-          />
-        </div>
-
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-end gap-2">
+          <div className="flex-1 space-y-1">
+            <Label
+              htmlFor={`signer-${cell.cell_id}`}
+              className="text-[10px] uppercase tracking-wide opacity-70"
+            >
+              Signing as
+            </Label>
+            <Input
+              id={`signer-${cell.cell_id}`}
+              value={signer}
+              onChange={(e) => setSigner(e.target.value)}
+              disabled={blocked || mutation.isPending}
+              className="bg-white/80 text-foreground rounded-none h-8 text-[13px]"
+              placeholder="name@example.com"
+            />
+          </div>
           <Button
             type="button"
+            size="sm"
             disabled={!canSubmit}
             onClick={() => mutation.mutate()}
-            className={
-              blocked
-                ? undefined
-                : "bg-amber-600 text-white hover:bg-amber-700"
-            }
+            className={cn(
+              "rounded-none h-8",
+              !blocked && "bg-amber-600 text-white hover:bg-amber-700",
+            )}
           >
             {mutation.isPending ? "Signing…" : "Sign off"}
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

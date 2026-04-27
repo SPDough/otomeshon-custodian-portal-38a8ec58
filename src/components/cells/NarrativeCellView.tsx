@@ -1,19 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { NarrativeCell } from "@/types/vellum";
 
 export function NarrativeCellView({ cell }: { cell: NarrativeCell }) {
   return (
-    <Card>
+    <div className="px-3 py-2 text-[13px] leading-snug">
       {cell.label && (
-        <CardHeader>
-          <CardTitle>{cell.label}</CardTitle>
-        </CardHeader>
+        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {cell.label}
+        </div>
       )}
-      <CardContent className={cell.label ? "" : "pt-6"}>
-        <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-wrap">
-          {cell.body}
-        </p>
-      </CardContent>
-    </Card>
+      <p className="whitespace-pre-wrap text-foreground/90">{cell.body}</p>
+    </div>
   );
 }
