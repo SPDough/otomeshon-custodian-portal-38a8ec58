@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { Boxes } from "lucide-react";
 import type { Cell, CellStatus, ProcedureDocument } from "@/types/vellum";
 import { cn } from "@/lib/utils";
@@ -6,6 +6,7 @@ import { STATUS_DOT_CLASSES } from "@/lib/cellStatus";
 
 interface Props {
   document?: ProcedureDocument;
+  activeCellId?: string | null;
   children: ReactNode;
 }
 
@@ -56,13 +57,32 @@ function deriveStatus(c: Cell): CellStatus {
   }
 }
 
-export function AppShell({ document: doc, children }: Props) {
+export function AppShell({ document: doc, activeCellId, children }: Props) {
   const steps = deriveSteps(doc);
+  const navRef = useRef<HTMLElement | null>(null);
+  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const handleJump = (cellId: string) => {
     const el = window.document.getElementById(`cell-${cellId}`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  // Keep the active step visible inside the sidebar's own scroll area.
+  useEffect(() => {
+    if (!activeCellId) return;
+    const btn = buttonRefs.current[activeCellId];
+    const nav = navRef.current;
+    if (!btn || !nav) return;
+    const btnTop = btn.offsetTop;
+    const btnBottom = btnTop + btn.offsetHeight;
+    const viewTop = nav.scrollTop;
+    const viewBottom = viewTop + nav.clientHeight;
+    if (btnTop < viewTop + 8) {
+      nav.scrollTo({ top: btnTop - 8, behavior: "smooth" });
+    } else if (btnBottom > viewBottom - 8) {
+      nav.scrollTo({ top: btnBottom - nav.clientHeight + 8, behavior: "smooth" });
+    }
+  }, [activeCellId]);
 
   return (
     <div
@@ -93,6 +113,7 @@ export function AppShell({ document: doc, children }: Props) {
 
       {/* Sidebar */}
       <aside
+        ref={navRef as unknown as React.RefObject<HTMLElement>}
         className="row-start-2 border-r bg-card overflow-y-auto"
         style={{ width: 220 }}
       >
@@ -100,25 +121,37 @@ export function AppShell({ document: doc, children }: Props) {
           Steps
         </div>
         <nav className="px-1 py-1">
-          {steps.map((s, i) => (
-            <button
-              key={s.cell_id}
-              type="button"
-              onClick={() => handleJump(s.cell_id)}
-              className="flex w-full items-center gap-2 rounded-sm px-2 py-1 text-left text-[13px] hover:bg-muted transition-colors"
-            >
-              <span
+          {steps.map((s, i) => {
+            const isActive = s.cell_id === activeCellId;
+            return (
+              <button
+                key={s.cell_id}
+                ref={(el) => {
+                  buttonRefs.current[s.cell_id] = el;
+                }}
+                type="button"
+                onClick={() => handleJump(s.cell_id)}
+                aria-current={isActive ? "true" : undefined}
                 className={cn(
-                  "h-2 w-2 shrink-0 rounded-full",
-                  STATUS_DOT_CLASSES[s.status],
+                  "flex w-full items-center gap-2 rounded-sm px-2 py-1 text-left text-[13px] transition-colors",
+                  isActive
+                    ? "bg-accent/10 border-l-2 border-accent -ml-px pl-[calc(0.5rem-1px)] font-medium"
+                    : "hover:bg-muted",
                 )}
-              />
-              <span className="text-[11px] text-muted-foreground tabular-nums w-5">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="truncate">{s.label}</span>
-            </button>
-          ))}
+              >
+                <span
+                  className={cn(
+                    "h-2 w-2 shrink-0 rounded-full",
+                    STATUS_DOT_CLASSES[s.status],
+                  )}
+                />
+                <span className="text-[11px] text-muted-foreground tabular-nums w-5">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="truncate">{s.label}</span>
+              </button>
+            );
+          })}
           {steps.length === 0 && (
             <div className="px-2 py-3 text-xs text-muted-foreground">No steps yet.</div>
           )}
