@@ -38,14 +38,29 @@ export default function ProcedureViewer() {
             </p>
           </div>
           <div className="space-y-4">
-            {[...doc.cells]
-              .sort((a, b) => a.position - b.position)
-              .filter((c) => c.cell_role !== "validation")
-              .map((cell) => (
-                <div key={cell.cell_id} id={`cell-${cell.cell_id}`} className="scroll-mt-6">
-                  {renderCell(cell, doc.id)}
-                </div>
-              ))}
+            {(() => {
+              const unresolvedExceptions = doc.cells.filter(
+                (c) => c.cell_role === "exception" && !c.resolution,
+              ).length;
+              const signoffBlocked = unresolvedExceptions > 0;
+              const blockedReason =
+                unresolvedExceptions > 0
+                  ? `Resolve ${unresolvedExceptions} open exception${unresolvedExceptions === 1 ? "" : "s"} before signing off.`
+                  : undefined;
+
+              return [...doc.cells]
+                .sort((a, b) => a.position - b.position)
+                .filter((c) => c.cell_role !== "validation")
+                .map((cell) => (
+                  <div
+                    key={cell.cell_id}
+                    id={`cell-${cell.cell_id}`}
+                    className="scroll-mt-6"
+                  >
+                    {renderCell(cell, doc.id, { signoffBlocked, blockedReason })}
+                  </div>
+                ));
+            })()}
           </div>
         </div>
       )}
@@ -53,7 +68,12 @@ export default function ProcedureViewer() {
   );
 }
 
-function renderCell(cell: Cell, documentId: string) {
+interface RenderOpts {
+  signoffBlocked: boolean;
+  blockedReason?: string;
+}
+
+function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
   switch (cell.cell_role) {
     case "narrative":
       return <NarrativeCellView cell={cell} />;
@@ -64,7 +84,14 @@ function renderCell(cell: Cell, documentId: string) {
     case "exception":
       return <ExceptionCellView cell={cell} documentId={documentId} />;
     case "signoff":
-      return <SignoffCellView cell={cell} />;
+      return (
+        <SignoffCellView
+          cell={cell}
+          documentId={documentId}
+          blocked={opts.signoffBlocked}
+          blockedReason={opts.blockedReason}
+        />
+      );
     case "validation":
       return null;
     default:
