@@ -51,7 +51,13 @@ function OpenExceptionsBadge({ count }: { count: number }) {
 
 const DEFAULT_SIGNER = "current.user@vellum.ops";
 
-export function SignoffCellView({ cell, documentId, blocked, blockedReason }: Props) {
+export function SignoffCellView({
+  cell,
+  documentId,
+  blocked,
+  blockedReason,
+  openExceptions = 0,
+}: Props) {
   const queryClient = useQueryClient();
   const [signer, setSigner] = useState<string>(DEFAULT_SIGNER);
   const signed = Boolean(cell.signed_by && cell.signed_at);
