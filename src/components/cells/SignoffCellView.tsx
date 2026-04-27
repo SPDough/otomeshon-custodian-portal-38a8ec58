@@ -127,16 +127,19 @@ export function SignoffCellView({
               {cell.label ?? "Signoff"} — {cell.required_role}
             </CardTitle>
           </div>
-          <span
-            className={cn(
-              "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wider",
-              blocked
-                ? "border-gray-200 bg-gray-100"
-                : "border-amber-200 bg-amber-50",
-            )}
-          >
-            {blocked ? "BLOCKED" : "AWAITING SIGNOFF"}
-          </span>
+          <div className="flex items-center gap-2">
+            <OpenExceptionsBadge count={openExceptions} />
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wider",
+                blocked
+                  ? "border-gray-200 bg-gray-100"
+                  : "border-amber-200 bg-amber-50",
+              )}
+            >
+              {blocked ? "BLOCKED" : "AWAITING SIGNOFF"}
+            </span>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
