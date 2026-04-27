@@ -4,6 +4,9 @@ import type {
   ExceptionDecisionRequest,
   ExceptionDecisionResponse,
   ProcedureDocument,
+  SignoffCell,
+  SignoffRequest,
+  SignoffResponse,
 } from "@/types/vellum";
 
 // In-memory mutable copy so the mock mutation is reflected on refetch.
@@ -46,6 +49,33 @@ export async function decideException(
     cell_id: cellId,
     resolution: exceptionCell.resolution,
   };
+}
+
+export async function signOffCell(
+  cellId: string,
+  payload: SignoffRequest,
+): Promise<SignoffResponse> {
+  await delay(jitter());
+  const cell = documentStore.cells.find((c) => c.cell_id === cellId);
+  if (!cell || cell.cell_role !== "signoff") {
+    throw new Error(`Signoff cell not found: ${cellId}`);
+  }
+
+  // Block signoff if any exception is unresolved.
+  const unresolved = documentStore.cells.find(
+    (c) => c.cell_role === "exception" && !(c as ExceptionCell).resolution,
+  );
+  if (unresolved) {
+    throw new Error("Cannot sign off: there are unresolved exceptions.");
+  }
+
+  const signoffCell = cell as SignoffCell;
+  const signed_at = new Date().toISOString();
+  signoffCell.signed_by = payload.signed_by;
+  signoffCell.signed_at = signed_at;
+  documentStore.status = "signed";
+
+  return { cell_id: cellId, signed_by: payload.signed_by, signed_at };
 }
 
 // Test helper — not used by the app, useful in dev console.
