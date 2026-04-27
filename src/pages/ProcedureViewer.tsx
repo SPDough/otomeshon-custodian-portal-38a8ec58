@@ -83,6 +83,7 @@ interface RenderOpts {
   signoffBlocked: boolean;
   blockedReason?: string;
   openExceptions: number;
+  openExceptionSubjects: string[];
 }
 
 function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
