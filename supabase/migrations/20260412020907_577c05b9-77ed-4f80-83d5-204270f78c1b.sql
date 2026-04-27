@@ -1,1 +1,0 @@
-ALTER TABLE public.agents ADD COLUMN workflows text[] NOT NULL DEFAULT '{}'::text[];
