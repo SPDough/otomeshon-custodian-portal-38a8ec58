@@ -86,6 +86,7 @@ export function SignoffCellView({
   blocked,
   blockedReason,
   openExceptions = 0,
+  openExceptionSubjects = [],
 }: Props) {
   const queryClient = useQueryClient();
   const [signer, setSigner] = useState<string>(DEFAULT_SIGNER);
@@ -114,7 +115,7 @@ export function SignoffCellView({
               </CardTitle>
             </div>
             <div className="flex items-center gap-2">
-              <OpenExceptionsBadge count={openExceptions} />
+              <OpenExceptionsBadge count={openExceptions} subjects={openExceptionSubjects} />
               <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-bold tracking-wider">
                 SIGNED
               </span>
@@ -157,7 +158,7 @@ export function SignoffCellView({
             </CardTitle>
           </div>
           <div className="flex items-center gap-2">
-            <OpenExceptionsBadge count={openExceptions} />
+            <OpenExceptionsBadge count={openExceptions} subjects={openExceptionSubjects} />
             <span
               className={cn(
                 "inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-wider",
