@@ -39,9 +39,15 @@ export default function ProcedureViewer() {
           </div>
           <div className="space-y-4">
             {(() => {
-              const unresolvedExceptions = doc.cells.filter(
-                (c) => c.cell_role === "exception" && !c.resolution,
-              ).length;
+              const unresolvedExceptionCells = [...doc.cells]
+                .sort((a, b) => a.position - b.position)
+                .filter(
+                  (c) => c.cell_role === "exception" && !c.resolution,
+                );
+              const unresolvedExceptions = unresolvedExceptionCells.length;
+              const openExceptionSubjects = unresolvedExceptionCells.map(
+                (c) => c.label ?? "Exception",
+              );
               const signoffBlocked = unresolvedExceptions > 0;
               const blockedReason =
                 unresolvedExceptions > 0
@@ -61,6 +67,7 @@ export default function ProcedureViewer() {
                       signoffBlocked,
                       blockedReason,
                       openExceptions: unresolvedExceptions,
+                      openExceptionSubjects,
                     })}
                   </div>
                 ));
@@ -76,6 +83,7 @@ interface RenderOpts {
   signoffBlocked: boolean;
   blockedReason?: string;
   openExceptions: number;
+  openExceptionSubjects: string[];
 }
 
 function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
@@ -96,6 +104,7 @@ function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
           blocked={opts.signoffBlocked}
           blockedReason={opts.blockedReason}
           openExceptions={opts.openExceptions}
+          openExceptionSubjects={opts.openExceptionSubjects}
         />
       );
     case "validation":
