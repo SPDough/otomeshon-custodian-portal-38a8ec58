@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getDocument } from "@/lib/api";
 import { AppShell } from "@/components/AppShell";
@@ -41,8 +42,57 @@ export default function ProcedureViewer() {
     refetchInterval: 15000,
   });
 
+  const [activeCellId, setActiveCellId] = useState<string | null>(null);
+  const visibilityRef = useRef<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    if (!doc) return;
+    visibilityRef.current = new Map();
+    const rows = Array.from(
+      window.document.querySelectorAll<HTMLElement>("[data-cell-row='true']"),
+    );
+    if (rows.length === 0) return;
+
+    const pick = () => {
+      let bestId: string | null = null;
+      let bestRatio = 0;
+      for (const [id, ratio] of visibilityRef.current.entries()) {
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          bestId = id;
+        }
+      }
+      if (bestId && bestRatio > 0) setActiveCellId(bestId);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = (entry.target as HTMLElement).dataset.cellId;
+          if (!id) continue;
+          if (entry.isIntersecting) {
+            visibilityRef.current.set(id, entry.intersectionRatio);
+          } else {
+            visibilityRef.current.set(id, 0);
+          }
+        }
+        pick();
+      },
+      {
+        // Account for sticky formula bar (~29px) + column header (~22px).
+        rootMargin: "-56px 0px -40% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    rows.forEach((r) => observer.observe(r));
+    // Seed initial active cell.
+    setActiveCellId((cur) => cur ?? rows[0]?.dataset.cellId ?? null);
+    return () => observer.disconnect();
+  }, [doc]);
+
   return (
-    <AppShell document={doc}>
+    <AppShell document={doc} activeCellId={activeCellId}>
       {isLoading && (
         <div className="px-4 py-3 text-sm text-muted-foreground">
           Loading procedure document…
@@ -111,6 +161,8 @@ export default function ProcedureViewer() {
                     <div
                       key={cell.cell_id}
                       id={`cell-${cell.cell_id}`}
+                      data-cell-row="true"
+                      data-cell-id={cell.cell_id}
                       className="grid scroll-mt-16 border-b last:border-b-0"
                       style={{ gridTemplateColumns: "40px 110px 1fr" }}
                     >
