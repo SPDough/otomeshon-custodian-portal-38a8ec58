@@ -98,11 +98,15 @@ export default function ProcedureViewer() {
           Loading procedure document…
         </div>
       )}
-      {isError && (
-        <div className="m-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
-          Failed to load document: {(error as Error)?.message}
-        </div>
-      )}
+      {isError && (() => {
+        // Log full error details for developers; show a generic message to users.
+        if (error) console.error("Failed to load procedure document", error);
+        return (
+          <div className="m-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+            Failed to load document. Please try again.
+          </div>
+        );
+      })()}
       {doc &&
         (() => {
           const unresolvedExceptionCells = [...doc.cells]
