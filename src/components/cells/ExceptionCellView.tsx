@@ -30,7 +30,7 @@ export function ExceptionCellView({ cell, documentId }: Props) {
 
   const mutation = useMutation({
     mutationFn: () =>
-      decideException(cell.cell_id, {
+      decideException(documentId, cell.cell_id, {
         option_id: optionId,
         rationale: rationale.trim(),
       }),
