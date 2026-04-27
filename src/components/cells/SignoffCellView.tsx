@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { signOffCell } from "@/lib/api";
 import type { SignoffCell } from "@/types/vellum";
@@ -19,19 +20,22 @@ interface Props {
   blockedReason?: string;
   /** Number of unresolved exceptions in the document. */
   openExceptions?: number;
+  /** Subjects/labels of the unresolved exceptions, in document order. */
+  openExceptionSubjects?: string[];
 }
 
-function OpenExceptionsBadge({ count }: { count: number }) {
+function OpenExceptionsBadge({
+  count,
+  subjects,
+}: {
+  count: number;
+  subjects: string[];
+}) {
   const none = count === 0;
-  return (
+  const badge = (
     <span
-      title={
-        none
-          ? "No unresolved exceptions"
-          : `${count} unresolved exception${count === 1 ? "" : "s"}`
-      }
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold tabular-nums",
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold tabular-nums cursor-default",
         none
           ? "bg-green-50 text-green-800 border-green-200"
           : "bg-red-50 text-red-800 border-red-200",
@@ -46,7 +50,32 @@ function OpenExceptionsBadge({ count }: { count: number }) {
       {count} open
     </span>
   );
+
+  return (
+    <Tooltip delayDuration={150}>
+      <TooltipTrigger asChild>{badge}</TooltipTrigger>
+      <TooltipContent side="top" align="end">
+        {none ? (
+          <span>No unresolved exceptions</span>
+        ) : (
+          <div className="space-y-1">
+            <div className="font-semibold">
+              {count} unresolved exception{count === 1 ? "" : "s"}
+            </div>
+            <ul className="list-disc pl-4 space-y-0.5">
+              {subjects.map((s, i) => (
+                <li key={i} className="leading-snug">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </TooltipContent>
+    </Tooltip>
+  );
 }
+
 
 
 const DEFAULT_SIGNER = "current.user@vellum.ops";
