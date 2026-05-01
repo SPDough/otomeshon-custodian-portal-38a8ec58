@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Box, Typography, Alert } from "@mui/material";
 import { getDocument } from "@/lib/api";
 import { AppShell } from "@/components/AppShell";
 import { NarrativeCellView } from "@/components/cells/NarrativeCellView";
@@ -7,31 +8,26 @@ import { ReasoningCellView } from "@/components/cells/ReasoningCellView";
 import { ResultCellView } from "@/components/cells/ResultCellView";
 import { ExceptionCellView } from "@/components/cells/ExceptionCellView";
 import { SignoffCellView } from "@/components/cells/SignoffCellView";
-import { STATUS_DOT_CLASSES } from "@/lib/cellStatus";
-import { cn } from "@/lib/utils";
+import { STATUS_DOT_COLOR } from "@/lib/cellStatus";
 import type { Cell, CellStatus } from "@/types/vellum";
 
 const DOCUMENT_ID = "doc-apac-eq-01-2026-04-24";
 
 const ROLE_LABEL: Record<Cell["cell_role"], string> = {
-  narrative: "NARRATIVE",
-  reasoning: "REASONING",
+  narrative:  "NARRATIVE",
+  reasoning:  "REASONING",
   validation: "VALIDATION",
-  result: "RESULT",
-  exception: "EXCEPTION",
-  signoff: "SIGNOFF",
+  result:     "RESULT",
+  exception:  "EXCEPTION",
+  signoff:    "SIGNOFF",
 };
 
 function rowStatus(c: Cell): CellStatus {
   switch (c.cell_role) {
-    case "result":
-      return c.status;
-    case "exception":
-      return c.resolution ? "pass" : "breach";
-    case "signoff":
-      return c.signed_by ? "pass" : "pending";
-    default:
-      return "pending";
+    case "result":    return c.status;
+    case "exception": return c.resolution ? "pass" : "breach";
+    case "signoff":   return c.signed_by ? "pass" : "pending";
+    default:          return "pending";
   }
 }
 
@@ -57,10 +53,7 @@ export default function ProcedureViewer() {
       let bestId: string | null = null;
       let bestRatio = 0;
       for (const [id, ratio] of visibilityRef.current.entries()) {
-        if (ratio > bestRatio) {
-          bestRatio = ratio;
-          bestId = id;
-        }
+        if (ratio > bestRatio) { bestRatio = ratio; bestId = id; }
       }
       if (bestId && bestRatio > 0) setActiveCellId(bestId);
     };
@@ -70,11 +63,7 @@ export default function ProcedureViewer() {
         for (const entry of entries) {
           const id = (entry.target as HTMLElement).dataset.cellId;
           if (!id) continue;
-          if (entry.isIntersecting) {
-            visibilityRef.current.set(id, entry.intersectionRatio);
-          } else {
-            visibilityRef.current.set(id, 0);
-          }
+          visibilityRef.current.set(id, entry.isIntersecting ? entry.intersectionRatio : 0);
         }
         pick();
       },
@@ -86,7 +75,6 @@ export default function ProcedureViewer() {
     );
 
     rows.forEach((r) => observer.observe(r));
-    // Seed initial active cell.
     setActiveCellId((cur) => cur ?? rows[0]?.dataset.cellId ?? null);
     return () => observer.disconnect();
   }, [doc]);
@@ -94,114 +82,171 @@ export default function ProcedureViewer() {
   return (
     <AppShell document={doc} activeCellId={activeCellId}>
       {isLoading && (
-        <div className="px-4 py-3 text-sm text-muted-foreground">
+        <Typography sx={{ px: 2, py: 1.5, fontSize: 14, color: "text.secondary" }}>
           Loading procedure document…
-        </div>
+        </Typography>
       )}
       {isError && (() => {
-        // Log full error details for developers; show a generic message to users.
         if (error) console.error("Failed to load procedure document", error);
         return (
-          <div className="m-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+          <Alert severity="error" sx={{ m: 2, borderRadius: 0 }}>
             Failed to load document. Please try again.
-          </div>
+          </Alert>
         );
       })()}
-      {doc &&
-        (() => {
-          const unresolvedExceptionCells = [...doc.cells]
-            .sort((a, b) => a.position - b.position)
-            .filter((c) => c.cell_role === "exception" && !c.resolution);
-          const unresolvedExceptions = unresolvedExceptionCells.length;
-          const openExceptionSubjects = unresolvedExceptionCells.map(
-            (c) => c.label ?? "Exception",
-          );
-          const signoffBlocked = unresolvedExceptions > 0;
-          const blockedReason =
-            unresolvedExceptions > 0
-              ? `Resolve ${unresolvedExceptions} open exception${
-                  unresolvedExceptions === 1 ? "" : "s"
-                } before signing off.`
-              : undefined;
+      {doc && (() => {
+        const unresolvedExceptionCells = [...doc.cells]
+          .sort((a, b) => a.position - b.position)
+          .filter((c) => c.cell_role === "exception" && !c.resolution);
+        const unresolvedExceptions = unresolvedExceptionCells.length;
+        const openExceptionSubjects = unresolvedExceptionCells.map((c) => c.label ?? "Exception");
+        const signoffBlocked = unresolvedExceptions > 0;
+        const blockedReason = unresolvedExceptions > 0
+          ? `Resolve ${unresolvedExceptions} open exception${unresolvedExceptions === 1 ? "" : "s"} before signing off.`
+          : undefined;
 
-          const visibleCells = [...doc.cells]
-            .sort((a, b) => a.position - b.position)
-            .filter((c) => c.cell_role !== "validation");
+        const visibleCells = [...doc.cells]
+          .sort((a, b) => a.position - b.position)
+          .filter((c) => c.cell_role !== "validation");
 
-          return (
-            <>
-              {/* Formula bar */}
-              <div className="sticky top-0 z-20 flex items-center gap-3 border-b bg-card px-3 py-1.5 text-[12px]">
-                <span className="font-semibold">{doc.title}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="font-mono text-[11px]">{doc.fund_code}</span>
-                <span className="text-muted-foreground">·</span>
-                <span>NAV as of {doc.as_of_date}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="font-semibold uppercase tracking-wide text-[10px]">
-                  {doc.status.replace("_", " ")}
-                </span>
-              </div>
+        return (
+          <>
+            {/* Formula bar */}
+            <Box
+              sx={{
+                position: "sticky",
+                top: 0,
+                zIndex: 20,
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+                bgcolor: "background.paper",
+                px: 1.5,
+                py: 0.75,
+                fontSize: 12,
+              }}
+            >
+              <Typography sx={{ fontSize: 12, fontWeight: 600 }}>{doc.title}</Typography>
+              <Typography sx={{ color: "text.secondary" }}>·</Typography>
+              <Typography sx={{ fontFamily: "monospace", fontSize: 11 }}>{doc.fund_code}</Typography>
+              <Typography sx={{ color: "text.secondary" }}>·</Typography>
+              <Typography sx={{ fontSize: 12 }}>NAV as of {doc.as_of_date}</Typography>
+              <Typography sx={{ color: "text.secondary" }}>·</Typography>
+              <Typography sx={{ fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                {doc.status.replace("_", " ")}
+              </Typography>
+            </Box>
 
-              {/* Sheet */}
-              <div className="border-y border-border">
-                {/* Column header row */}
-                <div
-                  className="sticky z-10 grid border-b bg-muted/60 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground"
-                  style={{
-                    top: 29 /* matches formula-bar height */,
-                    gridTemplateColumns: "40px 110px 1fr",
-                  }}
-                >
-                  <div className="border-r px-2 py-1 text-right">#</div>
-                  <div className="border-r px-2 py-1">Type</div>
-                  <div className="px-3 py-1">Cell</div>
-                </div>
+            {/* Sheet */}
+            <Box sx={{ borderTop: "1px solid", borderBottom: "1px solid", borderColor: "divider" }}>
+              {/* Column header row */}
+              <Box
+                sx={{
+                  position: "sticky",
+                  top: 29,
+                  zIndex: 10,
+                  display: "grid",
+                  gridTemplateColumns: "40px 110px 1fr",
+                  borderBottom: "1px solid",
+                  borderColor: "divider",
+                  bgcolor: "action.selected",
+                  fontSize: 10,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "text.secondary",
+                }}
+              >
+                <Box sx={{ borderRight: "1px solid", borderColor: "divider", px: 1, py: 0.5, textAlign: "right" }}>#</Box>
+                <Box sx={{ borderRight: "1px solid", borderColor: "divider", px: 1, py: 0.5 }}>Type</Box>
+                <Box sx={{ px: 1.5, py: 0.5 }}>Cell</Box>
+              </Box>
 
-                {/* Rows */}
-                {visibleCells.map((cell, i) => {
-                  const status = rowStatus(cell);
-                  return (
-                    <div
-                      key={cell.cell_id}
-                      id={`cell-${cell.cell_id}`}
-                      data-cell-row="true"
-                      data-cell-id={cell.cell_id}
-                      className="grid scroll-mt-16 border-b last:border-b-0"
-                      style={{ gridTemplateColumns: "40px 110px 1fr" }}
+              {/* Rows */}
+              {visibleCells.map((cell, i) => {
+                const status = rowStatus(cell);
+                return (
+                  <Box
+                    key={cell.cell_id}
+                    id={`cell-${cell.cell_id}`}
+                    data-cell-row="true"
+                    data-cell-id={cell.cell_id}
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "40px 110px 1fr",
+                      borderBottom: "1px solid",
+                      borderColor: "divider",
+                      scrollMarginTop: 64,
+                      "&:last-child": { borderBottom: "none" },
+                    }}
+                  >
+                    {/* Row-number gutter */}
+                    <Box
+                      sx={{
+                        borderRight: "1px solid",
+                        borderColor: "divider",
+                        bgcolor: "action.hover",
+                        px: 1,
+                        py: 1,
+                        textAlign: "right",
+                        fontFamily: "monospace",
+                        fontSize: 11,
+                        fontVariantNumeric: "tabular-nums",
+                        color: "text.secondary",
+                      }}
                     >
-                      {/* Row-number gutter */}
-                      <div className="border-r bg-muted/40 px-2 py-2 text-right font-mono text-[11px] tabular-nums text-muted-foreground">
-                        {String(i + 1).padStart(2, "0")}
-                      </div>
-                      {/* Type column */}
-                      <div className="flex items-start gap-1.5 border-r bg-muted/20 px-2 py-2">
-                        <span
-                          className={cn(
-                            "mt-1 h-1.5 w-1.5 shrink-0 rounded-full",
-                            STATUS_DOT_CLASSES[status],
-                          )}
-                        />
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                          {ROLE_LABEL[cell.cell_role]}
-                        </span>
-                      </div>
-                      {/* Cell column */}
-                      <div className="min-h-[36px]">
-                        {renderCell(cell, doc.id, {
-                          signoffBlocked,
-                          blockedReason,
-                          openExceptions: unresolvedExceptions,
-                          openExceptionSubjects,
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          );
-        })()}
+                      {String(i + 1).padStart(2, "0")}
+                    </Box>
+                    {/* Type column */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 0.75,
+                        borderRight: "1px solid",
+                        borderColor: "divider",
+                        bgcolor: "action.hover",
+                        px: 1,
+                        py: 1,
+                        opacity: 0.8,
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{
+                          mt: "3px",
+                          width: 6,
+                          height: 6,
+                          flexShrink: 0,
+                          borderRadius: "50%",
+                          bgcolor: STATUS_DOT_COLOR[status],
+                        }}
+                      />
+                      <Typography
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 600,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.06em",
+                          color: "text.secondary",
+                        }}
+                      >
+                        {ROLE_LABEL[cell.cell_role]}
+                      </Typography>
+                    </Box>
+                    {/* Cell column */}
+                    <Box sx={{ minHeight: 36 }}>
+                      {renderCell(cell, doc.id, { signoffBlocked, blockedReason, openExceptions: unresolvedExceptions, openExceptionSubjects })}
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+          </>
+        );
+      })()}
     </AppShell>
   );
 }
@@ -215,14 +260,10 @@ interface RenderOpts {
 
 function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
   switch (cell.cell_role) {
-    case "narrative":
-      return <NarrativeCellView cell={cell} />;
-    case "reasoning":
-      return <ReasoningCellView cell={cell} />;
-    case "result":
-      return <ResultCellView cell={cell} />;
-    case "exception":
-      return <ExceptionCellView cell={cell} documentId={documentId} />;
+    case "narrative":  return <NarrativeCellView cell={cell} />;
+    case "reasoning":  return <ReasoningCellView cell={cell} />;
+    case "result":     return <ResultCellView cell={cell} />;
+    case "exception":  return <ExceptionCellView cell={cell} documentId={documentId} />;
     case "signoff":
       return (
         <SignoffCellView
@@ -234,9 +275,6 @@ function renderCell(cell: Cell, documentId: string, opts: RenderOpts) {
           openExceptionSubjects={opts.openExceptionSubjects}
         />
       );
-    case "validation":
-      return null;
-    default:
-      return null;
+    default: return null;
   }
 }
