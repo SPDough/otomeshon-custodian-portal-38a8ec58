@@ -1,30 +1,60 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { Box, Collapse, Typography } from "@mui/material";
+import { ChevronRight, ExpandMore } from "@mui/icons-material";
 import type { ReasoningCell } from "@/types/vellum";
 
 export function ReasoningCellView({ cell }: { cell: ReasoningCell }) {
   const [open, setOpen] = useState(!cell.collapsed_by_default);
+
   return (
-    <div className="bg-muted/40 px-3 py-2">
-      <button
+    <Box sx={{ bgcolor: "action.hover", px: 1.5, py: 1 }}>
+      <Box
+        component="button"
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 text-left"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 0.75,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          p: 0,
+          color: "inherit",
+        }}
       >
-        {open ? (
-          <ChevronDown className="h-3.5 w-3.5" />
-        ) : (
-          <ChevronRight className="h-3.5 w-3.5" />
-        )}
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        {open
+          ? <ExpandMore sx={{ fontSize: 14, color: "text.secondary" }} />
+          : <ChevronRight sx={{ fontSize: 14, color: "text.secondary" }} />
+        }
+        <Typography
+          sx={{
+            fontSize: 11,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            color: "text.secondary",
+          }}
+        >
           {cell.label ?? "Agent reasoning"}
-        </span>
-      </button>
-      {open && (
-        <p className="mt-1 whitespace-pre-wrap font-mono text-[12px] leading-snug text-muted-foreground">
+        </Typography>
+      </Box>
+      <Collapse in={open}>
+        <Typography
+          component="pre"
+          sx={{
+            mt: 0.5,
+            whiteSpace: "pre-wrap",
+            fontFamily: "monospace",
+            fontSize: 12,
+            lineHeight: 1.4,
+            color: "text.secondary",
+            m: 0,
+          }}
+        >
           {cell.body}
-        </p>
-      )}
-    </div>
+        </Typography>
+      </Collapse>
+    </Box>
   );
 }

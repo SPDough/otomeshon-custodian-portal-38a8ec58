@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CheckCircle2, AlertTriangle } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
+import {
+  Box,
+  Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { CheckCircleOutline, WarningAmber } from "@mui/icons-material";
 import { decideException } from "@/lib/api";
 import type { ExceptionCell } from "@/types/vellum";
 
@@ -23,149 +26,184 @@ const SEVERITY_LABEL: Record<ExceptionCell["severity"], string> = {
   critical: "CRITICAL",
 };
 
+const GREEN = { bgcolor: "#f0fdf4", color: "#166534", borderColor: "#bbf7d0" };
+const RED   = { bgcolor: "#fef2f2", color: "#991b1b", borderColor: "#fecaca" };
+
 export function ExceptionCellView({ cell, documentId }: Props) {
   const queryClient = useQueryClient();
-  const [optionId, setOptionId] = useState<string>("");
-  const [rationale, setRationale] = useState<string>("");
+  const [optionId, setOptionId] = useState("");
+  const [rationale, setRationale] = useState("");
 
   const mutation = useMutation({
-    mutationFn: () =>
-      decideException(documentId, cell.cell_id, {
-        option_id: optionId,
-        rationale: rationale.trim(),
-      }),
+    mutationFn: () => decideException(documentId, cell.cell_id, { option_id: optionId, rationale: rationale.trim() }),
     onSuccess: () => {
       toast.success("Exception decision recorded");
       queryClient.invalidateQueries({ queryKey: ["document", documentId] });
     },
-    onError: (err: Error) => {
-      toast.error(err.message ?? "Failed to record decision");
-    },
+    onError: (err: Error) => toast.error(err.message ?? "Failed to record decision"),
   });
 
-  // Resolved state
   if (cell.resolution) {
-    const chosen = cell.remediation_options.find(
-      (o) => o.id === cell.resolution!.option_id,
-    );
+    const chosen = cell.remediation_options.find((o) => o.id === cell.resolution!.option_id);
     return (
-      <div className="flex flex-col bg-green-50 text-green-800 border-green-200">
-        <div className="flex items-center justify-between gap-3 border-b border-green-200 px-3 py-1.5">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            <span className="text-[11px] font-semibold uppercase tracking-wider">
+      <Box sx={{ display: "flex", flexDirection: "column", ...GREEN }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1.5, borderBottom: "1px solid", borderColor: GREEN.borderColor, px: 1.5, py: 0.75 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+            <CheckCircleOutline sx={{ fontSize: 14 }} />
+            <Typography sx={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
               {cell.label ?? "Exception"} — Resolved
-            </span>
-          </div>
-          <span className="inline-flex items-center rounded-sm border border-green-300 bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider">
-            RESOLVED
-          </span>
-        </div>
-        <div className="space-y-2 px-3 py-2 text-[13px] leading-snug">
-          <div>
-            <div className="text-[10px] uppercase tracking-wide opacity-70">Decision</div>
-            <div className="font-semibold">{chosen?.label ?? cell.resolution.option_id}</div>
-          </div>
-          <div>
-            <div className="text-[10px] uppercase tracking-wide opacity-70">Rationale</div>
-            <div className="whitespace-pre-wrap">{cell.resolution.rationale}</div>
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] opacity-80">
-            <span>By {cell.resolution.decided_by}</span>
-            <span>{new Date(cell.resolution.decided_at).toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
+            </Typography>
+          </Box>
+          <StatusBadge label="RESOLVED" borderColor={GREEN.borderColor} color={GREEN.color} />
+        </Box>
+        <Box sx={{ px: 1.5, py: 1, display: "flex", flexDirection: "column", gap: 1, fontSize: 13, lineHeight: 1.4 }}>
+          <FieldRow label="Decision" value={chosen?.label ?? cell.resolution.option_id} />
+          <FieldRow label="Rationale" value={cell.resolution.rationale} />
+          <Typography sx={{ fontSize: 11, opacity: 0.8 }}>
+            By {cell.resolution.decided_by} · {new Date(cell.resolution.decided_at).toLocaleString()}
+          </Typography>
+        </Box>
+      </Box>
     );
   }
 
-  // Unresolved state
-  const canSubmit =
-    optionId !== "" && rationale.trim().length > 0 && !mutation.isPending;
+  const canSubmit = optionId !== "" && rationale.trim().length > 0 && !mutation.isPending;
 
   return (
-    <div className="flex flex-col bg-red-50 text-red-800 border-red-200">
-      <div className="flex items-center justify-between gap-3 border-b border-red-200 px-3 py-1.5">
-        <div className="flex items-center gap-1.5">
-          <AlertTriangle className="h-3.5 w-3.5" />
-          <span className="text-[11px] font-semibold uppercase tracking-wider">
+    <Box sx={{ display: "flex", flexDirection: "column", ...RED }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1.5, borderBottom: "1px solid", borderColor: RED.borderColor, px: 1.5, py: 0.75 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+          <WarningAmber sx={{ fontSize: 14 }} />
+          <Typography sx={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
             {cell.label ?? "Exception"} — Action required
-          </span>
-        </div>
-        <span className="inline-flex items-center rounded-sm border border-red-300 bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider">
-          {SEVERITY_LABEL[cell.severity]}
-        </span>
-      </div>
-      <div className="space-y-3 px-3 py-2">
-        <p className="text-[13px] leading-snug">{cell.description}</p>
+          </Typography>
+        </Box>
+        <StatusBadge label={SEVERITY_LABEL[cell.severity]} borderColor={RED.borderColor} color={RED.color} />
+      </Box>
 
-        <div className="space-y-1.5">
-          <Label className="text-[10px] uppercase tracking-wide opacity-70">
+      <Box sx={{ px: 1.5, py: 1, display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <Typography sx={{ fontSize: 13, lineHeight: 1.4 }}>{cell.description}</Typography>
+
+        <Box>
+          <Typography sx={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", opacity: 0.7, mb: 0.75 }}>
             Choose remediation
-          </Label>
-          <RadioGroup value={optionId} onValueChange={setOptionId} className="gap-1">
-            {cell.remediation_options.map((opt) => {
-              const id = `opt-${cell.cell_id}-${opt.id}`;
-              const selected = optionId === opt.id;
-              return (
-                <label
-                  key={opt.id}
-                  htmlFor={id}
-                  className={cn(
-                    "flex cursor-pointer items-start gap-2 border bg-white/60 px-2 py-1.5 transition-colors",
-                    selected
-                      ? "border-red-400 ring-1 ring-red-300"
-                      : "border-red-200 hover:bg-white",
-                  )}
-                >
-                  <RadioGroupItem
-                    id={id}
-                    value={opt.id}
-                    className="mt-0.5 border-red-400 text-red-700"
-                  />
-                  <div className="space-y-0.5">
-                    <div className="text-[13px] font-semibold leading-snug">
-                      {opt.label}
-                    </div>
-                    <div className="text-[11px] leading-snug opacity-80">
-                      {opt.description}
-                    </div>
-                  </div>
-                </label>
-              );
-            })}
+          </Typography>
+          <RadioGroup value={optionId} onChange={(e) => setOptionId(e.target.value)} sx={{ gap: 0.5 }}>
+            {cell.remediation_options.map((opt) => (
+              <Box
+                key={opt.id}
+                onClick={() => setOptionId(opt.id)}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 1,
+                  border: "1px solid",
+                  borderColor: optionId === opt.id ? "#f87171" : RED.borderColor,
+                  bgcolor: optionId === opt.id ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.6)",
+                  px: 1,
+                  py: 0.75,
+                  cursor: "pointer",
+                  boxShadow: optionId === opt.id ? "0 0 0 1px #fca5a5" : "none",
+                  transition: "all 0.1s",
+                  "&:hover": { bgcolor: "rgba(255,255,255,0.9)" },
+                }}
+              >
+                <Radio
+                  value={opt.id}
+                  size="small"
+                  sx={{ p: 0, mt: 0.25, color: "#dc2626", "&.Mui-checked": { color: "#dc2626" } }}
+                />
+                <Box>
+                  <Typography sx={{ fontSize: 13, fontWeight: 600, lineHeight: 1.4, color: RED.color }}>
+                    {opt.label}
+                  </Typography>
+                  <Typography sx={{ fontSize: 11, lineHeight: 1.4, opacity: 0.8, color: RED.color }}>
+                    {opt.description}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
           </RadioGroup>
-        </div>
+        </Box>
 
-        <div className="space-y-1.5">
-          <Label
+        <Box>
+          <Typography
+            component="label"
             htmlFor={`rationale-${cell.cell_id}`}
-            className="text-[10px] uppercase tracking-wide opacity-70"
+            sx={{ display: "block", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", opacity: 0.7, mb: 0.75, color: RED.color }}
           >
             Rationale (required)
-          </Label>
-          <Textarea
+          </Typography>
+          <TextField
             id={`rationale-${cell.cell_id}`}
             value={rationale}
             onChange={(e) => setRationale(e.target.value)}
             placeholder="Explain the basis for this decision. This will be attached to the audit record."
-            className="bg-white/80 border-red-200 text-foreground placeholder:text-muted-foreground rounded-none text-[13px] min-h-0"
+            multiline
             rows={3}
+            fullWidth
+            size="small"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 0,
+                bgcolor: "rgba(255,255,255,0.8)",
+                fontSize: 13,
+                "& fieldset": { borderColor: RED.borderColor },
+                "&:hover fieldset": { borderColor: "#f87171" },
+                "&.Mui-focused fieldset": { borderColor: "#dc2626" },
+              },
+            }}
           />
-        </div>
+        </Box>
 
-        <div className="flex items-center justify-end gap-2">
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             type="button"
-            size="sm"
+            size="small"
+            variant="contained"
             disabled={!canSubmit}
             onClick={() => mutation.mutate()}
-            className="bg-red-600 text-white hover:bg-red-700 rounded-none h-8"
+            sx={{ borderRadius: 0, bgcolor: "#dc2626", "&:hover": { bgcolor: "#b91c1c" }, height: 32, fontSize: 13 }}
           >
             {mutation.isPending ? "Recording…" : "Confirm decision"}
           </Button>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function StatusBadge({ label, borderColor, color }: { label: string; borderColor: string; color: string }) {
+  return (
+    <Box
+      component="span"
+      sx={{
+        display: "inline-flex",
+        alignItems: "center",
+        borderRadius: "2px",
+        border: "1px solid",
+        borderColor,
+        bgcolor: "rgba(255,255,255,0.4)",
+        px: 0.75,
+        py: 0.25,
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: "0.06em",
+        color,
+      }}
+    >
+      {label}
+    </Box>
+  );
+}
+
+function FieldRow({ label, value }: { label: string; value: string }) {
+  return (
+    <Box>
+      <Typography sx={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em", opacity: 0.7 }}>
+        {label}
+      </Typography>
+      <Typography sx={{ fontSize: 13, fontWeight: 600, whiteSpace: "pre-wrap" }}>{value}</Typography>
+    </Box>
   );
 }

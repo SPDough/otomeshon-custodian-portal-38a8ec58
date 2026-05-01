@@ -1,36 +1,77 @@
-import { cn } from "@/lib/utils";
-import { STATUS_CARD_CLASSES, STATUS_LABEL } from "@/lib/cellStatus";
+import { Box, Typography } from "@mui/material";
+import { STATUS_CARD_SX, STATUS_LABEL } from "@/lib/cellStatus";
 import type { ResultCell } from "@/types/vellum";
 
 export function ResultCellView({ cell }: { cell: ResultCell }) {
-  const statusClasses = STATUS_CARD_CLASSES[cell.status];
+  const { bgcolor, color, borderColor } = STATUS_CARD_SX[cell.status];
+
   return (
-    <div className={cn("flex flex-col", statusClasses)}>
-      <div className="flex items-center justify-between gap-3 border-b border-current/20 px-3 py-1.5">
-        <span className="text-[11px] font-semibold uppercase tracking-wider">
+    <Box sx={{ display: "flex", flexDirection: "column", bgcolor, color }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 1.5,
+          borderBottom: "1px solid",
+          borderColor,
+          px: 1.5,
+          py: 0.75,
+        }}
+      >
+        <Typography sx={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
           {cell.label ?? "Result"}
-        </span>
-        <span className="inline-flex items-center rounded-sm border border-current/30 bg-white/40 px-1.5 py-0.5 text-[10px] font-bold tracking-wider">
+        </Typography>
+        <Box
+          component="span"
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            borderRadius: "2px",
+            border: "1px solid",
+            borderColor,
+            bgcolor: "rgba(255,255,255,0.4)",
+            px: 0.75,
+            py: 0.25,
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: "0.06em",
+            color,
+          }}
+        >
           {STATUS_LABEL[cell.status]}
-        </span>
-      </div>
-      <div className="space-y-2 px-3 py-2">
-        <p className="text-[13px] font-medium leading-snug">{cell.summary}</p>
+        </Box>
+      </Box>
+
+      <Box sx={{ px: 1.5, py: 1 }}>
+        <Typography sx={{ fontSize: 13, fontWeight: 500, lineHeight: 1.4, mb: cell.metrics?.length ? 1 : 0 }}>
+          {cell.summary}
+        </Typography>
         {cell.metrics && cell.metrics.length > 0 && (
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-4">
+          <Box
+            component="dl"
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              columnGap: 2,
+              rowGap: 0.5,
+              m: 0,
+              "@media (min-width:600px)": { gridTemplateColumns: "repeat(4, 1fr)" },
+            }}
+          >
             {cell.metrics.map((m) => (
-              <div key={m.label} className="space-y-0.5">
-                <dt className="text-[10px] uppercase tracking-wide opacity-70">
+              <Box key={m.label}>
+                <Typography component="dt" sx={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em", opacity: 0.7 }}>
                   {m.label}
-                </dt>
-                <dd className="text-[13px] font-semibold tabular-nums leading-tight">
+                </Typography>
+                <Typography component="dd" sx={{ fontSize: 13, fontWeight: 600, fontVariantNumeric: "tabular-nums", lineHeight: 1.3, m: 0 }}>
                   {m.value}
-                </dd>
-              </div>
+                </Typography>
+              </Box>
             ))}
-          </dl>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
